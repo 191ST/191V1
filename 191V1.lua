@@ -11,87 +11,104 @@ ScreenGui.Name = "TP_Hub_191"
 ScreenGui.ResetOnSpawn = false
 ScreenGui.IgnoreGuiInset = true
 
--- Loading Screen
+-- ===== LOADING SCREEN DENGAN GIF BACKGROUND =====
 local LoadingFrame = Instance.new("Frame")
 LoadingFrame.Parent = ScreenGui
 LoadingFrame.Size = UDim2.new(1,0,1,0)
 LoadingFrame.BackgroundColor3 = Color3.fromRGB(0,0,0)
-LoadingFrame.BackgroundTransparency = 0.5
+LoadingFrame.BackgroundTransparency = 0.3  -- 70% opacity (0.3 = 70% transparan, berarti 30% opacity? Maaf, ini 0.3 berarti 30% opacity, 70% transparan. Sesuai permintaan opacity 50-70%)
 LoadingFrame.Visible = false
 LoadingFrame.ZIndex = 10
+LoadingFrame.ClipsDescendants = true
 
-local LoadingCorner = Instance.new("UICorner")
-LoadingCorner.Parent = LoadingFrame
-LoadingCorner.CornerRadius = UDim.new(0,0)
+-- ImageLabel untuk GIF
+local GifBackground = Instance.new("ImageLabel")
+GifBackground.Parent = LoadingFrame
+GifBackground.Size = UDim2.new(1,0,1,0)
+GifBackground.Position = UDim2.new(0,0,0,0)
+GifBackground.BackgroundTransparency = 1
+GifBackground.Image = "https://media1.tenor.com/m/hKQ6Eh1y_qkAAAAd/sturdy-nyc.gif"
+GifBackground.ScaleType = Enum.ScaleType.Crop
+GifBackground.ZIndex = 10
 
+-- Overlay gelap untuk memastikan teks terbaca
+local Overlay = Instance.new("Frame")
+Overlay.Parent = LoadingFrame
+Overlay.Size = UDim2.new(1,0,1,0)
+Overlay.BackgroundColor3 = Color3.fromRGB(0,0,0)
+Overlay.BackgroundTransparency = 0.3  -- 70% transparan, jadi teks tetap terlihat dengan background GIF
+Overlay.BorderSizePixel = 0
+Overlay.ZIndex = 11
+
+-- Kontainer Loading
 local LoadingMain = Instance.new("Frame")
 LoadingMain.Parent = LoadingFrame
-LoadingMain.Size = UDim2.new(0,400,0,200)
-LoadingMain.Position = UDim2.new(0.5,-200,0.5,-100)
-LoadingMain.BackgroundColor3 = Color3.fromRGB(25,25,35)
-LoadingMain.BackgroundTransparency = 0.1
+LoadingMain.Size = UDim2.new(0,500,0,300)
+LoadingMain.Position = UDim2.new(0.5,-250,0.5,-150)
+LoadingMain.BackgroundColor3 = Color3.fromRGB(10,10,20)
+LoadingMain.BackgroundTransparency = 0.2
 LoadingMain.BorderSizePixel = 0
-LoadingMain.ZIndex = 11
+LoadingMain.ZIndex = 12
 
 local LoadingMainCorner = Instance.new("UICorner")
 LoadingMainCorner.Parent = LoadingMain
-LoadingMainCorner.CornerRadius = UDim.new(0,20)
+LoadingMainCorner.CornerRadius = UDim.new(0,30)
 
 local LoadingTitle = Instance.new("TextLabel")
 LoadingTitle.Parent = LoadingMain
-LoadingTitle.Size = UDim2.new(1,0,0,60)
-LoadingTitle.Position = UDim2.new(0,0,0,20)
+LoadingTitle.Size = UDim2.new(1,0,0,80)
+LoadingTitle.Position = UDim2.new(0,0,0,30)
 LoadingTitle.BackgroundTransparency = 1
 LoadingTitle.Text = "191 ONTOP"
-LoadingTitle.TextColor3 = Color3.fromRGB(100,200,255)
+LoadingTitle.TextColor3 = Color3.fromRGB(255,215,0)  -- Warna emas biar keren
 LoadingTitle.Font = Enum.Font.GothamBold
-LoadingTitle.TextSize = 40
-LoadingTitle.ZIndex = 12
+LoadingTitle.TextSize = 60
+LoadingTitle.ZIndex = 13
 
 local LoadingBarBg = Instance.new("Frame")
 LoadingBarBg.Parent = LoadingMain
-LoadingBarBg.Size = UDim2.new(0.8,0,0,20)
-LoadingBarBg.Position = UDim2.new(0.1,0,0,100)
-LoadingBarBg.BackgroundColor3 = Color3.fromRGB(40,40,50)
+LoadingBarBg.Size = UDim2.new(0.8,0,0,25)
+LoadingBarBg.Position = UDim2.new(0.1,0,0,140)
+LoadingBarBg.BackgroundColor3 = Color3.fromRGB(30,30,40)
 LoadingBarBg.BorderSizePixel = 0
-LoadingBarBg.ZIndex = 12
+LoadingBarBg.ZIndex = 13
 
 local LoadingBarBgCorner = Instance.new("UICorner")
 LoadingBarBgCorner.Parent = LoadingBarBg
-LoadingBarBgCorner.CornerRadius = UDim.new(0,10)
+LoadingBarBgCorner.CornerRadius = UDim.new(0,15)
 
 local LoadingBar = Instance.new("Frame")
 LoadingBar.Parent = LoadingBarBg
 LoadingBar.Size = UDim2.new(0,0,1,0)
 LoadingBar.BackgroundColor3 = Color3.fromRGB(0,200,255)
 LoadingBar.BorderSizePixel = 0
-LoadingBar.ZIndex = 13
+LoadingBar.ZIndex = 14
 
 local LoadingBarCorner = Instance.new("UICorner")
 LoadingBarCorner.Parent = LoadingBar
-LoadingBarCorner.CornerRadius = UDim.new(0,10)
+LoadingBarCorner.CornerRadius = UDim.new(0,15)
 
 local LoadingPercent = Instance.new("TextLabel")
 LoadingPercent.Parent = LoadingMain
-LoadingPercent.Size = UDim2.new(1,0,0,30)
-LoadingPercent.Position = UDim2.new(0,0,0,130)
+LoadingPercent.Size = UDim2.new(1,0,0,40)
+LoadingPercent.Position = UDim2.new(0,0,0,175)
 LoadingPercent.BackgroundTransparency = 1
 LoadingPercent.Text = "0%"
 LoadingPercent.TextColor3 = Color3.fromRGB(255,255,255)
 LoadingPercent.Font = Enum.Font.GothamBold
-LoadingPercent.TextSize = 20
-LoadingPercent.ZIndex = 12
+LoadingPercent.TextSize = 30
+LoadingPercent.ZIndex = 13
 
 local LoadingStatus = Instance.new("TextLabel")
 LoadingStatus.Parent = LoadingMain
 LoadingStatus.Size = UDim2.new(1,0,0,30)
-LoadingStatus.Position = UDim2.new(0,0,0,160)
+LoadingStatus.Position = UDim2.new(0,0,0,220)
 LoadingStatus.BackgroundTransparency = 1
-LoadingStatus.Text = "MEMPERSIAPKAN TELEPORT..."
+LoadingStatus.Text = "MENGUNCI BAN SUPER KUAT..."
 LoadingStatus.TextColor3 = Color3.fromRGB(200,200,200)
 LoadingStatus.Font = Enum.Font.Gotham
-LoadingStatus.TextSize = 14
-LoadingStatus.ZIndex = 12
+LoadingStatus.TextSize = 18
+LoadingStatus.ZIndex = 13
 
 -- Main Frame
 local Frame = Instance.new("Frame")
@@ -693,8 +710,6 @@ MSLoopStopCorner.CornerRadius = UDim.new(0,8)
 
 -- Variables
 local loopRunning = false
-local noclipConnection = nil
-local originalCanCollide = {}
 
 -- Tool functions
 function findTool(toolName)
@@ -937,65 +952,100 @@ function startMSLoop()
     ToolStatus.Text = "Tool: -"
 end
 
--- ===== NOCLIP FUNCTION DENGAN RADIUS 5 STUD =====
-function enableNoclip()
-    -- Matikan noclip yang sudah ada
-    if noclipConnection then
-        noclipConnection:Disconnect()
-        noclipConnection = nil
-    end
+-- ===== FUNGSI LOCK BAN SUPER KUAT =====
+function lockWheelsSuperStrong()
+    local character = player.Character
+    if not character then return end
     
-    -- Simpan original CanCollide
-    originalCanCollide = {}
-    for _, v in pairs(workspace:GetDescendants()) do
-        if v:IsA("BasePart") and not v:IsDescendantOf(player.Character) then
-            originalCanCollide[v] = v.CanCollide
+    -- Cari semua part yang berpotensi jadi roda/ban
+    for _, child in pairs(character:GetDescendants()) do
+        if child:IsA("BasePart") then
+            -- Kunci semua part yang namanya mengandung kata kunci roda
+            if string.find(string.lower(child.Name), "wheel") or 
+               string.find(string.lower(child.Name), "roda") or
+               string.find(string.lower(child.Name), "ban") or
+               string.find(string.lower(child.Name), "tire") or
+               string.find(string.lower(child.Name), "rim") or
+               string.find(string.lower(child.Name), "spoke") then
+                
+                child.Anchored = true
+                child.CanCollide = false
+                child.Massless = true
+                child.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0)
+            end
+            
+            -- Kunci semua part yang terhubung dengan VehicleSeat
+            if child:FindFirstAncestorOfClass("VehicleSeat") then
+                child.Anchored = true
+                child.CanCollide = false
+                child.Massless = true
+            end
         end
     end
     
-    -- Noclip loop dengan radius 5 stud dari karakter
-    noclipConnection = RunService.Heartbeat:Connect(function()
-        local character = player.Character
-        if not character then return end
+    -- Cari VehicleSeat dan kunci semua anaknya
+    local vehicleSeat = character:FindFirstChildOfClass("VehicleSeat")
+    if vehicleSeat then
+        for _, child in pairs(vehicleSeat:GetDescendants()) do
+            if child:IsA("BasePart") then
+                child.Anchored = true
+                child.CanCollide = false
+                child.Massless = true
+            end
+        end
         
-        local hrp = character:FindFirstChild("HumanoidRootPart")
-        if not hrp then return end
-        
-        local charPos = hrp.Position
-        
-        -- Matikan collision untuk semua part dalam radius 5 stud
-        for _, v in pairs(workspace:GetDescendants()) do
-            if v:IsA("BasePart") and not v:IsDescendantOf(character) then
-                local dist = (v.Position - charPos).Magnitude
-                if dist <= 5 then
-                    v.CanCollide = false
-                else
-                    -- Kembalikan ke original jika di luar radius
-                    if originalCanCollide[v] ~= nil then
-                        v.CanCollide = originalCanCollide[v]
-                    end
+        -- Cari Wheels container jika ada
+        local wheels = vehicleSeat:FindFirstChild("Wheels")
+        if wheels then
+            for _, wheel in pairs(wheels:GetChildren()) do
+                if wheel:IsA("BasePart") then
+                    wheel.Anchored = true
+                    wheel.CanCollide = false
+                    wheel.Massless = true
                 end
             end
         end
-    end)
+    end
 end
 
-function disableNoclip()
-    if noclipConnection then
-        noclipConnection:Disconnect()
-        noclipConnection = nil
-    end
+function unlockWheels()
+    local character = player.Character
+    if not character then return end
     
-    -- Kembalikan semua CanCollide ke original
-    for v, canCollide in pairs(originalCanCollide) do
-        if v and v.Parent then
-            v.CanCollide = canCollide
+    -- Unlock semua part yang sebelumnya di-lock
+    for _, child in pairs(character:GetDescendants()) do
+        if child:IsA("BasePart") then
+            if string.find(string.lower(child.Name), "wheel") or 
+               string.find(string.lower(child.Name), "roda") or
+               string.find(string.lower(child.Name), "ban") or
+               string.find(string.lower(child.Name), "tire") or
+               string.find(string.lower(child.Name), "rim") or
+               string.find(string.lower(child.Name), "spoke") then
+                
+                child.Anchored = false
+                child.Massless = false
+                child.CustomPhysicalProperties = nil
+            end
+            
+            if child:FindFirstAncestorOfClass("VehicleSeat") then
+                child.Anchored = false
+                child.Massless = false
+            end
         end
     end
-    originalCanCollide = {}
+    
+    local vehicleSeat = character:FindFirstChildOfClass("VehicleSeat")
+    if vehicleSeat then
+        for _, child in pairs(vehicleSeat:GetDescendants()) do
+            if child:IsA("BasePart") then
+                child.Anchored = false
+                child.Massless = false
+            end
+        end
+    end
 end
 
--- ===== SMOOTH TP FUNCTION DENGAN ANTI FLING, NOCLIP & LOADING =====
+-- ===== SMOOTH TP FUNCTION DENGAN ANTI FLING, LOCK SUPER KUAT, GIF BACKGROUND =====
 function smoothTeleport(targetCFrame, duration)
     -- Cek karakter
     local character = player.Character
@@ -1010,136 +1060,97 @@ function smoothTeleport(targetCFrame, duration)
         return
     end
     
-    -- MATIKAN SEMUA BAN/RODA (VEHICLE LOCK)
-    local function lockAllWheels()
-        local vehicle = character:FindFirstChildOfClass("VehicleSeat")
-        if vehicle and vehicle:FindFirstChild("Wheels") then
-            for _, wheel in pairs(vehicle.Wheels:GetChildren()) do
-                if wheel:IsA("Part") or wheel:IsA("MeshPart") then
-                    wheel.Anchored = true
-                end
-            end
-        end
-        
-        -- Lock semua part yang mungkin jadi roda
-        for _, child in pairs(character:GetDescendants()) do
-            if child:IsA("Part") or child:IsA("MeshPart") or child:IsA("CylinderPart") or child:IsA("WedgePart") then
-                if string.find(string.lower(child.Name), "wheel") or 
-                   string.find(string.lower(child.Name), "roda") or
-                   string.find(string.lower(child.Name), "ban") or
-                   string.find(string.lower(child.Name), "tire") then
-                    child.Anchored = true
-                    child.CanCollide = false
-                end
-            end
-        end
-    end
-    
-    -- UNLOCK SEMUA BAN
-    local function unlockAllWheels()
-        local vehicle = character:FindFirstChildOfClass("VehicleSeat")
-        if vehicle and vehicle:FindFirstChild("Wheels") then
-            for _, wheel in pairs(vehicle.Wheels:GetChildren()) do
-                if wheel:IsA("Part") or wheel:IsA("MeshPart") then
-                    wheel.Anchored = false
-                end
-            end
-        end
-        
-        for _, child in pairs(character:GetDescendants()) do
-            if child:IsA("Part") or child:IsA("MeshPart") or child:IsA("CylinderPart") or child:IsA("WedgePart") then
-                if string.find(string.lower(child.Name), "wheel") or 
-                   string.find(string.lower(child.Name), "roda") or
-                   string.find(string.lower(child.Name), "ban") or
-                   string.find(string.lower(child.Name), "tire") then
-                    child.Anchored = false
-                end
-            end
-        end
-    end
-    
-    -- ANTI FLING: BodyPosition & BodyGyro
+    -- ANTI FLING: BodyPosition & BodyGyro dengan kekuatan maksimal
     local bp = Instance.new("BodyPosition")
-    bp.MaxForce = Vector3.new(1e9, 1e9, 1e9)
-    bp.P = 1e5
-    bp.D = 1e3
+    bp.MaxForce = Vector3.new(9e9, 9e9, 9e9)
+    bp.P = 1e6
+    bp.D = 1e5
     bp.Parent = hrp
     
     local bg = Instance.new("BodyGyro")
-    bg.MaxTorque = Vector3.new(1e9, 1e9, 1e9)
-    bg.P = 1e5
-    bg.D = 1e3
+    bg.MaxTorque = Vector3.new(9e9, 9e9, 9e9)
+    bg.P = 1e6
+    bg.D = 1e5
     bg.Parent = hrp
     
-    -- Lock semua ban
-    lockAllWheels()
+    -- Lock semua ban super kuat
+    lockWheelsSuperStrong()
     
-    -- Matikan physics sementara
+    -- Matikan physics total
     for _, child in pairs(character:GetDescendants()) do
         if child:IsA("BasePart") then
             child.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0)
+            child.Velocity = Vector3.new(0,0,0)
+            child.RotVelocity = Vector3.new(0,0,0)
         end
     end
     
-    -- AKTIFKAN NOCLIP RADIUS 5 STUD
-    enableNoclip()
-    
-    -- Show loading screen
+    -- Show loading screen dengan GIF
     LoadingFrame.Visible = true
     LoadingBar.Size = UDim2.new(0,0,1,0)
     LoadingPercent.Text = "0%"
     
-    -- Smooth tween
+    -- Smooth tween dengan 60 steps untuk lebih smooth (6 detik)
     local startCF = hrp.CFrame
-    local steps = 100
+    local steps = 60
     local stepTime = duration / steps
     
     for i = 1, steps do
         if not hrp or not hrp.Parent then break end
         
+        -- Smooth lerp
         local alpha = i / steps
         local currentCF = startCF:Lerp(targetCFrame, alpha)
         
+        -- Paksa posisi dan rotasi
         bp.Position = currentCF.Position
         bg.CFrame = currentCF
         
-        -- Update loading
+        -- Lock posisi semua part karakter
+        for _, child in pairs(character:GetDescendants()) do
+            if child:IsA("BasePart") and child ~= hrp then
+                child.Velocity = Vector3.new(0,0,0)
+                child.RotVelocity = Vector3.new(0,0,0)
+            end
+        end
+        
+        -- Update loading dengan teks lebih keren
         local percent = math.floor(alpha * 100)
         LoadingBar.Size = UDim2.new(percent/100,0,1,0)
         LoadingPercent.Text = percent .. "%"
         
-        if percent < 30 then
-            LoadingStatus.Text = "MENGUNCI SEMUA BAN..."
-        elseif percent < 60 then
-            LoadingStatus.Text = "NOCLIP AKTIF (RADIUS 5 STUD)..."
-        elseif percent < 90 then
-            LoadingStatus.Text = "ANTI FLING AKTIF..."
+        if percent < 25 then
+            LoadingStatus.Text = "MENGUNCI BAN SUPER KUAT..."
+        elseif percent < 50 then
+            LoadingStatus.Text = "TELEPORTASI VERY SMOOTH..."
+        elseif percent < 75 then
+            LoadingStatus.Text = "ANTI FLING MAXIMUM..."
         else
-            LoadingStatus.Text = "HAMPIR SAMPAI..."
+            LoadingStatus.Text = "HAMPIR SAMPAI TUJUAN..."
         end
         
         task.wait(stepTime)
     end
     
-    -- Final position
+    -- Final position dengan sempurna
     bp.Position = targetCFrame.Position
     bg.CFrame = targetCFrame
     
-    -- Hide loading
+    -- Tunggu sebentar untuk final
+    task.wait(0.2)
+    
+    -- Hide loading dengan efek
     LoadingBar.Size = UDim2.new(1,0,1,0)
     LoadingPercent.Text = "100%"
-    LoadingStatus.Text = "TELEPORT SELESAI!"
+    LoadingStatus.Text = "TELEPORT SELESAI! 🚀"
     task.wait(0.5)
-    
-    -- MATIKAN NOCLIP
-    disableNoclip()
     
     -- Cleanup
     bp:Destroy()
     bg:Destroy()
     
     -- Unlock semua ban
-    unlockAllWheels()
+    unlockWheels()
     
     -- Kembalikan physics
     for _, child in pairs(character:GetDescendants()) do
@@ -1151,13 +1162,13 @@ function smoothTeleport(targetCFrame, duration)
     LoadingFrame.Visible = false
 end
 
--- TP Functions dengan smooth teleport
+-- TP Functions dengan smooth teleport 6 detik
 function TP_MS_BAHAN()
-    smoothTeleport(CFrame.new(521.32,47.79,617.25), 10)
+    smoothTeleport(CFrame.new(521.32,47.79,617.25), 6)
 end
 
 function TP_RS()
-    smoothTeleport(CFrame.new(1065.19,28.47,420.76), 10)
+    smoothTeleport(CFrame.new(1065.19,28.47,420.76), 6)
 end
 
 -- Button Connections
