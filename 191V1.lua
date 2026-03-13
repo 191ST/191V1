@@ -915,7 +915,7 @@ function lockWheels(vehicle, vehicleRoot)
     end
 end
 
--- SLOW TELEPORT DENGAN RUTE BAWAH TANAH (7 DETIK)
+-- SLOW TELEPORT DENGAN RUTE BAWAH TANAH (7 DETIK) - KEDALAMAN AMAN
 function slowTeleport(targetCFrame, locationName)
     if isTeleporting then return end
     if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then
@@ -924,8 +924,12 @@ function slowTeleport(targetCFrame, locationName)
     
     isTeleporting = true
     
-    -- POSISI BAWAH TANAH (jauh di bawah map)
-    local undergroundPos = CFrame.new(targetCFrame.X, -500, targetCFrame.Z)
+    -- AMBIL TITIK TERTINGGI DI SEKITAR LOKASI UNTUK CEK KETINGGIAN AMAN
+    local targetY = targetCFrame.Y
+    local safeUndergroundY = targetY - 30 -- Turun 30 studs saja (aman dan tidak terlalu dalam)
+    
+    -- POSISI BAWAH TANAH (30 studs di bawah target)
+    local undergroundPos = CFrame.new(targetCFrame.X, safeUndergroundY, targetCFrame.Z)
     
     -- Deteksi kendaraan
     local vehicle = findVehicle()
@@ -959,15 +963,15 @@ function slowTeleport(targetCFrame, locationName)
     local hrp = player.Character.HumanoidRootPart
     local duration = 7
     
-    -- TAHAP 1: TURUN KE BAWAH TANAH (3 detik)
+    -- TAHAP 1: TURUN KE BAWAH TANAH (2 detik)
     local startCF = hrp.CFrame
-    local targetUnderground = CFrame.new(startCF.X, -500, startCF.Z)
+    local targetUnderground = CFrame.new(startCF.X, safeUndergroundY, startCF.Z)
     local startTime = tick()
     
     local connection1
     connection1 = RunService.Heartbeat:Connect(function()
         local elapsed = tick() - startTime
-        local alpha = math.min(elapsed / 3, 1)
+        local alpha = math.min(elapsed / 2, 1)
         local smoothAlpha = alpha < 0.5 and 2 * alpha * alpha or 1 - math.pow(-2 * alpha + 2, 2) / 2
         
         -- Pindahkan karakter
@@ -976,12 +980,12 @@ function slowTeleport(targetCFrame, locationName)
         
         -- Pindahkan kendaraan jika ada
         if vehicleRoot and originalVehicleCF then
-            local vehicleNewCF = originalVehicleCF:Lerp(CFrame.new(originalVehicleCF.X, -500, originalVehicleCF.Z), smoothAlpha)
+            local vehicleNewCF = originalVehicleCF:Lerp(CFrame.new(originalVehicleCF.X, safeUndergroundY, originalVehicleCF.Z), smoothAlpha)
             vehicleRoot.CFrame = vehicleNewCF
         end
         
         -- Update progress
-        local totalAlpha = (elapsed / duration) * 0.43
+        local totalAlpha = (elapsed / duration) * 0.3
         PercentText.Text = math.floor(totalAlpha * 100) .. "%"
         ProgressBar.Size = UDim2.new(totalAlpha,0,1,0)
         
@@ -990,7 +994,7 @@ function slowTeleport(targetCFrame, locationName)
         end
     end)
     
-    task.wait(3)
+    task.wait(2)
     
     -- TAHAP 2: GERAK HORIZONTAL DI BAWAH TANAH (3 detik)
     StatusText.Text = "Bergerak di bawah tanah..."
@@ -1004,17 +1008,17 @@ function slowTeleport(targetCFrame, locationName)
         local smoothAlpha = alpha < 0.5 and 2 * alpha * alpha or 1 - math.pow(-2 * alpha + 2, 2) / 2
         
         -- Pindahkan karakter secara horizontal
-        local newCF = startCF:Lerp(CFrame.new(targetCFrame.X, -500, targetCFrame.Z), smoothAlpha)
+        local newCF = startCF:Lerp(CFrame.new(targetCFrame.X, safeUndergroundY, targetCFrame.Z), smoothAlpha)
         hrp.CFrame = newCF
         
         -- Pindahkan kendaraan
         if vehicleRoot and originalVehicleCF then
-            local vehicleNewCF = CFrame.new(originalVehicleCF.X, -500, originalVehicleCF.Z):Lerp(CFrame.new(targetCFrame.X, -500, targetCFrame.Z), smoothAlpha)
+            local vehicleNewCF = CFrame.new(originalVehicleCF.X, safeUndergroundY, originalVehicleCF.Z):Lerp(CFrame.new(targetCFrame.X, safeUndergroundY, targetCFrame.Z), smoothAlpha)
             vehicleRoot.CFrame = vehicleNewCF
         end
         
         -- Update progress
-        local totalAlpha = 0.43 + (elapsed / duration) * 0.43
+        local totalAlpha = 0.3 + (elapsed / duration) * 0.4
         PercentText.Text = math.floor(totalAlpha * 100) .. "%"
         ProgressBar.Size = UDim2.new(totalAlpha,0,1,0)
         
@@ -1025,7 +1029,7 @@ function slowTeleport(targetCFrame, locationName)
     
     task.wait(3)
     
-    -- TAHAP 3: NAIK KE ATAS (1 detik)
+    -- TAHAP 3: NAIK KE ATAS (2 detik)
     StatusText.Text = "Naik ke permukaan..."
     startCF = hrp.CFrame
     startTime = tick()
@@ -1033,7 +1037,7 @@ function slowTeleport(targetCFrame, locationName)
     local connection3
     connection3 = RunService.Heartbeat:Connect(function()
         local elapsed = tick() - startTime
-        local alpha = math.min(elapsed / 1, 1)
+        local alpha = math.min(elapsed / 2, 1)
         local smoothAlpha = alpha < 0.5 and 2 * alpha * alpha or 1 - math.pow(-2 * alpha + 2, 2) / 2
         
         -- Pindahkan karakter ke atas
@@ -1042,12 +1046,12 @@ function slowTeleport(targetCFrame, locationName)
         
         -- Pindahkan kendaraan ke atas
         if vehicleRoot and originalVehicleCF then
-            local vehicleNewCF = CFrame.new(targetCFrame.X, -500, targetCFrame.Z):Lerp(targetCFrame, smoothAlpha)
+            local vehicleNewCF = CFrame.new(targetCFrame.X, safeUndergroundY, targetCFrame.Z):Lerp(targetCFrame, smoothAlpha)
             vehicleRoot.CFrame = vehicleNewCF
         end
         
         -- Update progress
-        local totalAlpha = 0.86 + (elapsed / duration) * 0.14
+        local totalAlpha = 0.7 + (elapsed / duration) * 0.3
         PercentText.Text = math.floor(totalAlpha * 100) .. "%"
         ProgressBar.Size = UDim2.new(totalAlpha,0,1,0)
         
@@ -1056,7 +1060,7 @@ function slowTeleport(targetCFrame, locationName)
         end
     end)
     
-    task.wait(1)
+    task.wait(2)
     
     -- Pastikan posisi akhir tepat
     hrp.CFrame = targetCFrame
