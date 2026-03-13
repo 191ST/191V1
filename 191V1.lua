@@ -275,7 +275,7 @@ MSSafetyContent.Size = UDim2.new(1,0,1,0)
 MSSafetyContent.BackgroundTransparency = 1
 MSSafetyContent.Visible = false
 MSSafetyContent.ScrollBarThickness = 6
-MSSafetyContent.CanvasSize = UDim2.new(0,0,0,400)
+MSSafetyContent.CanvasSize = UDim2.new(0,0,0,500)
 
 -- Title MS Safety
 local MSSafetyTitle = Instance.new("TextLabel")
@@ -295,17 +295,79 @@ MSSafetyDesc.Parent = MSSafetyContent
 MSSafetyDesc.Size = UDim2.new(1,-20,0,30)
 MSSafetyDesc.Position = UDim2.new(0,10,0,60)
 MSSafetyDesc.BackgroundTransparency = 1
-MSSafetyDesc.Text = "Blink Masuk Meja"
+MSSafetyDesc.Text = "Blink Masuk Meja & Naik Turun"
 MSSafetyDesc.TextColor3 = Color3.fromRGB(200,200,200)
 MSSafetyDesc.TextXAlignment = Enum.TextXAlignment.Left
 MSSafetyDesc.Font = Enum.Font.Gotham
 MSSafetyDesc.TextSize = 14
 
+-- ===== BLINK KE ATAS (BARU) =====
+local BlinkAtasFrame = Instance.new("Frame")
+BlinkAtasFrame.Parent = MSSafetyContent
+BlinkAtasFrame.Size = UDim2.new(1,-20,0,80)
+BlinkAtasFrame.Position = UDim2.new(0,10,0,100)
+BlinkAtasFrame.BackgroundColor3 = Color3.fromRGB(35,35,45)
+BlinkAtasFrame.BorderSizePixel = 0
+
+local BlinkAtasCorner = Instance.new("UICorner")
+BlinkAtasCorner.Parent = BlinkAtasFrame
+BlinkAtasCorner.CornerRadius = UDim.new(0,10)
+
+-- Icon
+local BlinkAtasIcon = Instance.new("TextLabel")
+BlinkAtasIcon.Parent = BlinkAtasFrame
+BlinkAtasIcon.Size = UDim2.new(0,50,1,0)
+BlinkAtasIcon.Position = UDim2.new(0,10,0,0)
+BlinkAtasIcon.BackgroundTransparency = 1
+BlinkAtasIcon.Text = "⬆️"
+BlinkAtasIcon.TextSize = 40
+BlinkAtasIcon.Font = Enum.Font.GothamBold
+BlinkAtasIcon.TextColor3 = Color3.fromRGB(255,255,255)
+
+-- Title
+local BlinkAtasTitle = Instance.new("TextLabel")
+BlinkAtasTitle.Parent = BlinkAtasFrame
+BlinkAtasTitle.Size = UDim2.new(1,-120,0,30)
+BlinkAtasTitle.Position = UDim2.new(0,70,0,10)
+BlinkAtasTitle.BackgroundTransparency = 1
+BlinkAtasTitle.Text = "BLINK KE ATAS"
+BlinkAtasTitle.TextColor3 = Color3.fromRGB(255,255,255)
+BlinkAtasTitle.TextXAlignment = Enum.TextXAlignment.Left
+BlinkAtasTitle.Font = Enum.Font.GothamBold
+BlinkAtasTitle.TextSize = 18
+
+-- Description
+local BlinkAtasDesc = Instance.new("TextLabel")
+BlinkAtasDesc.Parent = BlinkAtasFrame
+BlinkAtasDesc.Size = UDim2.new(1,-120,0,20)
+BlinkAtasDesc.Position = UDim2.new(0,70,0,40)
+BlinkAtasDesc.BackgroundTransparency = 1
+BlinkAtasDesc.Text = "kusuka turun naik"
+BlinkAtasDesc.TextColor3 = Color3.fromRGB(180,180,180)
+BlinkAtasDesc.TextXAlignment = Enum.TextXAlignment.Left
+BlinkAtasDesc.Font = Enum.Font.Gotham
+BlinkAtasDesc.TextSize = 12
+
+-- Button Blink Atas
+local BlinkAtasBtn = Instance.new("TextButton")
+BlinkAtasBtn.Parent = BlinkAtasFrame
+BlinkAtasBtn.Size = UDim2.new(0,40,0,40)
+BlinkAtasBtn.Position = UDim2.new(1,-50,0.5,-20)
+BlinkAtasBtn.BackgroundColor3 = Color3.fromRGB(150,100,200)
+BlinkAtasBtn.Text = "▶️"
+BlinkAtasBtn.TextColor3 = Color3.fromRGB(255,255,255)
+BlinkAtasBtn.TextSize = 20
+BlinkAtasBtn.Font = Enum.Font.GothamBold
+
+local BlinkAtasBtnCorner = Instance.new("UICorner")
+BlinkAtasBtnCorner.Parent = BlinkAtasBtn
+BlinkAtasBtnCorner.CornerRadius = UDim.new(0,8)
+
 -- ===== BLINK KE BAWAH =====
 local BlinkDownFrame = Instance.new("Frame")
 BlinkDownFrame.Parent = MSSafetyContent
 BlinkDownFrame.Size = UDim2.new(1,-20,0,80)
-BlinkDownFrame.Position = UDim2.new(0,10,0,100)
+BlinkDownFrame.Position = UDim2.new(0,10,0,190)
 BlinkDownFrame.BackgroundColor3 = Color3.fromRGB(35,35,45)
 BlinkDownFrame.BorderSizePixel = 0
 
@@ -367,7 +429,7 @@ BlinkDownBtnCorner.CornerRadius = UDim.new(0,8)
 local BlinkMajuFrame = Instance.new("Frame")
 BlinkMajuFrame.Parent = MSSafetyContent
 BlinkMajuFrame.Size = UDim2.new(1,-20,0,80)
-BlinkMajuFrame.Position = UDim2.new(0,10,0,190)
+BlinkMajuFrame.Position = UDim2.new(0,10,0,280)
 BlinkMajuFrame.BackgroundColor3 = Color3.fromRGB(35,35,45)
 BlinkMajuFrame.BorderSizePixel = 0
 
@@ -429,7 +491,7 @@ BlinkMajuBtnCorner.CornerRadius = UDim.new(0,8)
 local BlinkMundurFrame = Instance.new("Frame")
 BlinkMundurFrame.Parent = MSSafetyContent
 BlinkMundurFrame.Size = UDim2.new(1,-20,0,80)
-BlinkMundurFrame.Position = UDim2.new(0,10,0,280)
+BlinkMundurFrame.Position = UDim2.new(0,10,0,370)
 BlinkMundurFrame.BackgroundColor3 = Color3.fromRGB(35,35,45)
 BlinkMundurFrame.BorderSizePixel = 0
 
@@ -491,7 +553,7 @@ BlinkMundurBtnCorner.CornerRadius = UDim.new(0,8)
 local BlinkStatus = Instance.new("TextLabel")
 BlinkStatus.Parent = MSSafetyContent
 BlinkStatus.Size = UDim2.new(1,-20,0,30)
-BlinkStatus.Position = UDim2.new(0,10,0,370)
+BlinkStatus.Position = UDim2.new(0,10,0,460)
 BlinkStatus.BackgroundColor3 = Color3.fromRGB(40,40,50)
 BlinkStatus.Text = "klik aja ngab fitur nya"
 BlinkStatus.TextColor3 = Color3.fromRGB(100,255,100)
@@ -887,6 +949,31 @@ function pressE()
 end
 
 -- FUNGSI BLINK
+function blinkAtas()
+    local character = player.Character
+    if not character then 
+        BlinkStatus.Text = "❌ ERROR: Character tidak ditemukan!"
+        BlinkStatus.TextColor3 = Color3.fromRGB(255,100,100)
+        return 
+    end
+    
+    local hrp = character:FindFirstChild("HumanoidRootPart")
+    if not hrp then 
+        BlinkStatus.Text = "❌ ERROR: HumanoidRootPart tidak ditemukan!"
+        BlinkStatus.TextColor3 = Color3.fromRGB(255,100,100)
+        return 
+    end
+    
+    BlinkStatus.Text = "⬆️ Blink ke atas 2 studs..."
+    BlinkStatus.TextColor3 = Color3.fromRGB(255,255,0)
+    
+    local blinkDistance = 2
+    hrp.CFrame = hrp.CFrame * CFrame.new(0, blinkDistance, 0)
+    
+    BlinkStatus.Text = "✅ Sudah naik 2 studs! kusuka turun naik"
+    BlinkStatus.TextColor3 = Color3.fromRGB(100,255,100)
+end
+
 function blinkDown()
     local character = player.Character
     if not character then 
@@ -1345,6 +1432,7 @@ end)
 RefreshBtn.MouseButton1Click:Connect(updateBuyIndicators)
 
 -- CONNECT BUTTONS MS SAFETY
+BlinkAtasBtn.MouseButton1Click:Connect(blinkAtas)
 BlinkDownBtn.MouseButton1Click:Connect(blinkDown)
 BlinkMajuBtn.MouseButton1Click:Connect(blinkMaju)
 BlinkMundurBtn.MouseButton1Click:Connect(blinkMundur)
