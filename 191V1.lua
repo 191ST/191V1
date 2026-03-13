@@ -693,6 +693,8 @@ MSLoopStopCorner.CornerRadius = UDim.new(0,8)
 
 -- Variables
 local loopRunning = false
+local noclipConnection = nil
+local originalCanCollide = {}
 
 -- Tool functions
 function findTool(toolName)
@@ -935,7 +937,65 @@ function startMSLoop()
     ToolStatus.Text = "Tool: -"
 end
 
--- ===== SMOOTH TP FUNCTION DENGAN ANTI FLING & LOADING =====
+-- ===== NOCLIP FUNCTION DENGAN RADIUS 5 STUD =====
+function enableNoclip()
+    -- Matikan noclip yang sudah ada
+    if noclipConnection then
+        noclipConnection:Disconnect()
+        noclipConnection = nil
+    end
+    
+    -- Simpan original CanCollide
+    originalCanCollide = {}
+    for _, v in pairs(workspace:GetDescendants()) do
+        if v:IsA("BasePart") and not v:IsDescendantOf(player.Character) then
+            originalCanCollide[v] = v.CanCollide
+        end
+    end
+    
+    -- Noclip loop dengan radius 5 stud dari karakter
+    noclipConnection = RunService.Heartbeat:Connect(function()
+        local character = player.Character
+        if not character then return end
+        
+        local hrp = character:FindFirstChild("HumanoidRootPart")
+        if not hrp then return end
+        
+        local charPos = hrp.Position
+        
+        -- Matikan collision untuk semua part dalam radius 5 stud
+        for _, v in pairs(workspace:GetDescendants()) do
+            if v:IsA("BasePart") and not v:IsDescendantOf(character) then
+                local dist = (v.Position - charPos).Magnitude
+                if dist <= 5 then
+                    v.CanCollide = false
+                else
+                    -- Kembalikan ke original jika di luar radius
+                    if originalCanCollide[v] ~= nil then
+                        v.CanCollide = originalCanCollide[v]
+                    end
+                end
+            end
+        end
+    end)
+end
+
+function disableNoclip()
+    if noclipConnection then
+        noclipConnection:Disconnect()
+        noclipConnection = nil
+    end
+    
+    -- Kembalikan semua CanCollide ke original
+    for v, canCollide in pairs(originalCanCollide) do
+        if v and v.Parent then
+            v.CanCollide = canCollide
+        end
+    end
+    originalCanCollide = {}
+end
+
+-- ===== SMOOTH TP FUNCTION DENGAN ANTI FLING, NOCLIP & LOADING =====
 function smoothTeleport(targetCFrame, duration)
     -- Cek karakter
     local character = player.Character
@@ -1021,6 +1081,9 @@ function smoothTeleport(targetCFrame, duration)
         end
     end
     
+    -- AKTIFKAN NOCLIP RADIUS 5 STUD
+    enableNoclip()
+    
     -- Show loading screen
     LoadingFrame.Visible = true
     LoadingBar.Size = UDim2.new(0,0,1,0)
@@ -1048,7 +1111,7 @@ function smoothTeleport(targetCFrame, duration)
         if percent < 30 then
             LoadingStatus.Text = "MENGUNCI SEMUA BAN..."
         elseif percent < 60 then
-            LoadingStatus.Text = "TELEPORTASI SMOOTH..."
+            LoadingStatus.Text = "NOCLIP AKTIF (RADIUS 5 STUD)..."
         elseif percent < 90 then
             LoadingStatus.Text = "ANTI FLING AKTIF..."
         else
@@ -1067,6 +1130,9 @@ function smoothTeleport(targetCFrame, duration)
     LoadingPercent.Text = "100%"
     LoadingStatus.Text = "TELEPORT SELESAI!"
     task.wait(0.5)
+    
+    -- MATIKAN NOCLIP
+    disableNoclip()
     
     -- Cleanup
     bp:Destroy()
