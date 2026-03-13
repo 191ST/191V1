@@ -617,10 +617,10 @@ local MSLoopStatusCorner = Instance.new("UICorner")
 MSLoopStatusCorner.Parent = MSLoopStatus
 MSLoopStatusCorner.CornerRadius = UDim.new(0,8)
 
--- INDICATOR BELI TOOLS
+-- INDICATOR BELI TOOLS (TANPA BAG)
 local BuyIndicatorFrame = Instance.new("Frame")
 BuyIndicatorFrame.Parent = MSLoopContent
-BuyIndicatorFrame.Size = UDim2.new(1,-20,0,160)
+BuyIndicatorFrame.Size = UDim2.new(1,-20,0,130)
 BuyIndicatorFrame.Position = UDim2.new(0,10,0,95)
 BuyIndicatorFrame.BackgroundColor3 = Color3.fromRGB(35,35,45)
 BuyIndicatorFrame.BorderSizePixel = 0
@@ -646,8 +646,8 @@ WaterIndicator.Parent = BuyIndicatorFrame
 WaterIndicator.Size = UDim2.new(1,-20,0,25)
 WaterIndicator.Position = UDim2.new(0,10,0,40)
 WaterIndicator.BackgroundTransparency = 1
-WaterIndicator.Text = "💧 WATER: 0/4"
-WaterIndicator.TextColor3 = Color3.fromRGB(255,100,100)
+WaterIndicator.Text = "💧 WATER: ❌ BELUM"
+WaterIndicator.TextColor3 = Color3.fromRGB(255,255,255)
 WaterIndicator.TextXAlignment = Enum.TextXAlignment.Left
 WaterIndicator.Font = Enum.Font.GothamBold
 WaterIndicator.TextSize = 14
@@ -656,10 +656,10 @@ WaterIndicator.TextSize = 14
 local SugarIndicator = Instance.new("TextLabel")
 SugarIndicator.Parent = BuyIndicatorFrame
 SugarIndicator.Size = UDim2.new(1,-20,0,25)
-SugarIndicator.Position = UDim2.new(0,10,0,70)
+SugarIndicator.Position = UDim2.new(0,10,0,65)
 SugarIndicator.BackgroundTransparency = 1
-SugarIndicator.Text = "🍚 SUGAR: 0/4"
-SugarIndicator.TextColor3 = Color3.fromRGB(255,100,100)
+SugarIndicator.Text = "🍚 SUGAR: ❌ BELUM"
+SugarIndicator.TextColor3 = Color3.fromRGB(255,255,255)
 SugarIndicator.TextXAlignment = Enum.TextXAlignment.Left
 SugarIndicator.Font = Enum.Font.GothamBold
 SugarIndicator.TextSize = 14
@@ -668,110 +668,51 @@ SugarIndicator.TextSize = 14
 local GelatinIndicator = Instance.new("TextLabel")
 GelatinIndicator.Parent = BuyIndicatorFrame
 GelatinIndicator.Size = UDim2.new(1,-20,0,25)
-GelatinIndicator.Position = UDim2.new(0,10,0,100)
+GelatinIndicator.Position = UDim2.new(0,10,0,90)
 GelatinIndicator.BackgroundTransparency = 1
-GelatinIndicator.Text = "🧪 GELATIN: 0/4"
-GelatinIndicator.TextColor3 = Color3.fromRGB(255,100,100)
+GelatinIndicator.Text = "🧪 GELATIN: ❌ BELUM"
+GelatinIndicator.TextColor3 = Color3.fromRGB(255,255,255)
 GelatinIndicator.TextXAlignment = Enum.TextXAlignment.Left
 GelatinIndicator.Font = Enum.Font.GothamBold
 GelatinIndicator.TextSize = 14
 
--- Bag Indicator
-local BagIndicator = Instance.new("TextLabel")
-BagIndicator.Parent = BuyIndicatorFrame
-BagIndicator.Size = UDim2.new(1,-20,0,25)
-BagIndicator.Position = UDim2.new(0,10,0,130)
-BagIndicator.BackgroundTransparency = 1
-BagIndicator.Text = "👜 BAG: 0/4"
-BagIndicator.TextColor3 = Color3.fromRGB(255,100,100)
-BagIndicator.TextXAlignment = Enum.TextXAlignment.Left
-BagIndicator.Font = Enum.Font.GothamBold
-BagIndicator.TextSize = 14
-
--- Function to count tools
-function countTools(toolName)
-    local count = 0
-    if not player.Character then return count end
-    
-    -- Check in character
-    for _, child in pairs(player.Character:GetChildren()) do
-        if child:IsA("Tool") and string.find(string.lower(child.Name), string.lower(toolName)) then
-            count = count + 1
-        end
-    end
-    
-    -- Check in backpack
-    local backpack = player:FindFirstChild("Backpack")
-    if backpack then
-        for _, child in pairs(backpack:GetChildren()) do
-            if child:IsA("Tool") and string.find(string.lower(child.Name), string.lower(toolName)) then
-                count = count + 1
-            end
-        end
-    end
-    
-    return count
-end
-
--- Function to update buy indicators with counts
+-- Function to update buy indicators
 local function updateBuyIndicators()
     -- Check Water
-    local waterCount = countTools("water")
-    WaterIndicator.Text = string.format("💧 WATER: %d/4", waterCount)
-    if waterCount >= 4 then
-        WaterIndicator.TextColor3 = Color3.fromRGB(100,255,100)
-    elseif waterCount >= 2 then
-        WaterIndicator.TextColor3 = Color3.fromRGB(255,255,100)
-    elseif waterCount >= 1 then
-        WaterIndicator.TextColor3 = Color3.fromRGB(255,150,100)
+    local waterTool = findTool("water")
+    if waterTool then
+        WaterIndicator.Text = "💧 WATER: ✅ SUDAH"
+        WaterIndicator.TextColor3 = Color3.fromRGB(100,200,255)
     else
-        WaterIndicator.TextColor3 = Color3.fromRGB(255,100,100)
+        WaterIndicator.Text = "💧 WATER: ❌ BELUM"
+        WaterIndicator.TextColor3 = Color3.fromRGB(255,255,255)
     end
     
     -- Check Sugar
-    local sugarCount = countTools("sugar")
-    SugarIndicator.Text = string.format("🍚 SUGAR: %d/4", sugarCount)
-    if sugarCount >= 4 then
-        SugarIndicator.TextColor3 = Color3.fromRGB(100,255,100)
-    elseif sugarCount >= 2 then
-        SugarIndicator.TextColor3 = Color3.fromRGB(255,255,100)
-    elseif sugarCount >= 1 then
-        SugarIndicator.TextColor3 = Color3.fromRGB(255,150,100)
+    local sugarTool = findTool("sugar")
+    if sugarTool then
+        SugarIndicator.Text = "🍚 SUGAR: ✅ SUDAH"
+        SugarIndicator.TextColor3 = Color3.fromRGB(100,200,255)
     else
-        SugarIndicator.TextColor3 = Color3.fromRGB(255,100,100)
+        SugarIndicator.Text = "🍚 SUGAR: ❌ BELUM"
+        SugarIndicator.TextColor3 = Color3.fromRGB(255,255,255)
     end
     
     -- Check Gelatin
-    local gelatinCount = countTools("gelatin")
-    GelatinIndicator.Text = string.format("🧪 GELATIN: %d/4", gelatinCount)
-    if gelatinCount >= 4 then
-        GelatinIndicator.TextColor3 = Color3.fromRGB(100,255,100)
-    elseif gelatinCount >= 2 then
-        GelatinIndicator.TextColor3 = Color3.fromRGB(255,255,100)
-    elseif gelatinCount >= 1 then
-        GelatinIndicator.TextColor3 = Color3.fromRGB(255,150,100)
+    local gelatinTool = findTool("gelatin")
+    if gelatinTool then
+        GelatinIndicator.Text = "🧪 GELATIN: ✅ SUDAH"
+        GelatinIndicator.TextColor3 = Color3.fromRGB(100,200,255)
     else
-        GelatinIndicator.TextColor3 = Color3.fromRGB(255,100,100)
-    end
-    
-    -- Check Bag (Empty bag)
-    local bagCount = countTools("empty") + countTools("bag")
-    BagIndicator.Text = string.format("👜 BAG: %d/4", bagCount)
-    if bagCount >= 4 then
-        BagIndicator.TextColor3 = Color3.fromRGB(100,255,100)
-    elseif bagCount >= 2 then
-        BagIndicator.TextColor3 = Color3.fromRGB(255,255,100)
-    elseif bagCount >= 1 then
-        BagIndicator.TextColor3 = Color3.fromRGB(255,150,100)
-    else
-        BagIndicator.TextColor3 = Color3.fromRGB(255,100,100)
+        GelatinIndicator.Text = "🧪 GELATIN: ❌ BELUM"
+        GelatinIndicator.TextColor3 = Color3.fromRGB(255,255,255)
     end
 end
 
 local MSLoopStepLabel = Instance.new("TextLabel")
 MSLoopStepLabel.Parent = MSLoopContent
 MSLoopStepLabel.Size = UDim2.new(1,-20,0,25)
-MSLoopStepLabel.Position = UDim2.new(0,10,0,265)
+MSLoopStepLabel.Position = UDim2.new(0,10,0,235)
 MSLoopStepLabel.BackgroundTransparency = 1
 MSLoopStepLabel.Text = "Step: Waiting..."
 MSLoopStepLabel.TextColor3 = Color3.fromRGB(200,200,200)
@@ -782,7 +723,7 @@ MSLoopStepLabel.TextSize = 14
 local MSLoopTimer = Instance.new("TextLabel")
 MSLoopTimer.Parent = MSLoopContent
 MSLoopTimer.Size = UDim2.new(1,-20,0,25)
-MSLoopTimer.Position = UDim2.new(0,10,0,290)
+MSLoopTimer.Position = UDim2.new(0,10,0,260)
 MSLoopTimer.BackgroundTransparency = 1
 MSLoopTimer.Text = "Timer: 0s"
 MSLoopTimer.TextColor3 = Color3.fromRGB(200,200,200)
@@ -794,7 +735,7 @@ MSLoopTimer.TextSize = 14
 local ToolStatus = Instance.new("TextLabel")
 ToolStatus.Parent = MSLoopContent
 ToolStatus.Size = UDim2.new(1,-20,0,25)
-ToolStatus.Position = UDim2.new(0,10,0,315)
+ToolStatus.Position = UDim2.new(0,10,0,285)
 ToolStatus.BackgroundTransparency = 1
 ToolStatus.Text = "Tool: -"
 ToolStatus.TextColor3 = Color3.fromRGB(200,200,200)
@@ -806,7 +747,7 @@ ToolStatus.TextSize = 14
 local JedaInfo = Instance.new("TextLabel")
 JedaInfo.Parent = MSLoopContent
 JedaInfo.Size = UDim2.new(1,-20,0,20)
-JedaInfo.Position = UDim2.new(0,10,0,340)
+JedaInfo.Position = UDim2.new(0,10,0,310)
 JedaInfo.BackgroundTransparency = 1
 JedaInfo.Text = "⏱️ Jeda 3 detik setelah WATER & GELATIN"
 JedaInfo.TextColor3 = Color3.fromRGB(255,255,100)
@@ -817,7 +758,7 @@ JedaInfo.TextSize = 12
 local MSLoopStartBtn = Instance.new("TextButton")
 MSLoopStartBtn.Parent = MSLoopContent
 MSLoopStartBtn.Size = UDim2.new(0.5,-15,0,45)
-MSLoopStartBtn.Position = UDim2.new(0,10,0,370)
+MSLoopStartBtn.Position = UDim2.new(0,10,0,340)
 MSLoopStartBtn.BackgroundColor3 = Color3.fromRGB(50,150,50)
 MSLoopStartBtn.Text = "▶️ START LOOP"
 MSLoopStartBtn.TextColor3 = Color3.fromRGB(255,255,255)
@@ -831,7 +772,7 @@ MSLoopStartCorner.CornerRadius = UDim.new(0,8)
 local MSLoopStopBtn = Instance.new("TextButton")
 MSLoopStopBtn.Parent = MSLoopContent
 MSLoopStopBtn.Size = UDim2.new(0.5,-15,0,45)
-MSLoopStopBtn.Position = UDim2.new(0.5,5,0,370)
+MSLoopStopBtn.Position = UDim2.new(0.5,5,0,340)
 MSLoopStopBtn.BackgroundColor3 = Color3.fromRGB(150,50,50)
 MSLoopStopBtn.Text = "⏹️ STOP LOOP"
 MSLoopStopBtn.TextColor3 = Color3.fromRGB(255,255,255)
@@ -846,7 +787,7 @@ MSLoopStopCorner.CornerRadius = UDim.new(0,8)
 local RefreshBtn = Instance.new("TextButton")
 RefreshBtn.Parent = MSLoopContent
 RefreshBtn.Size = UDim2.new(1,-20,0,30)
-RefreshBtn.Position = UDim2.new(0,10,0,425)
+RefreshBtn.Position = UDim2.new(0,10,0,395)
 RefreshBtn.BackgroundColor3 = Color3.fromRGB(60,60,80)
 RefreshBtn.Text = "🔄 REFRESH INDIKATOR"
 RefreshBtn.TextColor3 = Color3.fromRGB(200,200,255)
@@ -1462,10 +1403,10 @@ TweenService:Create(Frame, tweenInfo, {Size = openSize}):Play()
 task.wait(1)
 updateBuyIndicators()
 
--- Auto refresh every 5 seconds
+-- Auto refresh every 2 DETIK
 task.spawn(function()
     while true do
-        task.wait(5)
+        task.wait(2)
         if MSLoopContent.Visible then
             updateBuyIndicators()
         end
