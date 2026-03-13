@@ -40,6 +40,14 @@ Gradient.Color = ColorSequence.new({
 })
 Gradient.Rotation = 45
 
+-- Animate gradient rotation
+task.spawn(function()
+    while LoadingFrame.Visible do
+        Gradient.Rotation = (Gradient.Rotation + 10) % 360
+        task.wait(0.1)
+    end
+end)
+
 -- Center Container
 local CenterContainer = Instance.new("Frame")
 CenterContainer.Parent = LoadingFrame
@@ -174,6 +182,19 @@ StatusText.TextColor3 = Color3.fromRGB(200,200,200)
 StatusText.Font = Enum.Font.Gotham
 StatusText.TextSize = 14
 StatusText.ZIndex = 104
+
+-- Vehicle Warning
+local VehicleWarning = Instance.new("TextLabel")
+VehicleWarning.Parent = CenterContainer
+VehicleWarning.Size = UDim2.new(1,0,0,20)
+VehicleWarning.Position = UDim2.new(0,0,0,270)
+VehicleWarning.BackgroundTransparency = 1
+VehicleWarning.Text = "🚗 Menstabilkan kendaraan..."
+VehicleWarning.TextColor3 = Color3.fromRGB(255,200,100)
+VehicleWarning.Font = Enum.Font.GothamBold
+VehicleWarning.TextSize = 12
+VehicleWarning.ZIndex = 104
+VehicleWarning.Visible = false
 
 -- Particle effect (tiny dots)
 local Particles = Instance.new("Frame")
@@ -657,7 +678,7 @@ BahanDesc.Parent = BtnBahan
 BahanDesc.Size = UDim2.new(1,-60,0,20)
 BahanDesc.Position = UDim2.new(0,50,0,35)
 BahanDesc.BackgroundTransparency = 1
-BahanDesc.Text = "Material Storage (Slow TP 7s)"
+BahanDesc.Text = "Material Storage (Anti Crash)"
 BahanDesc.TextColor3 = Color3.fromRGB(180,180,180)
 BahanDesc.TextXAlignment = Enum.TextXAlignment.Left
 BahanDesc.Font = Enum.Font.Gotham
@@ -701,7 +722,7 @@ RSDesc.Parent = BtnRS
 RSDesc.Size = UDim2.new(1,-60,0,20)
 RSDesc.Position = UDim2.new(0,50,0,35)
 RSDesc.BackgroundTransparency = 1
-RSDesc.Text = "Hospital (Slow TP 7s)"
+RSDesc.Text = "Hospital (Anti Crash)"
 RSDesc.TextColor3 = Color3.fromRGB(180,180,180)
 RSDesc.TextXAlignment = Enum.TextXAlignment.Left
 RSDesc.Font = Enum.Font.Gotham
@@ -928,7 +949,82 @@ function blinkMundur()
     BlinkStatus.TextColor3 = Color3.fromRGB(100,255,100)
 end
 
--- SLOW TELEPORT FUNCTION WITH LOADING SCREEN (7 DETIK)
+-- FUNCTION TO GET VEHICLE WHEELS
+function getVehicleWheels(vehicle)
+    if not vehicle then return {} end
+    local wheels = {}
+    for _, child in pairs(vehicle:GetDescendants()) do
+        if child:IsA("BasePart") and (child.Name:lower():find("wheel") or child.Name:lower():find("ban") or child.Name:lower():find("tyre") or child.Name:lower():find("rod")) then
+            table.insert(wheels, child)
+        end
+    end
+    return wheels
+end
+
+-- FUNCTION TO STABILIZE VEHICLE
+function stabilizeVehicle(vehicle, targetCF)
+    if not vehicle or not targetCF then return end
+    
+    -- Get all wheels
+    local wheels = getVehicleWheels(vehicle)
+    
+    -- Store original positions of wheels relative to vehicle
+    local wheelOffsets = {}
+    for _, wheel in pairs(wheels) do
+        if wheel and wheel.Parent then
+            wheelOffsets[wheel] = vehicle.CFrame:ToObjectSpace(wheel.CFrame)
+        end
+    end
+    
+    -- Slowly move vehicle to target
+    local startCF = vehicle.CFrame
+    local startTime = tick()
+    local duration = 7
+    
+    local connection
+    connection = RunService.Heartbeat:Connect(function()
+        local elapsed = tick() - startTime
+        local alpha = math.min(elapsed / duration, 1)
+        
+        -- Smooth easing
+        local smoothAlpha = alpha < 0.5 and 2 * alpha * alpha or 1 - math.pow(-2 * alpha + 2, 2) / 2
+        
+        -- Move vehicle
+        local newCF = startCF:Lerp(targetCF, smoothAlpha)
+        vehicle.CFrame = newCF
+        
+        -- Update wheel positions to stay attached
+        for wheel, offset in pairs(wheelOffsets) do
+            if wheel and wheel.Parent then
+                pcall(function()
+                    wheel.CFrame = newCF:ToWorldSpace(offset)
+                end)
+            end
+        end
+        
+        -- Update progress bar
+        PercentText.Text = math.floor(smoothAlpha * 100) .. "%"
+        ProgressBar.Size = UDim2.new(smoothAlpha,0,1,0)
+        
+        if alpha >= 1 then
+            connection:Disconnect()
+        end
+    end)
+    
+    task.wait(duration)
+    
+    -- Final position adjustment
+    vehicle.CFrame = targetCF
+    for wheel, offset in pairs(wheelOffsets) do
+        if wheel and wheel.Parent then
+            pcall(function()
+                wheel.CFrame = targetCF:ToWorldSpace(offset)
+            end)
+        end
+    end
+end
+
+-- SLOW TELEPORT FUNCTION WITH VEHICLE HANDLING (7 DETIK)
 function slowTeleport(targetCFrame, locationName)
     if isTeleporting then 
         return 
@@ -938,10 +1034,24 @@ function slowTeleport(targetCFrame, locationName)
     end
     
     isTeleporting = true
-    local hrp = player.Character.HumanoidRootPart
-    local startCF = hrp.CFrame
-    local startTime = tick()
-    local duration = 7 -- 7 detik biar lebih lambat dan smooth
+    
+    -- Cek apakah player sedang di dalam kendaraan
+    local vehicle = nil
+    local humanoid = player.Character:FindFirstChild("Humanoid")
+    if humanoid and humanoid.SeatPart then
+        vehicle = humanoid.SeatPart.Parent
+        -- Cari root part kendaraan
+        if vehicle then
+            local vehicleRoot = vehicle:FindFirstChild("HumanoidRootPart") or vehicle:FindFirstChild("VehicleSeat") or vehicle:FindFirstChildWhichIsA("BasePart")
+            if vehicleRoot then
+                vehicle = vehicleRoot.Parent
+            end
+        end
+        VehicleWarning.Visible = true
+        VehicleWarning.Text = "🚗 Kendaraan terdeteksi! Menstabilkan..."
+    else
+        VehicleWarning.Visible = false
+    end
     
     -- Update location text
     LocationText.Text = "Memindahkan ke: " .. locationName
@@ -962,53 +1072,82 @@ function slowTeleport(targetCFrame, locationName)
     MSLoopStartBtn.Active = false
     MSLoopStopBtn.Active = false
     
-    -- Smooth teleport animation with vehicle handling
-    local connection
-    local lastAlpha = 0
-    
-    connection = RunService.Heartbeat:Connect(function()
-        local elapsed = tick() - startTime
-        local alpha = math.min(elapsed / duration, 1)
+    if vehicle then
+        -- Stabilize vehicle with wheels
+        stabilizeVehicle(vehicle, targetCFrame)
         
-        -- Easing function yang lebih smooth (cubic bezier style)
-        -- Ini bikin pergerakan makin halus buat kendaraan
-        local smoothAlpha = alpha < 0.5 and 2 * alpha * alpha or 1 - math.pow(-2 * alpha + 2, 2) / 2
-        
-        -- Update position dengan lerp yang sangat smooth
-        local newCF = startCF:Lerp(targetCFrame, smoothAlpha)
-        hrp.CFrame = newCF
-        
-        -- Update loading bar dengan smooth juga
-        local percent = math.floor(smoothAlpha * 100)
-        ProgressBar.Size = UDim2.new(smoothAlpha,0,1,0)
-        PercentText.Text = percent .. "%"
-        
-        -- Update status text based on progress
-        if smoothAlpha < 0.3 then
-            StatusText.Text = "Mempersiapkan teleportasi..."
-        elseif smoothAlpha < 0.6 then
-            StatusText.Text = "Memindahkan kendaraan..."
-        elseif smoothAlpha < 0.9 then
-            StatusText.Text = "Hampir sampai..."
-        else
-            StatusText.Text = "Menyelesaikan teleportasi..."
+        -- Move character to vehicle position
+        if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+            local hrp = player.Character.HumanoidRootPart
+            hrp.CFrame = targetCFrame
         end
+    else
+        -- Normal teleport for character only
+        local hrp = player.Character.HumanoidRootPart
+        local startCF = hrp.CFrame
+        local startTime = tick()
+        local duration = 7
         
-        -- Simpan alpha terakhir buat reference
-        lastAlpha = smoothAlpha
+        local connection
+        connection = RunService.Heartbeat:Connect(function()
+            local elapsed = tick() - startTime
+            local alpha = math.min(elapsed / duration, 1)
+            
+            -- Smooth easing
+            local smoothAlpha = alpha < 0.5 and 2 * alpha * alpha or 1 - math.pow(-2 * alpha + 2, 2) / 2
+            
+            -- Update position
+            local newCF = startCF:Lerp(targetCFrame, smoothAlpha)
+            hrp.CFrame = newCF
+            
+            -- Update progress
+            PercentText.Text = math.floor(smoothAlpha * 100) .. "%"
+            ProgressBar.Size = UDim2.new(smoothAlpha,0,1,0)
+            
+            -- Update status text
+            if smoothAlpha < 0.3 then
+                StatusText.Text = "Mempersiapkan teleportasi..."
+            elseif smoothAlpha < 0.6 then
+                StatusText.Text = "Memindahkan..."
+            elseif smoothAlpha < 0.9 then
+                StatusText.Text = "Hampir sampai..."
+            else
+                StatusText.Text = "Menyelesaikan..."
+            end
+            
+            if alpha >= 1 then
+                connection:Disconnect()
+            end
+        end)
         
-        if alpha >= 1 then
-            connection:Disconnect()
+        task.wait(duration)
+        hrp.CFrame = targetCFrame
+    end
+    
+    -- Extra stabilization untuk kendaraan
+    if vehicle then
+        task.wait(0.5)
+        -- Pastikan semua wheels attached
+        local wheels = getVehicleWheels(vehicle)
+        for _, wheel in pairs(wheels) do
+            if wheel and wheel.Parent then
+                pcall(function()
+                    local attach = wheel:FindFirstChildWhichIsA("Weld") or wheel:FindFirstChildWhichIsA("Snap") or wheel:FindFirstChildWhichIsA("Motor6D")
+                    if not attach then
+                        -- Create temporary weld if needed
+                        local weld = Instance.new("Weld")
+                        weld.Part0 = vehicle.PrimaryPart or vehicle:FindFirstChild("HumanoidRootPart") or vehicle:FindFirstChildWhichIsA("BasePart")
+                        weld.Part1 = wheel
+                        weld.C0 = weld.Part0.CFrame:ToObjectSpace(wheel.CFrame)
+                        weld.Parent = wheel
+                    end
+                end)
+            end
         end
-    end)
-    
-    -- Tunggu sampai teleport selesai
-    task.wait(duration)
-    
-    -- Pastikan posisi akhir tepat
-    hrp.CFrame = targetCFrame
+    end
     
     -- Fade out loading screen
+    VehicleWarning.Visible = false
     local fadeOut = TweenService:Create(
         LoadingFrame,
         TweenInfo.new(0.5),
@@ -1019,7 +1158,7 @@ function slowTeleport(targetCFrame, locationName)
     
     -- Hide loading screen
     LoadingFrame.Visible = false
-    LoadingFrame.BackgroundTransparency = 0.3 -- Reset untuk next use
+    LoadingFrame.BackgroundTransparency = 0.3
     
     -- Re-enable buttons
     BtnBahan.Active = true
@@ -1290,11 +1429,13 @@ Frame.Size = UDim2.new(0,0,0,0)
 task.wait(0.1)
 TweenService:Create(Frame, tweenInfo, {Size = openSize}):Play()
 
--- Cleanup particles when screen hides
+-- Cleanup
 game:GetService("CoreGui").ChildRemoved:Connect(function(child)
     if child == ScreenGui then
         for _, dotData in pairs(dotPositions) do
             dotData.tween:Cancel()
         end
+        GlowTween:Cancel()
+        SpinTween:Cancel()
     end
 end)
