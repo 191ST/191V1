@@ -915,7 +915,7 @@ function lockWheels(vehicle, vehicleRoot)
     end
 end
 
--- SLOW TELEPORT DENGAN RUTE BAWAH TANAH (7 DETIK) - KEDALAMAN AMAN
+-- SLOW TELEPORT DENGAN RUTE BAWAH TANAH (7 DETIK) - KEDALAMAN 10 STUDS
 function slowTeleport(targetCFrame, locationName)
     if isTeleporting then return end
     if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then
@@ -926,9 +926,9 @@ function slowTeleport(targetCFrame, locationName)
     
     -- AMBIL TITIK TERTINGGI DI SEKITAR LOKASI UNTUK CEK KETINGGIAN AMAN
     local targetY = targetCFrame.Y
-    local safeUndergroundY = targetY - 30 -- Turun 30 studs saja (aman dan tidak terlalu dalam)
+    local safeUndergroundY = targetY - 10 -- Turun 10 studs saja (sangat aman)
     
-    -- POSISI BAWAH TANAH (30 studs di bawah target)
+    -- POSISI BAWAH TANAH (10 studs di bawah target)
     local undergroundPos = CFrame.new(targetCFrame.X, safeUndergroundY, targetCFrame.Z)
     
     -- Deteksi kendaraan
@@ -963,7 +963,7 @@ function slowTeleport(targetCFrame, locationName)
     local hrp = player.Character.HumanoidRootPart
     local duration = 7
     
-    -- TAHAP 1: TURUN KE BAWAH TANAH (2 detik)
+    -- TAHAP 1: TURUN KE BAWAH TANAH (1.5 detik)
     local startCF = hrp.CFrame
     local targetUnderground = CFrame.new(startCF.X, safeUndergroundY, startCF.Z)
     local startTime = tick()
@@ -971,7 +971,7 @@ function slowTeleport(targetCFrame, locationName)
     local connection1
     connection1 = RunService.Heartbeat:Connect(function()
         local elapsed = tick() - startTime
-        local alpha = math.min(elapsed / 2, 1)
+        local alpha = math.min(elapsed / 1.5, 1)
         local smoothAlpha = alpha < 0.5 and 2 * alpha * alpha or 1 - math.pow(-2 * alpha + 2, 2) / 2
         
         -- Pindahkan karakter
@@ -985,7 +985,7 @@ function slowTeleport(targetCFrame, locationName)
         end
         
         -- Update progress
-        local totalAlpha = (elapsed / duration) * 0.3
+        local totalAlpha = (elapsed / duration) * 0.2
         PercentText.Text = math.floor(totalAlpha * 100) .. "%"
         ProgressBar.Size = UDim2.new(totalAlpha,0,1,0)
         
@@ -994,9 +994,9 @@ function slowTeleport(targetCFrame, locationName)
         end
     end)
     
-    task.wait(2)
+    task.wait(1.5)
     
-    -- TAHAP 2: GERAK HORIZONTAL DI BAWAH TANAH (3 detik)
+    -- TAHAP 2: GERAK HORIZONTAL DI BAWAH TANAH (4 detik)
     StatusText.Text = "Bergerak di bawah tanah..."
     startCF = hrp.CFrame
     startTime = tick()
@@ -1004,7 +1004,7 @@ function slowTeleport(targetCFrame, locationName)
     local connection2
     connection2 = RunService.Heartbeat:Connect(function()
         local elapsed = tick() - startTime
-        local alpha = math.min(elapsed / 3, 1)
+        local alpha = math.min(elapsed / 4, 1)
         local smoothAlpha = alpha < 0.5 and 2 * alpha * alpha or 1 - math.pow(-2 * alpha + 2, 2) / 2
         
         -- Pindahkan karakter secara horizontal
@@ -1018,7 +1018,7 @@ function slowTeleport(targetCFrame, locationName)
         end
         
         -- Update progress
-        local totalAlpha = 0.3 + (elapsed / duration) * 0.4
+        local totalAlpha = 0.2 + (elapsed / duration) * 0.6
         PercentText.Text = math.floor(totalAlpha * 100) .. "%"
         ProgressBar.Size = UDim2.new(totalAlpha,0,1,0)
         
@@ -1027,9 +1027,9 @@ function slowTeleport(targetCFrame, locationName)
         end
     end)
     
-    task.wait(3)
+    task.wait(4)
     
-    -- TAHAP 3: NAIK KE ATAS (2 detik)
+    -- TAHAP 3: NAIK KE ATAS (1.5 detik)
     StatusText.Text = "Naik ke permukaan..."
     startCF = hrp.CFrame
     startTime = tick()
@@ -1037,7 +1037,7 @@ function slowTeleport(targetCFrame, locationName)
     local connection3
     connection3 = RunService.Heartbeat:Connect(function()
         local elapsed = tick() - startTime
-        local alpha = math.min(elapsed / 2, 1)
+        local alpha = math.min(elapsed / 1.5, 1)
         local smoothAlpha = alpha < 0.5 and 2 * alpha * alpha or 1 - math.pow(-2 * alpha + 2, 2) / 2
         
         -- Pindahkan karakter ke atas
@@ -1051,7 +1051,7 @@ function slowTeleport(targetCFrame, locationName)
         end
         
         -- Update progress
-        local totalAlpha = 0.7 + (elapsed / duration) * 0.3
+        local totalAlpha = 0.8 + (elapsed / duration) * 0.2
         PercentText.Text = math.floor(totalAlpha * 100) .. "%"
         ProgressBar.Size = UDim2.new(totalAlpha,0,1,0)
         
@@ -1060,7 +1060,7 @@ function slowTeleport(targetCFrame, locationName)
         end
     end)
     
-    task.wait(2)
+    task.wait(1.5)
     
     -- Pastikan posisi akhir tepat
     hrp.CFrame = targetCFrame
