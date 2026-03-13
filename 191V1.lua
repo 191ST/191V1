@@ -189,7 +189,7 @@ VehicleWarning.Parent = CenterContainer
 VehicleWarning.Size = UDim2.new(1,0,0,20)
 VehicleWarning.Position = UDim2.new(0,0,0,270)
 VehicleWarning.BackgroundTransparency = 1
-VehicleWarning.Text = "🚗 Mengunci ban kendaraan..."
+VehicleWarning.Text = "🔍 Mencari kendaraan..."
 VehicleWarning.TextColor3 = Color3.fromRGB(255,200,100)
 VehicleWarning.Font = Enum.Font.GothamBold
 VehicleWarning.TextSize = 12
@@ -678,7 +678,7 @@ BahanDesc.Parent = BtnBahan
 BahanDesc.Size = UDim2.new(1,-60,0,20)
 BahanDesc.Position = UDim2.new(0,50,0,35)
 BahanDesc.BackgroundTransparency = 1
-BahanDesc.Text = "Material Storage (Anti Terbang)"
+BahanDesc.Text = "Material Storage (Auto Vehicle)"
 BahanDesc.TextColor3 = Color3.fromRGB(180,180,180)
 BahanDesc.TextXAlignment = Enum.TextXAlignment.Left
 BahanDesc.Font = Enum.Font.Gotham
@@ -722,7 +722,7 @@ RSDesc.Parent = BtnRS
 RSDesc.Size = UDim2.new(1,-60,0,20)
 RSDesc.Position = UDim2.new(0,50,0,35)
 RSDesc.BackgroundTransparency = 1
-RSDesc.Text = "Hospital (Anti Terbang)"
+RSDesc.Text = "Hospital (Auto Vehicle)"
 RSDesc.TextColor3 = Color3.fromRGB(180,180,180)
 RSDesc.TextXAlignment = Enum.TextXAlignment.Left
 RSDesc.Font = Enum.Font.Gotham
@@ -950,17 +950,93 @@ function blinkMundur()
     BlinkStatus.TextColor3 = Color3.fromRGB(100,255,100)
 end
 
--- FUNCTION TO GET VEHICLE WHEELS (MORE AGGRESSIVE)
+-- FUNGSI DETEKSI KENDARAAN YANG LEBIH AKURAT
+function findVehicle()
+    local character = player.Character
+    if not character then return nil end
+    
+    local humanoid = character:FindFirstChild("Humanoid")
+    if not humanoid then return nil end
+    
+    -- Cek apakah player sedang duduk di kursi kendaraan
+    if humanoid.SeatPart then
+        local seat = humanoid.SeatPart
+        local vehicle = seat.Parent
+        
+        -- Validasi bahwa ini benar-benar kendaraan
+        if vehicle then
+            -- Cari VehicleSeat atau komponen kendaraan lainnya
+            local hasVehicleSeat = vehicle:FindFirstChildWhichIsA("VehicleSeat") ~= nil
+            local hasWheels = false
+            
+            -- Cek apakah ada part yang mirip ban
+            for _, child in pairs(vehicle:GetDescendants()) do
+                if child:IsA("BasePart") then
+                    local nameLower = string.lower(child.Name)
+                    if nameLower:find("wheel") or nameLower:find("ban") or nameLower:find("tyre") then
+                        hasWheels = true
+                        break
+                    end
+                end
+            end
+            
+            if hasVehicleSeat or hasWheels then
+                return vehicle
+            end
+        end
+    end
+    
+    return nil
+end
+
+-- FUNCTION TO GET VEHICLE ROOT PART
+function getVehicleRoot(vehicle)
+    if not vehicle then return nil end
+    
+    -- Coba cari PrimaryPart dulu
+    if vehicle.PrimaryPart then
+        return vehicle.PrimaryPart
+    end
+    
+    -- Cari HumanoidRootPart
+    local hrp = vehicle:FindFirstChild("HumanoidRootPart")
+    if hrp then
+        return hrp
+    end
+    
+    -- Cari VehicleSeat
+    local seat = vehicle:FindFirstChildWhichIsA("VehicleSeat")
+    if seat then
+        return seat
+    end
+    
+    -- Cari part terbesar sebagai alternatif
+    local largestPart = nil
+    local largestSize = 0
+    
+    for _, child in pairs(vehicle:GetChildren()) do
+        if child:IsA("BasePart") then
+            local size = child.Size.X * child.Size.Y * child.Size.Z
+            if size > largestSize then
+                largestSize = size
+                largestPart = child
+            end
+        end
+    end
+    
+    return largestPart
+end
+
+-- FUNCTION TO GET VEHICLE WHEELS
 function getVehicleWheels(vehicle)
     if not vehicle then return {} end
     local wheels = {}
     
-    -- Cari semua part yang mungkin jadi ban
-    local wheelKeywords = {"wheel", "ban", "tyre", "tire", "rod", "axle", "rim", "spoke", "hub", "rotor", "brake", "suspension", "shock", "spring", "arm", "linkage", "drive", "shaft"}
+    local wheelKeywords = {"wheel", "ban", "tyre", "tire", "rod", "axle", "rim"}
     
     for _, child in pairs(vehicle:GetDescendants()) do
         if child:IsA("BasePart") then
-            local nameLower = child.Name:lower()
+            local nameLower = string.lower(child.Name)
             for _, keyword in pairs(wheelKeywords) do
                 if nameLower:find(keyword) then
                     table.insert(wheels, child)
@@ -973,9 +1049,9 @@ function getVehicleWheels(vehicle)
     return wheels
 end
 
--- FUNCTION TO LOCK WHEELS (AGGRESSIVE)
-function lockWheels(vehicle, targetCF)
-    if not vehicle then return {} end
+-- FUNCTION TO LOCK WHEELS
+function lockWheels(vehicle, vehicleRoot, targetCF)
+    if not vehicle or not vehicleRoot then return {} end
     
     -- Bersihkan weld lama
     for _, weld in pairs(wheelWelds) do
@@ -984,28 +1060,24 @@ function lockWheels(vehicle, targetCF)
     wheelWelds = {}
     
     local wheels = getVehicleWheels(vehicle)
-    local vehicleRoot = vehicle.PrimaryPart or vehicle:FindFirstChild("HumanoidRootPart") or vehicle:FindFirstChildWhichIsA("BasePart")
     
-    if not vehicleRoot then return wheels end
-    
-    -- Buat weld super kuat untuk setiap ban
     for _, wheel in pairs(wheels) do
         if wheel and wheel.Parent and wheel ~= vehicleRoot then
             pcall(function()
-                -- Hapus semua weld/joint yang ada
+                -- Hapus weld/joint yang ada
                 for _, joint in pairs(wheel:GetChildren()) do
-                    if joint:IsA("Weld") or joint:IsA("Snap") or joint:IsA("Motor6D") or joint:IsA("Constraint") then
+                    if joint:IsA("Weld") or joint:IsA("Snap") or joint:IsA("Motor6D") then
                         joint:Destroy()
                     end
                 end
                 
-                -- Buat weld baru yang super kuat
+                -- Buat weld baru
                 local weld = Instance.new("Weld")
                 weld.Part0 = vehicleRoot
                 weld.Part1 = wheel
                 
-                -- Hitung offset relatif ke target CFrame
-                local relativeOffset = targetCF:ToObjectSpace(wheel.CFrame)
+                -- Hitung offset relatif
+                local relativeOffset = vehicleRoot.CFrame:ToObjectSpace(wheel.CFrame)
                 weld.C0 = relativeOffset
                 
                 weld.Parent = wheel
@@ -1017,32 +1089,38 @@ function lockWheels(vehicle, targetCF)
     return wheels
 end
 
--- FUNCTION TO STABILIZE VEHICLE WITH SUPER LOCK
-function stabilizeVehicle(vehicle, targetCF)
-    if not vehicle or not targetCF then return end
+-- FUNCTION TO TELEPORT VEHICLE
+function teleportVehicle(vehicle, targetCFrame, duration)
+    if not vehicle then return end
+    
+    local vehicleRoot = getVehicleRoot(vehicle)
+    if not vehicleRoot then 
+        StatusText.Text = "❌ Tidak bisa menemukan root kendaraan!"
+        return 
+    end
     
     VehicleWarning.Visible = true
-    VehicleWarning.Text = "🔒 MENGUNCI BAN DENGAN SUPER WELD..."
+    VehicleWarning.Text = "🔧 Mengunci komponen kendaraan..."
     
-    -- Lock wheels immediately with super weld
-    local wheels = lockWheels(vehicle, targetCF)
+    -- Lock wheels
+    lockWheels(vehicle, vehicleRoot, targetCFrame)
     
-    task.wait(0.5) -- Kasih waktu weld terbentuk
+    task.wait(0.5)
     
-    VehicleWarning.Text = "🚗 MEMINDAHKAN KENDARAAN..."
+    VehicleWarning.Text = "🚗 Memindahkan kendaraan..."
     
-    -- Store original positions for backup
+    -- Store wheel offsets untuk backup
+    local wheels = getVehicleWheels(vehicle)
     local wheelOffsets = {}
     for _, wheel in pairs(wheels) do
         if wheel and wheel.Parent then
-            wheelOffsets[wheel] = targetCF:ToObjectSpace(wheel.CFrame)
+            wheelOffsets[wheel] = vehicleRoot.CFrame:ToObjectSpace(wheel.CFrame)
         end
     end
     
-    -- Slowly move vehicle to target
-    local startCF = vehicle.CFrame
+    -- Smooth teleport untuk kendaraan
+    local startCF = vehicleRoot.CFrame
     local startTime = tick()
-    local duration = 7
     
     local connection
     connection = RunService.Heartbeat:Connect(function()
@@ -1052,23 +1130,14 @@ function stabilizeVehicle(vehicle, targetCF)
         -- Smooth easing
         local smoothAlpha = alpha < 0.5 and 2 * alpha * alpha or 1 - math.pow(-2 * alpha + 2, 2) / 2
         
-        -- Move vehicle
-        local newCF = startCF:Lerp(targetCF, smoothAlpha)
-        vehicle.CFrame = newCF
+        -- Pindahkan root kendaraan
+        local newCF = startCF:Lerp(targetCFrame, smoothAlpha)
+        vehicleRoot.CFrame = newCF
         
-        -- Update weld positions to match vehicle movement
-        for _, weld in pairs(wheelWelds) do
-            if weld and weld.Parent then
-                pcall(function()
-                    -- Weld akan otomatis menjaga posisi relatif
-                end)
-            end
-        end
-        
-        -- Backup manual update for any wheels without welds
+        -- Update posisi ban yang mungkin lepas dari weld
         for wheel, offset in pairs(wheelOffsets) do
             if wheel and wheel.Parent then
-                -- Cek apakah wheel masih punya weld
+                -- Cek apakah wheel masih terhubung dengan weld
                 local hasWeld = false
                 for _, weld in pairs(wheelWelds) do
                     if weld.Part1 == wheel then
@@ -1078,6 +1147,7 @@ function stabilizeVehicle(vehicle, targetCF)
                 end
                 
                 if not hasWeld then
+                    -- Backup: force position
                     pcall(function()
                         wheel.CFrame = newCF:ToWorldSpace(offset)
                     end)
@@ -1089,15 +1159,15 @@ function stabilizeVehicle(vehicle, targetCF)
         PercentText.Text = math.floor(smoothAlpha * 100) .. "%"
         ProgressBar.Size = UDim2.new(smoothAlpha,0,1,0)
         
-        -- Update status text
+        -- Update status
         if smoothAlpha < 0.3 then
-            StatusText.Text = "Mengunci ban..."
+            StatusText.Text = "Mengunci komponen..."
         elseif smoothAlpha < 0.6 then
             StatusText.Text = "Memindahkan kendaraan..."
         elseif smoothAlpha < 0.9 then
-            StatusText.Text = "Menstabilkan ban..."
+            StatusText.Text = "Menstabilkan..."
         else
-            StatusText.Text = "Finalizing..."
+            StatusText.Text = "Hampir selesai..."
         end
         
         if alpha >= 1 then
@@ -1108,46 +1178,25 @@ function stabilizeVehicle(vehicle, targetCF)
     task.wait(duration)
     
     -- Final position
-    vehicle.CFrame = targetCF
+    vehicleRoot.CFrame = targetCFrame
     
-    -- Re-lock wheels one more time
-    lockWheels(vehicle, targetCF)
+    -- Re-lock wheels
+    lockWheels(vehicle, vehicleRoot, targetCFrame)
     
-    -- Extra stabilization: force all wheels to correct position
+    -- Force semua ban ke posisi yang benar
     for wheel, offset in pairs(wheelOffsets) do
         if wheel and wheel.Parent then
             pcall(function()
-                wheel.CFrame = targetCF:ToWorldSpace(offset)
-                
-                -- Create another weld if still detached
-                local hasWeld = false
-                for _, weld in pairs(wheelWelds) do
-                    if weld.Part1 == wheel then
-                        hasWeld = true
-                        break
-                    end
-                end
-                
-                if not hasWeld then
-                    local vehicleRoot = vehicle.PrimaryPart or vehicle:FindFirstChild("HumanoidRootPart") or vehicle:FindFirstChildWhichIsA("BasePart")
-                    if vehicleRoot then
-                        local emergencyWeld = Instance.new("Weld")
-                        emergencyWeld.Part0 = vehicleRoot
-                        emergencyWeld.Part1 = wheel
-                        emergencyWeld.C0 = targetCF:ToObjectSpace(wheel.CFrame)
-                        emergencyWeld.Parent = wheel
-                        table.insert(wheelWelds, emergencyWeld)
-                    end
-                end
+                wheel.CFrame = targetCFrame:ToWorldSpace(offset)
             end)
         end
     end
     
-    task.wait(0.5) -- Stabilisasi akhir
-    VehicleWarning.Text = "✅ BAN TERKUNCI!"
+    task.wait(0.5)
+    VehicleWarning.Text = "✅ Kendaraan siap!"
 end
 
--- SLOW TELEPORT FUNCTION WITH SUPER LOCK (7 DETIK)
+-- SLOW TELEPORT FUNCTION (7 DETIK)
 function slowTeleport(targetCFrame, locationName)
     if isTeleporting then 
         return 
@@ -1158,34 +1207,21 @@ function slowTeleport(targetCFrame, locationName)
     
     isTeleporting = true
     
-    -- Cek apakah player sedang di dalam kendaraan
-    local vehicle = nil
-    local humanoid = player.Character:FindFirstChild("Humanoid")
-    if humanoid and humanoid.SeatPart then
-        vehicle = humanoid.SeatPart.Parent
-        -- Cari root part kendaraan
-        if vehicle then
-            local vehicleRoot = vehicle:FindFirstChild("HumanoidRootPart") or vehicle:FindFirstChild("VehicleSeat") or vehicle:FindFirstChildWhichIsA("BasePart")
-            if vehicleRoot then
-                vehicle = vehicleRoot.Parent
-            end
-        end
-        VehicleWarning.Visible = true
-    else
-        VehicleWarning.Visible = false
-    end
+    -- Deteksi kendaraan
+    local vehicle = findVehicle()
+    local duration = 7
     
     -- Update location text
     LocationText.Text = "Memindahkan ke: " .. locationName
     StatusText.Text = "Memproses teleportasi..."
     
-    -- Show loading screen with fade in
+    -- Show loading screen
     LoadingFrame.Visible = true
     LoadingFrame.BackgroundTransparency = 0.3
     ProgressBar.Size = UDim2.new(0,0,1,0)
     PercentText.Text = "0%"
     
-    -- Disable buttons during teleport
+    -- Disable buttons
     BtnBahan.Active = false
     BtnRS.Active = false
     BlinkDownBtn.Active = false
@@ -1195,40 +1231,38 @@ function slowTeleport(targetCFrame, locationName)
     MSLoopStopBtn.Active = false
     
     if vehicle then
-        -- Stabilize vehicle with super lock
-        stabilizeVehicle(vehicle, targetCFrame)
+        -- Teleport kendaraan
+        VehicleWarning.Visible = true
+        VehicleWarning.Text = "✅ Kendaraan ditemukan! Memindahkan..."
+        teleportVehicle(vehicle, targetCFrame, duration)
         
-        -- Move character to vehicle position
+        -- Pindahkan karakter ke dalam kendaraan
         if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
             local hrp = player.Character.HumanoidRootPart
             hrp.CFrame = targetCFrame
         end
     else
-        -- Normal teleport for character only
+        VehicleWarning.Visible = false
+        StatusText.Text = "Memindahkan karakter..."
+        
+        -- Teleport karakter saja
         local hrp = player.Character.HumanoidRootPart
         local startCF = hrp.CFrame
         local startTime = tick()
-        local duration = 7
         
         local connection
         connection = RunService.Heartbeat:Connect(function()
             local elapsed = tick() - startTime
             local alpha = math.min(elapsed / duration, 1)
-            
-            -- Smooth easing
             local smoothAlpha = alpha < 0.5 and 2 * alpha * alpha or 1 - math.pow(-2 * alpha + 2, 2) / 2
             
-            -- Update position
-            local newCF = startCF:Lerp(targetCFrame, smoothAlpha)
-            hrp.CFrame = newCF
+            hrp.CFrame = startCF:Lerp(targetCFrame, smoothAlpha)
             
-            -- Update progress
             PercentText.Text = math.floor(smoothAlpha * 100) .. "%"
             ProgressBar.Size = UDim2.new(smoothAlpha,0,1,0)
             
-            -- Update status text
             if smoothAlpha < 0.3 then
-                StatusText.Text = "Mempersiapkan teleportasi..."
+                StatusText.Text = "Mempersiapkan..."
             elseif smoothAlpha < 0.6 then
                 StatusText.Text = "Memindahkan..."
             elseif smoothAlpha < 0.9 then
@@ -1246,10 +1280,8 @@ function slowTeleport(targetCFrame, locationName)
         hrp.CFrame = targetCFrame
     end
     
-    -- Bersihkan welds setelah teleport selesai (optional)
-    -- Jangan langsung dihapus biar ban tetap nempel
-    -- Tapi kita bisa hapus setelah beberapa detik
-    task.wait(2)
+    -- Bersihkan welds
+    task.wait(1)
     for _, weld in pairs(wheelWelds) do
         pcall(function() weld:Destroy() end)
     end
@@ -1265,7 +1297,6 @@ function slowTeleport(targetCFrame, locationName)
     fadeOut:Play()
     task.wait(0.5)
     
-    -- Hide loading screen
     LoadingFrame.Visible = false
     LoadingFrame.BackgroundTransparency = 0.3
     
@@ -1281,7 +1312,7 @@ function slowTeleport(targetCFrame, locationName)
     isTeleporting = false
 end
 
--- TP Functions with Slow Teleport (7 seconds)
+-- TP Functions
 function TP_MS_BAHAN()
     if isTeleporting then return end
     local targetPos = CFrame.new(521.32, 47.79, 617.25)
@@ -1445,7 +1476,7 @@ BlinkMundurBtn.MouseButton1Click:Connect(function()
     if not isTeleporting then blinkMundur() end
 end)
 
--- Tab Switching (SEKARANG 3 TAB)
+-- Tab Switching
 TPTabBtn.MouseButton1Click:Connect(function()
     TPContent.Visible = true
     MSLoopContent.Visible = false
