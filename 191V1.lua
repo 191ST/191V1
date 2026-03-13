@@ -935,7 +935,7 @@ function startMSLoop()
     ToolStatus.Text = "Tool: -"
 end
 
--- ===== SMOOTH TP FUNCTION DENGAN ANTI FLING, NAIK 40 STUDS, JALAN, LALU TURUN =====
+-- ===== SMOOTH TP FUNCTION DENGAN ANTI FLING, NAIK 65 STUDS, JALAN, LALU TURUN =====
 function smoothTeleport(targetCFrame, duration)
     -- Cek karakter
     local character = player.Character
@@ -1029,14 +1029,15 @@ function smoothTeleport(targetCFrame, duration)
     -- POSISI AWAL
     local startCF = hrp.CFrame
     
-    -- HITUNG TITIK PERTENGAHAN (NAIK 40 STUDS)
-    local upCF = startCF + Vector3.new(0, 40, 0)
+    -- HITUNG TITIK PERTENGAHAN (NAIK 65 STUDS)
+    local riseHeight = 65
+    local upCF = startCF + Vector3.new(0, riseHeight, 0)
     
     -- HITUNG TITIK HORIZONTAL (POSISI TARGET TAPI TINGGI SAMA DENGAN upCF)
     local horizontalCF = CFrame.new(targetCFrame.X, upCF.Y, targetCFrame.Z) * CFrame.Angles(0, targetCFrame.Rotation.Y, 0)
     
     -- BAGI DURASI MENJADI 3 BAGIAN: NAIK (30%), JALAN (40%), TURUN (30%)
-    local riseDuration = duration * 0.3  -- 30% waktu untuk naik 40 studs
+    local riseDuration = duration * 0.3  -- 30% waktu untuk naik 65 studs
     local travelDuration = duration * 0.4 -- 40% waktu untuk jalan horizontal
     local descendDuration = duration * 0.3 -- 30% waktu untuk turun ke target
     
@@ -1047,9 +1048,9 @@ function smoothTeleport(targetCFrame, duration)
     
     local stepTime = duration / totalSteps
     
-    LoadingStatus.Text = "FASE 1: NAIK 40 STUDS KE ATAS..."
+    LoadingStatus.Text = "FASE 1: NAIK 65 STUDS KE ATAS..."
     
-    -- FASE 1: NAIK 40 STUDS
+    -- FASE 1: NAIK 65 STUDS
     for i = 1, riseSteps do
         if not hrp or not hrp.Parent then break end
         
@@ -1063,7 +1064,7 @@ function smoothTeleport(targetCFrame, duration)
         local percent = math.floor((i / totalSteps) * 100)
         LoadingBar.Size = UDim2.new(percent/100,0,1,0)
         LoadingPercent.Text = percent .. "%"
-        LoadingStatus.Text = string.format("NAIK: %d/40 studs", math.floor(alpha * 40))
+        LoadingStatus.Text = string.format("NAIK: %d/65 studs", math.floor(alpha * 65))
         
         task.wait(stepTime)
     end
@@ -1093,7 +1094,7 @@ function smoothTeleport(targetCFrame, duration)
         task.wait(stepTime)
     end
     
-    LoadingStatus.Text = "FASE 3: TURUN KE WAYPOINT..."
+    LoadingStatus.Text = "FASE 3: TURUN DARI 65 STUDS KE WAYPOINT..."
     
     -- FASE 3: TURUN KE TARGET
     for i = 1, descendSteps do
@@ -1110,7 +1111,7 @@ function smoothTeleport(targetCFrame, duration)
         local percent = math.floor((stepIndex / totalSteps) * 100)
         LoadingBar.Size = UDim2.new(percent/100,0,1,0)
         LoadingPercent.Text = percent .. "%"
-        LoadingStatus.Text = string.format("TURUN: %d/40 studs", math.floor(alpha * 40))
+        LoadingStatus.Text = string.format("TURUN: %d/65 studs", math.floor((1 - alpha) * 65))
         
         task.wait(stepTime)
     end
@@ -1142,7 +1143,7 @@ function smoothTeleport(targetCFrame, duration)
     LoadingFrame.Visible = false
 end
 
--- TP Functions dengan smooth teleport (NAIK 40 STUDS, JALAN, TURUN)
+-- TP Functions dengan smooth teleport (NAIK 65 STUDS, JALAN, TURUN)
 function TP_MS_BAHAN()
     smoothTeleport(CFrame.new(521.32,47.79,617.25), 10)
 end
