@@ -895,7 +895,7 @@ function lockVehicleCompletely(vehicle, vehicleRoot)
     end
 end
 
--- SLOW TELEPORT - LANGSUNG TANPA UNDERGROUND
+-- SLOW TELEPORT - 8 DETIK (SUPER AMAN)
 function slowTeleport(targetCFrame, locationName)
     if isTeleporting then return end
     if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then
@@ -932,7 +932,7 @@ function slowTeleport(targetCFrame, locationName)
     MSLoopStopBtn.Active = false
     
     local hrp = player.Character.HumanoidRootPart
-    local duration = 5 -- 5 detik aja biar cepet
+    local duration = 8 -- 8 detik biar super aman
     
     -- Smooth teleport
     local startCF = hrp.CFrame
@@ -943,8 +943,8 @@ function slowTeleport(targetCFrame, locationName)
         local elapsed = tick() - startTime
         local alpha = math.min(elapsed / duration, 1)
         
-        -- Easing yang sangat smooth
-        local smoothAlpha = alpha < 0.5 and 2 * alpha * alpha or 1 - math.pow(-2 * alpha + 2, 2) / 2
+        -- Easing yang sangat smooth (Quintic)
+        local smoothAlpha = alpha * alpha * alpha * (alpha * (alpha * 6 - 15) + 10)
         
         -- Pindahkan karakter
         local newCF = startCF:Lerp(targetCFrame, smoothAlpha)
@@ -959,11 +959,11 @@ function slowTeleport(targetCFrame, locationName)
         PercentText.Text = math.floor(smoothAlpha * 100) .. "%"
         ProgressBar.Size = UDim2.new(smoothAlpha,0,1,0)
         
-        if smoothAlpha < 0.3 then
+        if smoothAlpha < 0.25 then
             StatusText.Text = "Mempersiapkan..."
-        elseif smoothAlpha < 0.6 then
+        elseif smoothAlpha < 0.5 then
             StatusText.Text = "Memindahkan..."
-        elseif smoothAlpha < 0.9 then
+        elseif smoothAlpha < 0.75 then
             StatusText.Text = "Hampir sampai..."
         else
             StatusText.Text = "Menyelesaikan..."
