@@ -266,7 +266,7 @@ MSLoopContent.Size = UDim2.new(1,0,1,0)
 MSLoopContent.BackgroundTransparency = 1
 MSLoopContent.Visible = false
 MSLoopContent.ScrollBarThickness = 6
-MSLoopContent.CanvasSize = UDim2.new(0,0,0,600)
+MSLoopContent.CanvasSize = UDim2.new(0,0,0,550)
 
 -- MS SAFETY TAB CONTENT
 local MSSafetyContent = Instance.new("ScrollingFrame")
@@ -646,7 +646,7 @@ WaterIndicator.Parent = BuyIndicatorFrame
 WaterIndicator.Size = UDim2.new(1,-20,0,25)
 WaterIndicator.Position = UDim2.new(0,10,0,40)
 WaterIndicator.BackgroundTransparency = 1
-WaterIndicator.Text = "💧 WATER: ❌ BELUM"
+WaterIndicator.Text = "💧 WATER: 0/4"
 WaterIndicator.TextColor3 = Color3.fromRGB(255,100,100)
 WaterIndicator.TextXAlignment = Enum.TextXAlignment.Left
 WaterIndicator.Font = Enum.Font.GothamBold
@@ -656,9 +656,9 @@ WaterIndicator.TextSize = 14
 local SugarIndicator = Instance.new("TextLabel")
 SugarIndicator.Parent = BuyIndicatorFrame
 SugarIndicator.Size = UDim2.new(1,-20,0,25)
-SugarIndicator.Position = UDim2.new(0,10,0,65)
+SugarIndicator.Position = UDim2.new(0,10,0,70)
 SugarIndicator.BackgroundTransparency = 1
-SugarIndicator.Text = "🍚 SUGAR: ❌ BELUM"
+SugarIndicator.Text = "🍚 SUGAR: 0/4"
 SugarIndicator.TextColor3 = Color3.fromRGB(255,100,100)
 SugarIndicator.TextXAlignment = Enum.TextXAlignment.Left
 SugarIndicator.Font = Enum.Font.GothamBold
@@ -668,9 +668,9 @@ SugarIndicator.TextSize = 14
 local GelatinIndicator = Instance.new("TextLabel")
 GelatinIndicator.Parent = BuyIndicatorFrame
 GelatinIndicator.Size = UDim2.new(1,-20,0,25)
-GelatinIndicator.Position = UDim2.new(0,10,0,90)
+GelatinIndicator.Position = UDim2.new(0,10,0,100)
 GelatinIndicator.BackgroundTransparency = 1
-GelatinIndicator.Text = "🧪 GELATIN: ❌ BELUM"
+GelatinIndicator.Text = "🧪 GELATIN: 0/4"
 GelatinIndicator.TextColor3 = Color3.fromRGB(255,100,100)
 GelatinIndicator.TextXAlignment = Enum.TextXAlignment.Left
 GelatinIndicator.Font = Enum.Font.GothamBold
@@ -680,53 +680,90 @@ GelatinIndicator.TextSize = 14
 local BagIndicator = Instance.new("TextLabel")
 BagIndicator.Parent = BuyIndicatorFrame
 BagIndicator.Size = UDim2.new(1,-20,0,25)
-BagIndicator.Position = UDim2.new(0,10,0,115)
+BagIndicator.Position = UDim2.new(0,10,0,130)
 BagIndicator.BackgroundTransparency = 1
-BagIndicator.Text = "👜 BAG: ❌ BELUM"
+BagIndicator.Text = "👜 BAG: 0/4"
 BagIndicator.TextColor3 = Color3.fromRGB(255,100,100)
 BagIndicator.TextXAlignment = Enum.TextXAlignment.Left
 BagIndicator.Font = Enum.Font.GothamBold
 BagIndicator.TextSize = 14
 
--- Function to update buy indicators
+-- Function to count tools
+function countTools(toolName)
+    local count = 0
+    if not player.Character then return count end
+    
+    -- Check in character
+    for _, child in pairs(player.Character:GetChildren()) do
+        if child:IsA("Tool") and string.find(string.lower(child.Name), string.lower(toolName)) then
+            count = count + 1
+        end
+    end
+    
+    -- Check in backpack
+    local backpack = player:FindFirstChild("Backpack")
+    if backpack then
+        for _, child in pairs(backpack:GetChildren()) do
+            if child:IsA("Tool") and string.find(string.lower(child.Name), string.lower(toolName)) then
+                count = count + 1
+            end
+        end
+    end
+    
+    return count
+end
+
+-- Function to update buy indicators with counts
 local function updateBuyIndicators()
     -- Check Water
-    local waterTool = findTool("water")
-    if waterTool then
-        WaterIndicator.Text = "💧 WATER: ✅ SUDAH (1)"
+    local waterCount = countTools("water")
+    WaterIndicator.Text = string.format("💧 WATER: %d/4", waterCount)
+    if waterCount >= 4 then
         WaterIndicator.TextColor3 = Color3.fromRGB(100,255,100)
+    elseif waterCount >= 2 then
+        WaterIndicator.TextColor3 = Color3.fromRGB(255,255,100)
+    elseif waterCount >= 1 then
+        WaterIndicator.TextColor3 = Color3.fromRGB(255,150,100)
     else
-        WaterIndicator.Text = "💧 WATER: ❌ BELUM"
         WaterIndicator.TextColor3 = Color3.fromRGB(255,100,100)
     end
     
     -- Check Sugar
-    local sugarTool = findTool("sugar")
-    if sugarTool then
-        SugarIndicator.Text = "🍚 SUGAR: ✅ SUDAH (1)"
+    local sugarCount = countTools("sugar")
+    SugarIndicator.Text = string.format("🍚 SUGAR: %d/4", sugarCount)
+    if sugarCount >= 4 then
         SugarIndicator.TextColor3 = Color3.fromRGB(100,255,100)
+    elseif sugarCount >= 2 then
+        SugarIndicator.TextColor3 = Color3.fromRGB(255,255,100)
+    elseif sugarCount >= 1 then
+        SugarIndicator.TextColor3 = Color3.fromRGB(255,150,100)
     else
-        SugarIndicator.Text = "🍚 SUGAR: ❌ BELUM"
         SugarIndicator.TextColor3 = Color3.fromRGB(255,100,100)
     end
     
     -- Check Gelatin
-    local gelatinTool = findTool("gelatin")
-    if gelatinTool then
-        GelatinIndicator.Text = "🧪 GELATIN: ✅ SUDAH (1)"
+    local gelatinCount = countTools("gelatin")
+    GelatinIndicator.Text = string.format("🧪 GELATIN: %d/4", gelatinCount)
+    if gelatinCount >= 4 then
         GelatinIndicator.TextColor3 = Color3.fromRGB(100,255,100)
+    elseif gelatinCount >= 2 then
+        GelatinIndicator.TextColor3 = Color3.fromRGB(255,255,100)
+    elseif gelatinCount >= 1 then
+        GelatinIndicator.TextColor3 = Color3.fromRGB(255,150,100)
     else
-        GelatinIndicator.Text = "🧪 GELATIN: ❌ BELUM"
         GelatinIndicator.TextColor3 = Color3.fromRGB(255,100,100)
     end
     
     -- Check Bag (Empty bag)
-    local bagTool = findTool("empty") or findTool("bag")
-    if bagTool then
-        BagIndicator.Text = "👜 BAG: ✅ SUDAH (1)"
+    local bagCount = countTools("empty") + countTools("bag")
+    BagIndicator.Text = string.format("👜 BAG: %d/4", bagCount)
+    if bagCount >= 4 then
         BagIndicator.TextColor3 = Color3.fromRGB(100,255,100)
+    elseif bagCount >= 2 then
+        BagIndicator.TextColor3 = Color3.fromRGB(255,255,100)
+    elseif bagCount >= 1 then
+        BagIndicator.TextColor3 = Color3.fromRGB(255,150,100)
     else
-        BagIndicator.Text = "👜 BAG: ❌ BELUM"
         BagIndicator.TextColor3 = Color3.fromRGB(255,100,100)
     end
 end
