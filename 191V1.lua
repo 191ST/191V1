@@ -11,224 +11,94 @@ ScreenGui.Name = "TP_Hub_191"
 ScreenGui.ResetOnSpawn = false
 ScreenGui.IgnoreGuiInset = true
 
--- LOADING SCREEN DARK THEME WITH ANIMATIONS
+-- LOADING SCREEN - SUPER GELAP
 local LoadingFrame = Instance.new("Frame")
 LoadingFrame.Parent = ScreenGui
 LoadingFrame.Size = UDim2.new(1,0,1,0)
 LoadingFrame.BackgroundColor3 = Color3.fromRGB(0,0,0)
-LoadingFrame.BackgroundTransparency = 0.3
+LoadingFrame.BackgroundTransparency = 0 -- GELAP TOTAL
 LoadingFrame.BorderSizePixel = 0
 LoadingFrame.Visible = false
 LoadingFrame.ZIndex = 100
 
--- Dark overlay with gradient
+-- Dark overlay tambahan
 local DarkOverlay = Instance.new("Frame")
 DarkOverlay.Parent = LoadingFrame
 DarkOverlay.Size = UDim2.new(1,0,1,0)
 DarkOverlay.BackgroundColor3 = Color3.fromRGB(0,0,0)
-DarkOverlay.BackgroundTransparency = 0.5
+DarkOverlay.BackgroundTransparency = 0
 DarkOverlay.BorderSizePixel = 0
 DarkOverlay.ZIndex = 101
-
--- Animated gradient effect
-local Gradient = Instance.new("UIGradient")
-Gradient.Parent = DarkOverlay
-Gradient.Color = ColorSequence.new({
-    ColorSequenceKeypoint.new(0, Color3.fromRGB(0,0,0)),
-    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(20,20,40)),
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(0,0,0))
-})
-Gradient.Rotation = 45
-
--- Animate gradient rotation
-task.spawn(function()
-    while LoadingFrame.Visible do
-        Gradient.Rotation = (Gradient.Rotation + 10) % 360
-        task.wait(0.1)
-    end
-end)
 
 -- Center Container
 local CenterContainer = Instance.new("Frame")
 CenterContainer.Parent = LoadingFrame
-CenterContainer.Size = UDim2.new(0,400,0,300)
-CenterContainer.Position = UDim2.new(0.5,-200,0.5,-150)
+CenterContainer.Size = UDim2.new(0,300,0,200)
+CenterContainer.Position = UDim2.new(0.5,-150,0.5,-100)
 CenterContainer.BackgroundTransparency = 1
 CenterContainer.ZIndex = 102
 
--- Glowing Circle Animation
-local GlowCircle = Instance.new("Frame")
-GlowCircle.Parent = CenterContainer
-GlowCircle.Size = UDim2.new(0,100,0,100)
-GlowCircle.Position = UDim2.new(0.5,-50,0,-20)
-GlowCircle.BackgroundColor3 = Color3.fromRGB(0,150,255)
-GlowCircle.BackgroundTransparency = 0.7
-GlowCircle.BorderSizePixel = 0
-GlowCircle.ZIndex = 103
-
-local GlowCorner = Instance.new("UICorner")
-GlowCorner.Parent = GlowCircle
-GlowCorner.CornerRadius = UDim.new(0.5,0)
-
--- Pulse animation for glow
-local GlowTween = TweenService:Create(
-    GlowCircle,
-    TweenInfo.new(1.5, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1),
-    {Size = UDim2.new(0,140,0,140), Position = UDim2.new(0.5,-70,0,-30), BackgroundTransparency = 0.9}
-)
-GlowTween:Play()
-
--- Loading Icon (Spinning)
-local LoadingIcon = Instance.new("ImageLabel")
-LoadingIcon.Parent = CenterContainer
-LoadingIcon.Size = UDim2.new(0,80,0,80)
-LoadingIcon.Position = UDim2.new(0.5,-40,0,-10)
-LoadingIcon.BackgroundTransparency = 1
-LoadingIcon.Image = "rbxasset://textures/ui/LoadingIcon.png"
-LoadingIcon.ImageColor3 = Color3.fromRGB(0,200,255)
-LoadingIcon.ZIndex = 104
-
--- Spin animation
-local SpinTween = TweenService:Create(
-    LoadingIcon,
-    TweenInfo.new(2, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1),
-    {Rotation = 360}
-)
-SpinTween:Play()
-
--- Main Title
-local LoadingTitle = Instance.new("TextLabel")
-LoadingTitle.Parent = CenterContainer
-LoadingTitle.Size = UDim2.new(1,0,0,50)
-LoadingTitle.Position = UDim2.new(0,0,0,80)
-LoadingTitle.BackgroundTransparency = 1
-LoadingTitle.Text = "TELEPORTING..."
-LoadingTitle.TextColor3 = Color3.fromRGB(255,255,255)
-LoadingTitle.Font = Enum.Font.GothamBold
-LoadingTitle.TextSize = 28
-LoadingTitle.TextStrokeTransparency = 0.5
-LoadingTitle.TextStrokeColor3 = Color3.fromRGB(0,150,255)
-LoadingTitle.ZIndex = 104
-
--- Subtitle (Location)
-local LocationText = Instance.new("TextLabel")
-LocationText.Parent = CenterContainer
-LocationText.Size = UDim2.new(1,0,0,30)
-LocationText.Position = UDim2.new(0,0,0,130)
-LocationText.BackgroundTransparency = 1
-LocationText.Text = "Memindahkan kendaraan..."
-LocationText.TextColor3 = Color3.fromRGB(180,180,255)
-LocationText.Font = Enum.Font.Gotham
-LocationText.TextSize = 16
-LocationText.ZIndex = 104
+-- Loading Text
+local LoadingText = Instance.new("TextLabel")
+LoadingText.Parent = CenterContainer
+LoadingText.Size = UDim2.new(1,0,0,40)
+LoadingText.Position = UDim2.new(0,0,0,30)
+LoadingText.BackgroundTransparency = 1
+LoadingText.Text = "TELEPORTING..."
+LoadingText.TextColor3 = Color3.fromRGB(255,255,255)
+LoadingText.Font = Enum.Font.GothamBold
+LoadingText.TextSize = 24
+LoadingText.TextStrokeTransparency = 0
+LoadingText.TextStrokeColor3 = Color3.fromRGB(0,0,0)
+LoadingText.ZIndex = 103
 
 -- Progress Bar Container
 local ProgressContainer = Instance.new("Frame")
 ProgressContainer.Parent = CenterContainer
-ProgressContainer.Size = UDim2.new(0.8,0,0,15)
-ProgressContainer.Position = UDim2.new(0.1,0,0,180)
-ProgressContainer.BackgroundColor3 = Color3.fromRGB(30,30,40)
+ProgressContainer.Size = UDim2.new(0.8,0,0,10)
+ProgressContainer.Position = UDim2.new(0.1,0,0,100)
+ProgressContainer.BackgroundColor3 = Color3.fromRGB(30,30,30)
 ProgressContainer.BorderSizePixel = 0
-ProgressContainer.ZIndex = 104
+ProgressContainer.ZIndex = 103
 
 local ProgressCorner = Instance.new("UICorner")
 ProgressCorner.Parent = ProgressContainer
-ProgressCorner.CornerRadius = UDim.new(0,8)
+ProgressCorner.CornerRadius = UDim.new(0,5)
 
 local ProgressBar = Instance.new("Frame")
 ProgressBar.Parent = ProgressContainer
 ProgressBar.Size = UDim2.new(0,0,1,0)
-ProgressBar.BackgroundColor3 = Color3.fromRGB(0,200,255)
+ProgressBar.BackgroundColor3 = Color3.fromRGB(0,150,255)
 ProgressBar.BorderSizePixel = 0
-ProgressBar.ZIndex = 105
+ProgressBar.ZIndex = 104
 
 local ProgressBarCorner = Instance.new("UICorner")
 ProgressBarCorner.Parent = ProgressBar
-ProgressBarCorner.CornerRadius = UDim.new(0,8)
-
--- Glow effect on progress bar
-local ProgressGlow = Instance.new("Frame")
-ProgressGlow.Parent = ProgressBar
-ProgressGlow.Size = UDim2.new(1,0,1,0)
-ProgressGlow.BackgroundColor3 = Color3.fromRGB(255,255,255)
-ProgressGlow.BackgroundTransparency = 0.8
-ProgressGlow.BorderSizePixel = 0
-ProgressGlow.ZIndex = 106
-
-local ProgressGlowCorner = Instance.new("UICorner")
-ProgressGlowCorner.Parent = ProgressGlow
-ProgressGlowCorner.CornerRadius = UDim.new(0,8)
+ProgressBarCorner.CornerRadius = UDim.new(0,5)
 
 -- Percentage Text
 local PercentText = Instance.new("TextLabel")
 PercentText.Parent = CenterContainer
 PercentText.Size = UDim2.new(1,0,0,30)
-PercentText.Position = UDim2.new(0,0,0,210)
+PercentText.Position = UDim2.new(0,0,0,120)
 PercentText.BackgroundTransparency = 1
 PercentText.Text = "0%"
-PercentText.TextColor3 = Color3.fromRGB(0,200,255)
+PercentText.TextColor3 = Color3.fromRGB(0,150,255)
 PercentText.Font = Enum.Font.GothamBold
-PercentText.TextSize = 24
-PercentText.ZIndex = 104
+PercentText.TextSize = 18
+PercentText.ZIndex = 103
 
 -- Status Text
 local StatusText = Instance.new("TextLabel")
 StatusText.Parent = CenterContainer
 StatusText.Size = UDim2.new(1,0,0,20)
-StatusText.Position = UDim2.new(0,0,0,250)
+StatusText.Position = UDim2.new(0,0,0,160)
 StatusText.BackgroundTransparency = 1
-StatusText.Text = "Memproses teleportasi..."
+StatusText.Text = "Menyiapkan teleportasi..."
 StatusText.TextColor3 = Color3.fromRGB(200,200,200)
 StatusText.Font = Enum.Font.Gotham
-StatusText.TextSize = 14
-StatusText.ZIndex = 104
-
--- Vehicle Warning
-local VehicleWarning = Instance.new("TextLabel")
-VehicleWarning.Parent = CenterContainer
-VehicleWarning.Size = UDim2.new(1,0,0,20)
-VehicleWarning.Position = UDim2.new(0,0,0,270)
-VehicleWarning.BackgroundTransparency = 1
-VehicleWarning.Text = "🔍 Mencari kendaraan..."
-VehicleWarning.TextColor3 = Color3.fromRGB(255,200,100)
-VehicleWarning.Font = Enum.Font.GothamBold
-VehicleWarning.TextSize = 12
-VehicleWarning.ZIndex = 104
-VehicleWarning.Visible = false
-
--- Particle effect (tiny dots)
-local Particles = Instance.new("Frame")
-Particles.Parent = LoadingFrame
-Particles.Size = UDim2.new(1,0,1,0)
-Particles.BackgroundTransparency = 1
-Particles.ZIndex = 103
-
--- Create some floating dots
-local dotPositions = {}
-for i = 1, 20 do
-    local dot = Instance.new("Frame")
-    dot.Parent = Particles
-    dot.Size = UDim2.new(0,2,0,2)
-    dot.Position = UDim2.new(math.random(), 0, math.random(), 0)
-    dot.BackgroundColor3 = Color3.fromRGB(0,150,255)
-    dot.BackgroundTransparency = 0.5
-    dot.BorderSizePixel = 0
-    dot.ZIndex = 103
-    
-    local dotCorner = Instance.new("UICorner")
-    dotCorner.Parent = dot
-    dotCorner.CornerRadius = UDim.new(0.5,0)
-    
-    -- Animate each dot
-    local targetPos = UDim2.new(math.random(), 0, math.random(), 0)
-    local dotTween = TweenService:Create(
-        dot,
-        TweenInfo.new(math.random(3,7), Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1),
-        {Position = targetPos}
-    )
-    dotTween:Play()
-    table.insert(dotPositions, {dot = dot, tween = dotTween})
-end
+StatusText.TextSize = 12
+StatusText.ZIndex = 103
 
 -- Main Frame
 local Frame = Instance.new("Frame")
@@ -678,7 +548,7 @@ BahanDesc.Parent = BtnBahan
 BahanDesc.Size = UDim2.new(1,-60,0,20)
 BahanDesc.Position = UDim2.new(0,50,0,35)
 BahanDesc.BackgroundTransparency = 1
-BahanDesc.Text = "Material Storage (Auto Vehicle)"
+BahanDesc.Text = "Material Storage (Underground TP)"
 BahanDesc.TextColor3 = Color3.fromRGB(180,180,180)
 BahanDesc.TextXAlignment = Enum.TextXAlignment.Left
 BahanDesc.Font = Enum.Font.Gotham
@@ -722,7 +592,7 @@ RSDesc.Parent = BtnRS
 RSDesc.Size = UDim2.new(1,-60,0,20)
 RSDesc.Position = UDim2.new(0,50,0,35)
 RSDesc.BackgroundTransparency = 1
-RSDesc.Text = "Hospital (Auto Vehicle)"
+RSDesc.Text = "Hospital (Underground TP)"
 RSDesc.TextColor3 = Color3.fromRGB(180,180,180)
 RSDesc.TextXAlignment = Enum.TextXAlignment.Left
 RSDesc.Font = Enum.Font.Gotham
@@ -831,7 +701,7 @@ MSLoopStopCorner.CornerRadius = UDim.new(0,8)
 -- Variables
 local loopRunning = false
 local isTeleporting = false
-local wheelWelds = {} -- Untuk menyimpan weld yang dibuat
+local wheelWelds = {}
 
 -- Tool functions
 function findTool(toolName)
@@ -950,7 +820,7 @@ function blinkMundur()
     BlinkStatus.TextColor3 = Color3.fromRGB(100,255,100)
 end
 
--- FUNGSI DETEKSI KENDARAAN YANG LEBIH AKURAT
+-- FUNGSI DETEKSI KENDARAAN
 function findVehicle()
     local character = player.Character
     if not character then return nil end
@@ -958,81 +828,46 @@ function findVehicle()
     local humanoid = character:FindFirstChild("Humanoid")
     if not humanoid then return nil end
     
-    -- Cek apakah player sedang duduk di kursi kendaraan
     if humanoid.SeatPart then
         local seat = humanoid.SeatPart
         local vehicle = seat.Parent
         
-        -- Validasi bahwa ini benar-benar kendaraan
         if vehicle then
-            -- Cari VehicleSeat atau komponen kendaraan lainnya
-            local hasVehicleSeat = vehicle:FindFirstChildWhichIsA("VehicleSeat") ~= nil
-            local hasWheels = false
-            
-            -- Cek apakah ada part yang mirip ban
-            for _, child in pairs(vehicle:GetDescendants()) do
-                if child:IsA("BasePart") then
-                    local nameLower = string.lower(child.Name)
-                    if nameLower:find("wheel") or nameLower:find("ban") or nameLower:find("tyre") then
-                        hasWheels = true
-                        break
-                    end
-                end
-            end
-            
-            if hasVehicleSeat or hasWheels then
-                return vehicle
-            end
+            return vehicle
         end
     end
     
     return nil
 end
 
--- FUNCTION TO GET VEHICLE ROOT PART
+-- FUNCTION TO GET VEHICLE ROOT
 function getVehicleRoot(vehicle)
     if not vehicle then return nil end
     
-    -- Coba cari PrimaryPart dulu
     if vehicle.PrimaryPart then
         return vehicle.PrimaryPart
     end
     
-    -- Cari HumanoidRootPart
     local hrp = vehicle:FindFirstChild("HumanoidRootPart")
-    if hrp then
-        return hrp
-    end
+    if hrp then return hrp end
     
-    -- Cari VehicleSeat
     local seat = vehicle:FindFirstChildWhichIsA("VehicleSeat")
-    if seat then
-        return seat
-    end
-    
-    -- Cari part terbesar sebagai alternatif
-    local largestPart = nil
-    local largestSize = 0
+    if seat then return seat end
     
     for _, child in pairs(vehicle:GetChildren()) do
         if child:IsA("BasePart") then
-            local size = child.Size.X * child.Size.Y * child.Size.Z
-            if size > largestSize then
-                largestSize = size
-                largestPart = child
-            end
+            return child
         end
     end
     
-    return largestPart
+    return nil
 end
 
--- FUNCTION TO GET VEHICLE WHEELS
+-- FUNCTION TO GET WHEELS
 function getVehicleWheels(vehicle)
     if not vehicle then return {} end
     local wheels = {}
-    
-    local wheelKeywords = {"wheel", "ban", "tyre", "tire", "rod", "axle", "rim"}
+    local wheelKeywords = {"wheel", "ban", "tyre", "tire"}
     
     for _, child in pairs(vehicle:GetDescendants()) do
         if child:IsA("BasePart") then
@@ -1050,10 +885,9 @@ function getVehicleWheels(vehicle)
 end
 
 -- FUNCTION TO LOCK WHEELS
-function lockWheels(vehicle, vehicleRoot, targetCF)
-    if not vehicle or not vehicleRoot then return {} end
+function lockWheels(vehicle, vehicleRoot)
+    if not vehicle or not vehicleRoot then return end
     
-    -- Bersihkan weld lama
     for _, weld in pairs(wheelWelds) do
         pcall(function() weld:Destroy() end)
     end
@@ -1064,162 +898,54 @@ function lockWheels(vehicle, vehicleRoot, targetCF)
     for _, wheel in pairs(wheels) do
         if wheel and wheel.Parent and wheel ~= vehicleRoot then
             pcall(function()
-                -- Hapus weld/joint yang ada
                 for _, joint in pairs(wheel:GetChildren()) do
                     if joint:IsA("Weld") or joint:IsA("Snap") or joint:IsA("Motor6D") then
                         joint:Destroy()
                     end
                 end
                 
-                -- Buat weld baru
                 local weld = Instance.new("Weld")
                 weld.Part0 = vehicleRoot
                 weld.Part1 = wheel
-                
-                -- Hitung offset relatif
-                local relativeOffset = vehicleRoot.CFrame:ToObjectSpace(wheel.CFrame)
-                weld.C0 = relativeOffset
-                
+                weld.C0 = vehicleRoot.CFrame:ToObjectSpace(wheel.CFrame)
                 weld.Parent = wheel
                 table.insert(wheelWelds, weld)
             end)
         end
     end
-    
-    return wheels
 end
 
--- FUNCTION TO TELEPORT VEHICLE
-function teleportVehicle(vehicle, targetCFrame, duration)
-    if not vehicle then return end
-    
-    local vehicleRoot = getVehicleRoot(vehicle)
-    if not vehicleRoot then 
-        StatusText.Text = "❌ Tidak bisa menemukan root kendaraan!"
-        return 
-    end
-    
-    VehicleWarning.Visible = true
-    VehicleWarning.Text = "🔧 Mengunci komponen kendaraan..."
-    
-    -- Lock wheels
-    lockWheels(vehicle, vehicleRoot, targetCFrame)
-    
-    task.wait(0.5)
-    
-    VehicleWarning.Text = "🚗 Memindahkan kendaraan..."
-    
-    -- Store wheel offsets untuk backup
-    local wheels = getVehicleWheels(vehicle)
-    local wheelOffsets = {}
-    for _, wheel in pairs(wheels) do
-        if wheel and wheel.Parent then
-            wheelOffsets[wheel] = vehicleRoot.CFrame:ToObjectSpace(wheel.CFrame)
-        end
-    end
-    
-    -- Smooth teleport untuk kendaraan
-    local startCF = vehicleRoot.CFrame
-    local startTime = tick()
-    
-    local connection
-    connection = RunService.Heartbeat:Connect(function()
-        local elapsed = tick() - startTime
-        local alpha = math.min(elapsed / duration, 1)
-        
-        -- Smooth easing
-        local smoothAlpha = alpha < 0.5 and 2 * alpha * alpha or 1 - math.pow(-2 * alpha + 2, 2) / 2
-        
-        -- Pindahkan root kendaraan
-        local newCF = startCF:Lerp(targetCFrame, smoothAlpha)
-        vehicleRoot.CFrame = newCF
-        
-        -- Update posisi ban yang mungkin lepas dari weld
-        for wheel, offset in pairs(wheelOffsets) do
-            if wheel and wheel.Parent then
-                -- Cek apakah wheel masih terhubung dengan weld
-                local hasWeld = false
-                for _, weld in pairs(wheelWelds) do
-                    if weld.Part1 == wheel then
-                        hasWeld = true
-                        break
-                    end
-                end
-                
-                if not hasWeld then
-                    -- Backup: force position
-                    pcall(function()
-                        wheel.CFrame = newCF:ToWorldSpace(offset)
-                    end)
-                end
-            end
-        end
-        
-        -- Update progress bar
-        PercentText.Text = math.floor(smoothAlpha * 100) .. "%"
-        ProgressBar.Size = UDim2.new(smoothAlpha,0,1,0)
-        
-        -- Update status
-        if smoothAlpha < 0.3 then
-            StatusText.Text = "Mengunci komponen..."
-        elseif smoothAlpha < 0.6 then
-            StatusText.Text = "Memindahkan kendaraan..."
-        elseif smoothAlpha < 0.9 then
-            StatusText.Text = "Menstabilkan..."
-        else
-            StatusText.Text = "Hampir selesai..."
-        end
-        
-        if alpha >= 1 then
-            connection:Disconnect()
-        end
-    end)
-    
-    task.wait(duration)
-    
-    -- Final position
-    vehicleRoot.CFrame = targetCFrame
-    
-    -- Re-lock wheels
-    lockWheels(vehicle, vehicleRoot, targetCFrame)
-    
-    -- Force semua ban ke posisi yang benar
-    for wheel, offset in pairs(wheelOffsets) do
-        if wheel and wheel.Parent then
-            pcall(function()
-                wheel.CFrame = targetCFrame:ToWorldSpace(offset)
-            end)
-        end
-    end
-    
-    task.wait(0.5)
-    VehicleWarning.Text = "✅ Kendaraan siap!"
-end
-
--- SLOW TELEPORT FUNCTION (7 DETIK)
+-- SLOW TELEPORT DENGAN RUTE BAWAH TANAH (7 DETIK)
 function slowTeleport(targetCFrame, locationName)
-    if isTeleporting then 
-        return 
-    end
+    if isTeleporting then return end
     if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then
         return
     end
     
     isTeleporting = true
     
+    -- POSISI BAWAH TANAH (jauh di bawah map)
+    local undergroundPos = CFrame.new(targetCFrame.X, -500, targetCFrame.Z)
+    
     -- Deteksi kendaraan
     local vehicle = findVehicle()
-    local duration = 7
+    local vehicleRoot = nil
+    local originalVehicleCF = nil
     
-    -- Update location text
-    LocationText.Text = "Memindahkan ke: " .. locationName
-    StatusText.Text = "Memproses teleportasi..."
+    if vehicle then
+        vehicleRoot = getVehicleRoot(vehicle)
+        if vehicleRoot then
+            originalVehicleCF = vehicleRoot.CFrame
+            StatusText.Text = "Kendaraan terdeteksi!"
+            lockWheels(vehicle, vehicleRoot)
+        end
+    end
     
-    -- Show loading screen
+    -- Tampilkan loading screen (GELAP TOTAL)
     LoadingFrame.Visible = true
-    LoadingFrame.BackgroundTransparency = 0.3
     ProgressBar.Size = UDim2.new(0,0,1,0)
     PercentText.Text = "0%"
+    StatusText.Text = "Turun ke bawah tanah..."
     
     -- Disable buttons
     BtnBahan.Active = false
@@ -1230,75 +956,123 @@ function slowTeleport(targetCFrame, locationName)
     MSLoopStartBtn.Active = false
     MSLoopStopBtn.Active = false
     
-    if vehicle then
-        -- Teleport kendaraan
-        VehicleWarning.Visible = true
-        VehicleWarning.Text = "✅ Kendaraan ditemukan! Memindahkan..."
-        teleportVehicle(vehicle, targetCFrame, duration)
+    local hrp = player.Character.HumanoidRootPart
+    local duration = 7
+    
+    -- TAHAP 1: TURUN KE BAWAH TANAH (3 detik)
+    local startCF = hrp.CFrame
+    local targetUnderground = CFrame.new(startCF.X, -500, startCF.Z)
+    local startTime = tick()
+    
+    local connection1
+    connection1 = RunService.Heartbeat:Connect(function()
+        local elapsed = tick() - startTime
+        local alpha = math.min(elapsed / 3, 1)
+        local smoothAlpha = alpha < 0.5 and 2 * alpha * alpha or 1 - math.pow(-2 * alpha + 2, 2) / 2
         
-        -- Pindahkan karakter ke dalam kendaraan
-        if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-            local hrp = player.Character.HumanoidRootPart
-            hrp.CFrame = targetCFrame
+        -- Pindahkan karakter
+        local newCF = startCF:Lerp(targetUnderground, smoothAlpha)
+        hrp.CFrame = newCF
+        
+        -- Pindahkan kendaraan jika ada
+        if vehicleRoot and originalVehicleCF then
+            local vehicleNewCF = originalVehicleCF:Lerp(CFrame.new(originalVehicleCF.X, -500, originalVehicleCF.Z), smoothAlpha)
+            vehicleRoot.CFrame = vehicleNewCF
         end
-    else
-        VehicleWarning.Visible = false
-        StatusText.Text = "Memindahkan karakter..."
         
-        -- Teleport karakter saja
-        local hrp = player.Character.HumanoidRootPart
-        local startCF = hrp.CFrame
-        local startTime = tick()
+        -- Update progress
+        local totalAlpha = (elapsed / duration) * 0.43
+        PercentText.Text = math.floor(totalAlpha * 100) .. "%"
+        ProgressBar.Size = UDim2.new(totalAlpha,0,1,0)
         
-        local connection
-        connection = RunService.Heartbeat:Connect(function()
-            local elapsed = tick() - startTime
-            local alpha = math.min(elapsed / duration, 1)
-            local smoothAlpha = alpha < 0.5 and 2 * alpha * alpha or 1 - math.pow(-2 * alpha + 2, 2) / 2
-            
-            hrp.CFrame = startCF:Lerp(targetCFrame, smoothAlpha)
-            
-            PercentText.Text = math.floor(smoothAlpha * 100) .. "%"
-            ProgressBar.Size = UDim2.new(smoothAlpha,0,1,0)
-            
-            if smoothAlpha < 0.3 then
-                StatusText.Text = "Mempersiapkan..."
-            elseif smoothAlpha < 0.6 then
-                StatusText.Text = "Memindahkan..."
-            elseif smoothAlpha < 0.9 then
-                StatusText.Text = "Hampir sampai..."
-            else
-                StatusText.Text = "Menyelesaikan..."
-            end
-            
-            if alpha >= 1 then
-                connection:Disconnect()
-            end
-        end)
+        if alpha >= 1 then
+            connection1:Disconnect()
+        end
+    end)
+    
+    task.wait(3)
+    
+    -- TAHAP 2: GERAK HORIZONTAL DI BAWAH TANAH (3 detik)
+    StatusText.Text = "Bergerak di bawah tanah..."
+    startCF = hrp.CFrame
+    startTime = tick()
+    
+    local connection2
+    connection2 = RunService.Heartbeat:Connect(function()
+        local elapsed = tick() - startTime
+        local alpha = math.min(elapsed / 3, 1)
+        local smoothAlpha = alpha < 0.5 and 2 * alpha * alpha or 1 - math.pow(-2 * alpha + 2, 2) / 2
         
-        task.wait(duration)
-        hrp.CFrame = targetCFrame
+        -- Pindahkan karakter secara horizontal
+        local newCF = startCF:Lerp(CFrame.new(targetCFrame.X, -500, targetCFrame.Z), smoothAlpha)
+        hrp.CFrame = newCF
+        
+        -- Pindahkan kendaraan
+        if vehicleRoot and originalVehicleCF then
+            local vehicleNewCF = CFrame.new(originalVehicleCF.X, -500, originalVehicleCF.Z):Lerp(CFrame.new(targetCFrame.X, -500, targetCFrame.Z), smoothAlpha)
+            vehicleRoot.CFrame = vehicleNewCF
+        end
+        
+        -- Update progress
+        local totalAlpha = 0.43 + (elapsed / duration) * 0.43
+        PercentText.Text = math.floor(totalAlpha * 100) .. "%"
+        ProgressBar.Size = UDim2.new(totalAlpha,0,1,0)
+        
+        if alpha >= 1 then
+            connection2:Disconnect()
+        end
+    end)
+    
+    task.wait(3)
+    
+    -- TAHAP 3: NAIK KE ATAS (1 detik)
+    StatusText.Text = "Naik ke permukaan..."
+    startCF = hrp.CFrame
+    startTime = tick()
+    
+    local connection3
+    connection3 = RunService.Heartbeat:Connect(function()
+        local elapsed = tick() - startTime
+        local alpha = math.min(elapsed / 1, 1)
+        local smoothAlpha = alpha < 0.5 and 2 * alpha * alpha or 1 - math.pow(-2 * alpha + 2, 2) / 2
+        
+        -- Pindahkan karakter ke atas
+        local newCF = startCF:Lerp(targetCFrame, smoothAlpha)
+        hrp.CFrame = newCF
+        
+        -- Pindahkan kendaraan ke atas
+        if vehicleRoot and originalVehicleCF then
+            local vehicleNewCF = CFrame.new(targetCFrame.X, -500, targetCFrame.Z):Lerp(targetCFrame, smoothAlpha)
+            vehicleRoot.CFrame = vehicleNewCF
+        end
+        
+        -- Update progress
+        local totalAlpha = 0.86 + (elapsed / duration) * 0.14
+        PercentText.Text = math.floor(totalAlpha * 100) .. "%"
+        ProgressBar.Size = UDim2.new(totalAlpha,0,1,0)
+        
+        if alpha >= 1 then
+            connection3:Disconnect()
+        end
+    end)
+    
+    task.wait(1)
+    
+    -- Pastikan posisi akhir tepat
+    hrp.CFrame = targetCFrame
+    if vehicleRoot then
+        vehicleRoot.CFrame = targetCFrame
     end
     
     -- Bersihkan welds
-    task.wait(1)
+    task.wait(0.5)
     for _, weld in pairs(wheelWelds) do
         pcall(function() weld:Destroy() end)
     end
     wheelWelds = {}
     
-    -- Fade out loading screen
-    VehicleWarning.Visible = false
-    local fadeOut = TweenService:Create(
-        LoadingFrame,
-        TweenInfo.new(0.5),
-        {BackgroundTransparency = 1}
-    )
-    fadeOut:Play()
-    task.wait(0.5)
-    
+    -- Sembunyikan loading screen
     LoadingFrame.Visible = false
-    LoadingFrame.BackgroundTransparency = 0.3
     
     -- Re-enable buttons
     BtnBahan.Active = true
@@ -1572,11 +1346,6 @@ TweenService:Create(Frame, tweenInfo, {Size = openSize}):Play()
 -- Cleanup
 game:GetService("CoreGui").ChildRemoved:Connect(function(child)
     if child == ScreenGui then
-        for _, dotData in pairs(dotPositions) do
-            dotData.tween:Cancel()
-        end
-        GlowTween:Cancel()
-        SpinTween:Cancel()
         for _, weld in pairs(wheelWelds) do
             pcall(function() weld:Destroy() end)
         end
