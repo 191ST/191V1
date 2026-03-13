@@ -9,69 +9,205 @@ local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Parent = player:WaitForChild("PlayerGui")
 ScreenGui.Name = "TP_Hub_191"
 ScreenGui.ResetOnSpawn = false
+ScreenGui.IgnoreGuiInset = true
 
--- Loading Screen (Global)
+-- LOADING SCREEN DARK THEME WITH ANIMATIONS
 local LoadingFrame = Instance.new("Frame")
 LoadingFrame.Parent = ScreenGui
-LoadingFrame.Size = UDim2.new(0,200,0,100)
-LoadingFrame.Position = UDim2.new(0.5,-100,0.5,-50)
-LoadingFrame.BackgroundColor3 = Color3.fromRGB(20,20,30)
-LoadingFrame.BackgroundTransparency = 0.2
+LoadingFrame.Size = UDim2.new(1,0,1,0)
+LoadingFrame.BackgroundColor3 = Color3.fromRGB(0,0,0)
+LoadingFrame.BackgroundTransparency = 0.3
 LoadingFrame.BorderSizePixel = 0
 LoadingFrame.Visible = false
-LoadingFrame.ZIndex = 10
+LoadingFrame.ZIndex = 100
 
-local LoadingCorner = Instance.new("UICorner")
-LoadingCorner.Parent = LoadingFrame
-LoadingCorner.CornerRadius = UDim.new(0,15)
+-- Dark overlay with gradient
+local DarkOverlay = Instance.new("Frame")
+DarkOverlay.Parent = LoadingFrame
+DarkOverlay.Size = UDim2.new(1,0,1,0)
+DarkOverlay.BackgroundColor3 = Color3.fromRGB(0,0,0)
+DarkOverlay.BackgroundTransparency = 0.5
+DarkOverlay.BorderSizePixel = 0
+DarkOverlay.ZIndex = 101
 
-local LoadingStroke = Instance.new("UIStroke")
-LoadingStroke.Parent = LoadingFrame
-LoadingStroke.Color = Color3.fromRGB(0,150,255)
-LoadingStroke.Thickness = 2
+-- Animated gradient effect
+local Gradient = Instance.new("UIGradient")
+Gradient.Parent = DarkOverlay
+Gradient.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(0,0,0)),
+    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(20,20,40)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(0,0,0))
+})
+Gradient.Rotation = 45
 
-local LoadingText = Instance.new("TextLabel")
-LoadingText.Parent = LoadingFrame
-LoadingText.Size = UDim2.new(1,0,0,40)
-LoadingText.Position = UDim2.new(0,0,0,10)
-LoadingText.BackgroundTransparency = 1
-LoadingText.Text = "TELEPORTING..."
-LoadingText.TextColor3 = Color3.fromRGB(255,255,255)
-LoadingText.Font = Enum.Font.GothamBold
-LoadingText.TextSize = 18
-LoadingText.ZIndex = 11
+-- Center Container
+local CenterContainer = Instance.new("Frame")
+CenterContainer.Parent = LoadingFrame
+CenterContainer.Size = UDim2.new(0,400,0,300)
+CenterContainer.Position = UDim2.new(0.5,-200,0.5,-150)
+CenterContainer.BackgroundTransparency = 1
+CenterContainer.ZIndex = 102
 
-local LoadingBarBg = Instance.new("Frame")
-LoadingBarBg.Parent = LoadingFrame
-LoadingBarBg.Size = UDim2.new(0.8,0,0,10)
-LoadingBarBg.Position = UDim2.new(0.1,0,0,60)
-LoadingBarBg.BackgroundColor3 = Color3.fromRGB(50,50,60)
-LoadingBarBg.BorderSizePixel = 0
+-- Glowing Circle Animation
+local GlowCircle = Instance.new("Frame")
+GlowCircle.Parent = CenterContainer
+GlowCircle.Size = UDim2.new(0,100,0,100)
+GlowCircle.Position = UDim2.new(0.5,-50,0,-20)
+GlowCircle.BackgroundColor3 = Color3.fromRGB(0,150,255)
+GlowCircle.BackgroundTransparency = 0.7
+GlowCircle.BorderSizePixel = 0
+GlowCircle.ZIndex = 103
 
-local LoadingBarCorner = Instance.new("UICorner")
-LoadingBarCorner.Parent = LoadingBarBg
-LoadingBarCorner.CornerRadius = UDim.new(0,5)
+local GlowCorner = Instance.new("UICorner")
+GlowCorner.Parent = GlowCircle
+GlowCorner.CornerRadius = UDim.new(0.5,0)
 
-local LoadingBar = Instance.new("Frame")
-LoadingBar.Parent = LoadingBarBg
-LoadingBar.Size = UDim2.new(0,0,1,0)
-LoadingBar.BackgroundColor3 = Color3.fromRGB(0,200,255)
-LoadingBar.BorderSizePixel = 0
+-- Pulse animation for glow
+local GlowTween = TweenService:Create(
+    GlowCircle,
+    TweenInfo.new(1.5, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1),
+    {Size = UDim2.new(0,140,0,140), Position = UDim2.new(0.5,-70,0,-30), BackgroundTransparency = 0.9}
+)
+GlowTween:Play()
 
-local LoadingBarFillCorner = Instance.new("UICorner")
-LoadingBarFillCorner.Parent = LoadingBar
-LoadingBarFillCorner.CornerRadius = UDim.new(0,5)
+-- Loading Icon (Spinning)
+local LoadingIcon = Instance.new("ImageLabel")
+LoadingIcon.Parent = CenterContainer
+LoadingIcon.Size = UDim2.new(0,80,0,80)
+LoadingIcon.Position = UDim2.new(0.5,-40,0,-10)
+LoadingIcon.BackgroundTransparency = 1
+LoadingIcon.Image = "rbxasset://textures/ui/LoadingIcon.png"
+LoadingIcon.ImageColor3 = Color3.fromRGB(0,200,255)
+LoadingIcon.ZIndex = 104
 
-local LoadingPercent = Instance.new("TextLabel")
-LoadingPercent.Parent = LoadingFrame
-LoadingPercent.Size = UDim2.new(1,0,0,20)
-LoadingPercent.Position = UDim2.new(0,0,0,75)
-LoadingPercent.BackgroundTransparency = 1
-LoadingPercent.Text = "0%"
-LoadingPercent.TextColor3 = Color3.fromRGB(200,200,200)
-LoadingPercent.Font = Enum.Font.Gotham
-LoadingPercent.TextSize = 12
-LoadingPercent.ZIndex = 11
+-- Spin animation
+local SpinTween = TweenService:Create(
+    LoadingIcon,
+    TweenInfo.new(2, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1),
+    {Rotation = 360}
+)
+SpinTween:Play()
+
+-- Main Title
+local LoadingTitle = Instance.new("TextLabel")
+LoadingTitle.Parent = CenterContainer
+LoadingTitle.Size = UDim2.new(1,0,0,50)
+LoadingTitle.Position = UDim2.new(0,0,0,80)
+LoadingTitle.BackgroundTransparency = 1
+LoadingTitle.Text = "TELEPORTING..."
+LoadingTitle.TextColor3 = Color3.fromRGB(255,255,255)
+LoadingTitle.Font = Enum.Font.GothamBold
+LoadingTitle.TextSize = 28
+LoadingTitle.TextStrokeTransparency = 0.5
+LoadingTitle.TextStrokeColor3 = Color3.fromRGB(0,150,255)
+LoadingTitle.ZIndex = 104
+
+-- Subtitle (Location)
+local LocationText = Instance.new("TextLabel")
+LocationText.Parent = CenterContainer
+LocationText.Size = UDim2.new(1,0,0,30)
+LocationText.Position = UDim2.new(0,0,0,130)
+LocationText.BackgroundTransparency = 1
+LocationText.Text = "Memindahkan kendaraan..."
+LocationText.TextColor3 = Color3.fromRGB(180,180,255)
+LocationText.Font = Enum.Font.Gotham
+LocationText.TextSize = 16
+LocationText.ZIndex = 104
+
+-- Progress Bar Container
+local ProgressContainer = Instance.new("Frame")
+ProgressContainer.Parent = CenterContainer
+ProgressContainer.Size = UDim2.new(0.8,0,0,15)
+ProgressContainer.Position = UDim2.new(0.1,0,0,180)
+ProgressContainer.BackgroundColor3 = Color3.fromRGB(30,30,40)
+ProgressContainer.BorderSizePixel = 0
+ProgressContainer.ZIndex = 104
+
+local ProgressCorner = Instance.new("UICorner")
+ProgressCorner.Parent = ProgressContainer
+ProgressCorner.CornerRadius = UDim.new(0,8)
+
+local ProgressBar = Instance.new("Frame")
+ProgressBar.Parent = ProgressContainer
+ProgressBar.Size = UDim2.new(0,0,1,0)
+ProgressBar.BackgroundColor3 = Color3.fromRGB(0,200,255)
+ProgressBar.BorderSizePixel = 0
+ProgressBar.ZIndex = 105
+
+local ProgressBarCorner = Instance.new("UICorner")
+ProgressBarCorner.Parent = ProgressBar
+ProgressBarCorner.CornerRadius = UDim.new(0,8)
+
+-- Glow effect on progress bar
+local ProgressGlow = Instance.new("Frame")
+ProgressGlow.Parent = ProgressBar
+ProgressGlow.Size = UDim2.new(1,0,1,0)
+ProgressGlow.BackgroundColor3 = Color3.fromRGB(255,255,255)
+ProgressGlow.BackgroundTransparency = 0.8
+ProgressGlow.BorderSizePixel = 0
+ProgressGlow.ZIndex = 106
+
+local ProgressGlowCorner = Instance.new("UICorner")
+ProgressGlowCorner.Parent = ProgressGlow
+ProgressGlowCorner.CornerRadius = UDim.new(0,8)
+
+-- Percentage Text
+local PercentText = Instance.new("TextLabel")
+PercentText.Parent = CenterContainer
+PercentText.Size = UDim2.new(1,0,0,30)
+PercentText.Position = UDim2.new(0,0,0,210)
+PercentText.BackgroundTransparency = 1
+PercentText.Text = "0%"
+PercentText.TextColor3 = Color3.fromRGB(0,200,255)
+PercentText.Font = Enum.Font.GothamBold
+PercentText.TextSize = 24
+PercentText.ZIndex = 104
+
+-- Status Text
+local StatusText = Instance.new("TextLabel")
+StatusText.Parent = CenterContainer
+StatusText.Size = UDim2.new(1,0,0,20)
+StatusText.Position = UDim2.new(0,0,0,250)
+StatusText.BackgroundTransparency = 1
+StatusText.Text = "Memproses teleportasi..."
+StatusText.TextColor3 = Color3.fromRGB(200,200,200)
+StatusText.Font = Enum.Font.Gotham
+StatusText.TextSize = 14
+StatusText.ZIndex = 104
+
+-- Particle effect (tiny dots)
+local Particles = Instance.new("Frame")
+Particles.Parent = LoadingFrame
+Particles.Size = UDim2.new(1,0,1,0)
+Particles.BackgroundTransparency = 1
+Particles.ZIndex = 103
+
+-- Create some floating dots
+local dotPositions = {}
+for i = 1, 20 do
+    local dot = Instance.new("Frame")
+    dot.Parent = Particles
+    dot.Size = UDim2.new(0,2,0,2)
+    dot.Position = UDim2.new(math.random(), 0, math.random(), 0)
+    dot.BackgroundColor3 = Color3.fromRGB(0,150,255)
+    dot.BackgroundTransparency = 0.5
+    dot.BorderSizePixel = 0
+    dot.ZIndex = 103
+    
+    local dotCorner = Instance.new("UICorner")
+    dotCorner.Parent = dot
+    dotCorner.CornerRadius = UDim.new(0.5,0)
+    
+    -- Animate each dot
+    local targetPos = UDim2.new(math.random(), 0, math.random(), 0)
+    local dotTween = TweenService:Create(
+        dot,
+        TweenInfo.new(math.random(3,7), Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1),
+        {Position = targetPos}
+    )
+    dotTween:Play()
+    table.insert(dotPositions, {dot = dot, tween = dotTween})
+end
 
 -- Main Frame
 local Frame = Instance.new("Frame")
@@ -521,7 +657,7 @@ BahanDesc.Parent = BtnBahan
 BahanDesc.Size = UDim2.new(1,-60,0,20)
 BahanDesc.Position = UDim2.new(0,50,0,35)
 BahanDesc.BackgroundTransparency = 1
-BahanDesc.Text = "Material Storage (Slow TP)"
+BahanDesc.Text = "Material Storage (Slow TP 7s)"
 BahanDesc.TextColor3 = Color3.fromRGB(180,180,180)
 BahanDesc.TextXAlignment = Enum.TextXAlignment.Left
 BahanDesc.Font = Enum.Font.Gotham
@@ -565,7 +701,7 @@ RSDesc.Parent = BtnRS
 RSDesc.Size = UDim2.new(1,-60,0,20)
 RSDesc.Position = UDim2.new(0,50,0,35)
 RSDesc.BackgroundTransparency = 1
-RSDesc.Text = "Hospital (Slow TP)"
+RSDesc.Text = "Hospital (Slow TP 7s)"
 RSDesc.TextColor3 = Color3.fromRGB(180,180,180)
 RSDesc.TextXAlignment = Enum.TextXAlignment.Left
 RSDesc.Font = Enum.Font.Gotham
@@ -792,10 +928,9 @@ function blinkMundur()
     BlinkStatus.TextColor3 = Color3.fromRGB(100,255,100)
 end
 
--- SLOW TELEPORT FUNCTION WITH LOADING SCREEN
-function slowTeleport(targetCFrame, duration)
+-- SLOW TELEPORT FUNCTION WITH LOADING SCREEN (7 DETIK)
+function slowTeleport(targetCFrame, locationName)
     if isTeleporting then 
-        LoadingFrame.Visible = false
         return 
     end
     if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then
@@ -806,11 +941,17 @@ function slowTeleport(targetCFrame, duration)
     local hrp = player.Character.HumanoidRootPart
     local startCF = hrp.CFrame
     local startTime = tick()
+    local duration = 7 -- 7 detik biar lebih lambat dan smooth
     
-    -- Show loading screen
+    -- Update location text
+    LocationText.Text = "Memindahkan ke: " .. locationName
+    StatusText.Text = "Memproses teleportasi..."
+    
+    -- Show loading screen with fade in
     LoadingFrame.Visible = true
-    LoadingBar.Size = UDim2.new(0,0,1,0)
-    LoadingPercent.Text = "0%"
+    LoadingFrame.BackgroundTransparency = 0.3
+    ProgressBar.Size = UDim2.new(0,0,1,0)
+    PercentText.Text = "0%"
     
     -- Disable buttons during teleport
     BtnBahan.Active = false
@@ -821,34 +962,64 @@ function slowTeleport(targetCFrame, duration)
     MSLoopStartBtn.Active = false
     MSLoopStopBtn.Active = false
     
-    -- Smooth teleport animation
+    -- Smooth teleport animation with vehicle handling
     local connection
+    local lastAlpha = 0
+    
     connection = RunService.Heartbeat:Connect(function()
         local elapsed = tick() - startTime
         local alpha = math.min(elapsed / duration, 1)
         
-        -- Easing function (smooth step)
-        alpha = alpha * alpha * (3 - 2 * alpha)
+        -- Easing function yang lebih smooth (cubic bezier style)
+        -- Ini bikin pergerakan makin halus buat kendaraan
+        local smoothAlpha = alpha < 0.5 and 2 * alpha * alpha or 1 - math.pow(-2 * alpha + 2, 2) / 2
         
-        -- Update position
-        local newCF = startCF:Lerp(targetCFrame, alpha)
+        -- Update position dengan lerp yang sangat smooth
+        local newCF = startCF:Lerp(targetCFrame, smoothAlpha)
         hrp.CFrame = newCF
         
-        -- Update loading bar
-        local percent = math.floor(alpha * 100)
-        LoadingBar.Size = UDim2.new(alpha,0,1,0)
-        LoadingPercent.Text = percent .. "%"
+        -- Update loading bar dengan smooth juga
+        local percent = math.floor(smoothAlpha * 100)
+        ProgressBar.Size = UDim2.new(smoothAlpha,0,1,0)
+        PercentText.Text = percent .. "%"
+        
+        -- Update status text based on progress
+        if smoothAlpha < 0.3 then
+            StatusText.Text = "Mempersiapkan teleportasi..."
+        elseif smoothAlpha < 0.6 then
+            StatusText.Text = "Memindahkan kendaraan..."
+        elseif smoothAlpha < 0.9 then
+            StatusText.Text = "Hampir sampai..."
+        else
+            StatusText.Text = "Menyelesaikan teleportasi..."
+        end
+        
+        -- Simpan alpha terakhir buat reference
+        lastAlpha = smoothAlpha
         
         if alpha >= 1 then
             connection:Disconnect()
         end
     end)
     
-    -- Wait for teleport to complete
+    -- Tunggu sampai teleport selesai
     task.wait(duration)
+    
+    -- Pastikan posisi akhir tepat
+    hrp.CFrame = targetCFrame
+    
+    -- Fade out loading screen
+    local fadeOut = TweenService:Create(
+        LoadingFrame,
+        TweenInfo.new(0.5),
+        {BackgroundTransparency = 1}
+    )
+    fadeOut:Play()
+    task.wait(0.5)
     
     -- Hide loading screen
     LoadingFrame.Visible = false
+    LoadingFrame.BackgroundTransparency = 0.3 -- Reset untuk next use
     
     -- Re-enable buttons
     BtnBahan.Active = true
@@ -862,17 +1033,17 @@ function slowTeleport(targetCFrame, duration)
     isTeleporting = false
 end
 
--- TP Functions with Slow Teleport (5 seconds)
+-- TP Functions with Slow Teleport (7 seconds)
 function TP_MS_BAHAN()
     if isTeleporting then return end
     local targetPos = CFrame.new(521.32, 47.79, 617.25)
-    slowTeleport(targetPos, 5) -- 5 detik biar lambat
+    slowTeleport(targetPos, "MS BAHAN")
 end
 
 function TP_RS()
     if isTeleporting then return end
     local targetPos = CFrame.new(1065.19, 28.47, 420.76)
-    slowTeleport(targetPos, 5) -- 5 detik biar lambat
+    slowTeleport(targetPos, "RS/HOSPITAL")
 end
 
 -- MS LOOP
@@ -1118,3 +1289,12 @@ end)
 Frame.Size = UDim2.new(0,0,0,0)
 task.wait(0.1)
 TweenService:Create(Frame, tweenInfo, {Size = openSize}):Play()
+
+-- Cleanup particles when screen hides
+game:GetService("CoreGui").ChildRemoved:Connect(function(child)
+    if child == ScreenGui then
+        for _, dotData in pairs(dotPositions) do
+            dotData.tween:Cancel()
+        end
+    end
+end)
