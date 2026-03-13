@@ -11,71 +11,87 @@ ScreenGui.Name = "TP_Hub_191"
 ScreenGui.ResetOnSpawn = false
 ScreenGui.IgnoreGuiInset = true
 
--- LOADING SCREEN
+-- Loading Screen
 local LoadingFrame = Instance.new("Frame")
 LoadingFrame.Parent = ScreenGui
 LoadingFrame.Size = UDim2.new(1,0,1,0)
 LoadingFrame.BackgroundColor3 = Color3.fromRGB(0,0,0)
-LoadingFrame.BackgroundTransparency = 0
-LoadingFrame.BorderSizePixel = 0
+LoadingFrame.BackgroundTransparency = 0.5
 LoadingFrame.Visible = false
-LoadingFrame.ZIndex = 100
+LoadingFrame.ZIndex = 10
 
--- Center Container
-local CenterContainer = Instance.new("Frame")
-CenterContainer.Parent = LoadingFrame
-CenterContainer.Size = UDim2.new(0,300,0,150)
-CenterContainer.Position = UDim2.new(0.5,-150,0.5,-75)
-CenterContainer.BackgroundTransparency = 1
-CenterContainer.ZIndex = 102
+local LoadingCorner = Instance.new("UICorner")
+LoadingCorner.Parent = LoadingFrame
+LoadingCorner.CornerRadius = UDim.new(0,0)
 
--- Loading Text
-local LoadingText = Instance.new("TextLabel")
-LoadingText.Parent = CenterContainer
-LoadingText.Size = UDim2.new(1,0,0,40)
-LoadingText.Position = UDim2.new(0,0,0,20)
-LoadingText.BackgroundTransparency = 1
-LoadingText.Text = "TELEPORTING..."
-LoadingText.TextColor3 = Color3.fromRGB(255,255,255)
-LoadingText.Font = Enum.Font.GothamBold
-LoadingText.TextSize = 24
-LoadingText.ZIndex = 103
+local LoadingMain = Instance.new("Frame")
+LoadingMain.Parent = LoadingFrame
+LoadingMain.Size = UDim2.new(0,400,0,200)
+LoadingMain.Position = UDim2.new(0.5,-200,0.5,-100)
+LoadingMain.BackgroundColor3 = Color3.fromRGB(25,25,35)
+LoadingMain.BackgroundTransparency = 0.1
+LoadingMain.BorderSizePixel = 0
+LoadingMain.ZIndex = 11
 
--- Progress Bar Container
-local ProgressContainer = Instance.new("Frame")
-ProgressContainer.Parent = CenterContainer
-ProgressContainer.Size = UDim2.new(0.8,0,0,10)
-ProgressContainer.Position = UDim2.new(0.1,0,0,80)
-ProgressContainer.BackgroundColor3 = Color3.fromRGB(30,30,30)
-ProgressContainer.BorderSizePixel = 0
-ProgressContainer.ZIndex = 103
+local LoadingMainCorner = Instance.new("UICorner")
+LoadingMainCorner.Parent = LoadingMain
+LoadingMainCorner.CornerRadius = UDim.new(0,20)
 
-local ProgressCorner = Instance.new("UICorner")
-ProgressCorner.Parent = ProgressContainer
-ProgressCorner.CornerRadius = UDim.new(0,5)
+local LoadingTitle = Instance.new("TextLabel")
+LoadingTitle.Parent = LoadingMain
+LoadingTitle.Size = UDim2.new(1,0,0,60)
+LoadingTitle.Position = UDim2.new(0,0,0,20)
+LoadingTitle.BackgroundTransparency = 1
+LoadingTitle.Text = "191 ONTOP"
+LoadingTitle.TextColor3 = Color3.fromRGB(100,200,255)
+LoadingTitle.Font = Enum.Font.GothamBold
+LoadingTitle.TextSize = 40
+LoadingTitle.ZIndex = 12
 
-local ProgressBar = Instance.new("Frame")
-ProgressBar.Parent = ProgressContainer
-ProgressBar.Size = UDim2.new(0,0,1,0)
-ProgressBar.BackgroundColor3 = Color3.fromRGB(0,150,255)
-ProgressBar.BorderSizePixel = 0
-ProgressBar.ZIndex = 104
+local LoadingBarBg = Instance.new("Frame")
+LoadingBarBg.Parent = LoadingMain
+LoadingBarBg.Size = UDim2.new(0.8,0,0,20)
+LoadingBarBg.Position = UDim2.new(0.1,0,0,100)
+LoadingBarBg.BackgroundColor3 = Color3.fromRGB(40,40,50)
+LoadingBarBg.BorderSizePixel = 0
+LoadingBarBg.ZIndex = 12
 
-local ProgressBarCorner = Instance.new("UICorner")
-ProgressBarCorner.Parent = ProgressBar
-ProgressBarCorner.CornerRadius = UDim.new(0,5)
+local LoadingBarBgCorner = Instance.new("UICorner")
+LoadingBarBgCorner.Parent = LoadingBarBg
+LoadingBarBgCorner.CornerRadius = UDim.new(0,10)
 
--- Percentage Text
-local PercentText = Instance.new("TextLabel")
-PercentText.Parent = CenterContainer
-PercentText.Size = UDim2.new(1,0,0,30)
-PercentText.Position = UDim2.new(0,0,0,100)
-PercentText.BackgroundTransparency = 1
-PercentText.Text = "0%"
-PercentText.TextColor3 = Color3.fromRGB(0,150,255)
-PercentText.Font = Enum.Font.GothamBold
-PercentText.TextSize = 18
-PercentText.ZIndex = 103
+local LoadingBar = Instance.new("Frame")
+LoadingBar.Parent = LoadingBarBg
+LoadingBar.Size = UDim2.new(0,0,1,0)
+LoadingBar.BackgroundColor3 = Color3.fromRGB(0,200,255)
+LoadingBar.BorderSizePixel = 0
+LoadingBar.ZIndex = 13
+
+local LoadingBarCorner = Instance.new("UICorner")
+LoadingBarCorner.Parent = LoadingBar
+LoadingBarCorner.CornerRadius = UDim.new(0,10)
+
+local LoadingPercent = Instance.new("TextLabel")
+LoadingPercent.Parent = LoadingMain
+LoadingPercent.Size = UDim2.new(1,0,0,30)
+LoadingPercent.Position = UDim2.new(0,0,0,130)
+LoadingPercent.BackgroundTransparency = 1
+LoadingPercent.Text = "0%"
+LoadingPercent.TextColor3 = Color3.fromRGB(255,255,255)
+LoadingPercent.Font = Enum.Font.GothamBold
+LoadingPercent.TextSize = 20
+LoadingPercent.ZIndex = 12
+
+local LoadingStatus = Instance.new("TextLabel")
+LoadingStatus.Parent = LoadingMain
+LoadingStatus.Size = UDim2.new(1,0,0,30)
+LoadingStatus.Position = UDim2.new(0,0,0,160)
+LoadingStatus.BackgroundTransparency = 1
+LoadingStatus.Text = "MEMPERSIAPKAN TELEPORT..."
+LoadingStatus.TextColor3 = Color3.fromRGB(200,200,200)
+LoadingStatus.Font = Enum.Font.Gotham
+LoadingStatus.TextSize = 14
+LoadingStatus.ZIndex = 12
 
 -- Main Frame
 local Frame = Instance.new("Frame")
@@ -677,7 +693,6 @@ MSLoopStopCorner.CornerRadius = UDim.new(0,8)
 
 -- Variables
 local loopRunning = false
-local isTeleporting = false
 
 -- Tool functions
 function findTool(toolName)
@@ -794,223 +809,6 @@ function blinkMundur()
     
     BlinkStatus.Text = "✅ Sudah mundur 5 studs!"
     BlinkStatus.TextColor3 = Color3.fromRGB(100,255,100)
-end
-
--- FUNGSI DETEKSI KENDARAAN
-function findVehicle()
-    local character = player.Character
-    if not character then return nil end
-    
-    local humanoid = character:FindFirstChild("Humanoid")
-    if not humanoid then return nil end
-    
-    if humanoid.SeatPart then
-        local seat = humanoid.SeatPart
-        local vehicle = seat.Parent
-        
-        if vehicle then
-            return vehicle
-        end
-    end
-    
-    return nil
-end
-
--- FUNCTION TO GET VEHICLE ROOT
-function getVehicleRoot(vehicle)
-    if not vehicle then return nil end
-    
-    if vehicle.PrimaryPart then
-        return vehicle.PrimaryPart
-    end
-    
-    local hrp = vehicle:FindFirstChild("HumanoidRootPart")
-    if hrp then return hrp end
-    
-    local seat = vehicle:FindFirstChildWhichIsA("VehicleSeat")
-    if seat then return seat end
-    
-    return nil
-end
-
--- FUNCTION TO GET ALL WHEELS
-function getAllWheels(vehicle)
-    if not vehicle then return {} end
-    local wheels = {}
-    local wheelKeywords = {"wheel", "ban", "tyre", "tire", "rod", "axle", "rim"}
-    
-    for _, child in pairs(vehicle:GetDescendants()) do
-        if child:IsA("BasePart") then
-            local nameLower = string.lower(child.Name)
-            for _, keyword in pairs(wheelKeywords) do
-                if nameLower:find(keyword) then
-                    table.insert(wheels, child)
-                    break
-                end
-            end
-        end
-    end
-    
-    return wheels
-end
-
--- FUNCTION TO LOCK ENTIRE VEHICLE
-function lockVehicleCompletely(vehicle, vehicleRoot)
-    if not vehicle or not vehicleRoot then return end
-    
-    -- Dapatkan semua part yang perlu dikunci
-    local allParts = {}
-    
-    -- Ambil semua part dalam kendaraan
-    for _, child in pairs(vehicle:GetDescendants()) do
-        if child:IsA("BasePart") and child ~= vehicleRoot then
-            table.insert(allParts, child)
-        end
-    end
-    
-    -- Buat weld untuk setiap part ke root
-    for _, part in pairs(allParts) do
-        pcall(function()
-            -- Hapus weld lama
-            for _, joint in pairs(part:GetChildren()) do
-                if joint:IsA("Weld") or joint:IsA("Snap") or joint:IsA("Motor6D") then
-                    joint:Destroy()
-                end
-            end
-            
-            -- Buat weld baru
-            local weld = Instance.new("Weld")
-            weld.Part0 = vehicleRoot
-            weld.Part1 = part
-            weld.C0 = vehicleRoot.CFrame:ToObjectSpace(part.CFrame)
-            weld.Parent = part
-        end)
-    end
-    
-    -- Kunci juga semua joints yang ada
-    for _, constraint in pairs(vehicle:GetDescendants()) do
-        if constraint:IsA("Constraint") then
-            constraint.Enabled = true
-        end
-    end
-end
-
--- SLOW TELEPORT - 8 DETIK (SUPER AMAN)
-function slowTeleport(targetCFrame, locationName)
-    if isTeleporting then return end
-    if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then
-        return
-    end
-    
-    isTeleporting = true
-    
-    -- Deteksi kendaraan
-    local vehicle = findVehicle()
-    local vehicleRoot = nil
-    
-    if vehicle then
-        vehicleRoot = getVehicleRoot(vehicle)
-        if vehicleRoot then
-            StatusText.Text = "Mengunci kendaraan..."
-            lockVehicleCompletely(vehicle, vehicleRoot)
-        end
-    end
-    
-    -- Tampilkan loading screen
-    LoadingFrame.Visible = true
-    ProgressBar.Size = UDim2.new(0,0,1,0)
-    PercentText.Text = "0%"
-    StatusText.Text = "Memindahkan..."
-    
-    -- Disable buttons
-    BtnBahan.Active = false
-    BtnRS.Active = false
-    BlinkDownBtn.Active = false
-    BlinkMajuBtn.Active = false
-    BlinkMundurBtn.Active = false
-    MSLoopStartBtn.Active = false
-    MSLoopStopBtn.Active = false
-    
-    local hrp = player.Character.HumanoidRootPart
-    local duration = 8 -- 8 detik biar super aman
-    
-    -- Smooth teleport
-    local startCF = hrp.CFrame
-    local startTime = tick()
-    
-    local connection
-    connection = RunService.Heartbeat:Connect(function()
-        local elapsed = tick() - startTime
-        local alpha = math.min(elapsed / duration, 1)
-        
-        -- Easing yang sangat smooth (Quintic)
-        local smoothAlpha = alpha * alpha * alpha * (alpha * (alpha * 6 - 15) + 10)
-        
-        -- Pindahkan karakter
-        local newCF = startCF:Lerp(targetCFrame, smoothAlpha)
-        hrp.CFrame = newCF
-        
-        -- Pindahkan kendaraan jika ada
-        if vehicleRoot then
-            vehicleRoot.CFrame = newCF
-        end
-        
-        -- Update progress
-        PercentText.Text = math.floor(smoothAlpha * 100) .. "%"
-        ProgressBar.Size = UDim2.new(smoothAlpha,0,1,0)
-        
-        if smoothAlpha < 0.25 then
-            StatusText.Text = "Mempersiapkan..."
-        elseif smoothAlpha < 0.5 then
-            StatusText.Text = "Memindahkan..."
-        elseif smoothAlpha < 0.75 then
-            StatusText.Text = "Hampir sampai..."
-        else
-            StatusText.Text = "Menyelesaikan..."
-        end
-        
-        if alpha >= 1 then
-            connection:Disconnect()
-        end
-    end)
-    
-    task.wait(duration)
-    
-    -- Pastikan posisi akhir tepat
-    hrp.CFrame = targetCFrame
-    if vehicleRoot then
-        vehicleRoot.CFrame = targetCFrame
-    end
-    
-    -- Tunggu sebentar
-    task.wait(0.5)
-    
-    -- Sembunyikan loading screen
-    LoadingFrame.Visible = false
-    
-    -- Re-enable buttons
-    BtnBahan.Active = true
-    BtnRS.Active = true
-    BlinkDownBtn.Active = true
-    BlinkMajuBtn.Active = true
-    BlinkMundurBtn.Active = true
-    MSLoopStartBtn.Active = true
-    MSLoopStopBtn.Active = true
-    
-    isTeleporting = false
-end
-
--- TP Functions
-function TP_MS_BAHAN()
-    if isTeleporting then return end
-    local targetPos = CFrame.new(521.32, 47.79, 617.25)
-    slowTeleport(targetPos, "MS BAHAN")
-end
-
-function TP_RS()
-    if isTeleporting then return end
-    local targetPos = CFrame.new(1065.19, 28.47, 420.76)
-    slowTeleport(targetPos, "RS/HOSPITAL")
 end
 
 -- MS LOOP
@@ -1137,12 +935,171 @@ function startMSLoop()
     ToolStatus.Text = "Tool: -"
 end
 
+-- ===== SMOOTH TP FUNCTION DENGAN ANTI FLING & LOADING =====
+function smoothTeleport(targetCFrame, duration)
+    -- Cek karakter
+    local character = player.Character
+    if not character then
+        warn("Character not found!")
+        return
+    end
+    
+    local hrp = character:FindFirstChild("HumanoidRootPart")
+    if not hrp then
+        warn("HumanoidRootPart not found!")
+        return
+    end
+    
+    -- MATIKAN SEMUA BAN/RODA (VEHICLE LOCK)
+    local function lockAllWheels()
+        local vehicle = character:FindFirstChildOfClass("VehicleSeat")
+        if vehicle and vehicle:FindFirstChild("Wheels") then
+            for _, wheel in pairs(vehicle.Wheels:GetChildren()) do
+                if wheel:IsA("Part") or wheel:IsA("MeshPart") then
+                    wheel.Anchored = true
+                end
+            end
+        end
+        
+        -- Lock semua part yang mungkin jadi roda
+        for _, child in pairs(character:GetDescendants()) do
+            if child:IsA("Part") or child:IsA("MeshPart") or child:IsA("CylinderPart") or child:IsA("WedgePart") then
+                if string.find(string.lower(child.Name), "wheel") or 
+                   string.find(string.lower(child.Name), "roda") or
+                   string.find(string.lower(child.Name), "ban") or
+                   string.find(string.lower(child.Name), "tire") then
+                    child.Anchored = true
+                    child.CanCollide = false
+                end
+            end
+        end
+    end
+    
+    -- UNLOCK SEMUA BAN
+    local function unlockAllWheels()
+        local vehicle = character:FindFirstChildOfClass("VehicleSeat")
+        if vehicle and vehicle:FindFirstChild("Wheels") then
+            for _, wheel in pairs(vehicle.Wheels:GetChildren()) do
+                if wheel:IsA("Part") or wheel:IsA("MeshPart") then
+                    wheel.Anchored = false
+                end
+            end
+        end
+        
+        for _, child in pairs(character:GetDescendants()) do
+            if child:IsA("Part") or child:IsA("MeshPart") or child:IsA("CylinderPart") or child:IsA("WedgePart") then
+                if string.find(string.lower(child.Name), "wheel") or 
+                   string.find(string.lower(child.Name), "roda") or
+                   string.find(string.lower(child.Name), "ban") or
+                   string.find(string.lower(child.Name), "tire") then
+                    child.Anchored = false
+                end
+            end
+        end
+    end
+    
+    -- ANTI FLING: BodyPosition & BodyGyro
+    local bp = Instance.new("BodyPosition")
+    bp.MaxForce = Vector3.new(1e9, 1e9, 1e9)
+    bp.P = 1e5
+    bp.D = 1e3
+    bp.Parent = hrp
+    
+    local bg = Instance.new("BodyGyro")
+    bg.MaxTorque = Vector3.new(1e9, 1e9, 1e9)
+    bg.P = 1e5
+    bg.D = 1e3
+    bg.Parent = hrp
+    
+    -- Lock semua ban
+    lockAllWheels()
+    
+    -- Matikan physics sementara
+    for _, child in pairs(character:GetDescendants()) do
+        if child:IsA("BasePart") then
+            child.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0)
+        end
+    end
+    
+    -- Show loading screen
+    LoadingFrame.Visible = true
+    LoadingBar.Size = UDim2.new(0,0,1,0)
+    LoadingPercent.Text = "0%"
+    
+    -- Smooth tween
+    local startCF = hrp.CFrame
+    local steps = 100
+    local stepTime = duration / steps
+    
+    for i = 1, steps do
+        if not hrp or not hrp.Parent then break end
+        
+        local alpha = i / steps
+        local currentCF = startCF:Lerp(targetCFrame, alpha)
+        
+        bp.Position = currentCF.Position
+        bg.CFrame = currentCF
+        
+        -- Update loading
+        local percent = math.floor(alpha * 100)
+        LoadingBar.Size = UDim2.new(percent/100,0,1,0)
+        LoadingPercent.Text = percent .. "%"
+        
+        if percent < 30 then
+            LoadingStatus.Text = "MENGUNCI SEMUA BAN..."
+        elseif percent < 60 then
+            LoadingStatus.Text = "TELEPORTASI SMOOTH..."
+        elseif percent < 90 then
+            LoadingStatus.Text = "ANTI FLING AKTIF..."
+        else
+            LoadingStatus.Text = "HAMPIR SAMPAI..."
+        end
+        
+        task.wait(stepTime)
+    end
+    
+    -- Final position
+    bp.Position = targetCFrame.Position
+    bg.CFrame = targetCFrame
+    
+    -- Hide loading
+    LoadingBar.Size = UDim2.new(1,0,1,0)
+    LoadingPercent.Text = "100%"
+    LoadingStatus.Text = "TELEPORT SELESAI!"
+    task.wait(0.5)
+    
+    -- Cleanup
+    bp:Destroy()
+    bg:Destroy()
+    
+    -- Unlock semua ban
+    unlockAllWheels()
+    
+    -- Kembalikan physics
+    for _, child in pairs(character:GetDescendants()) do
+        if child:IsA("BasePart") then
+            child.CustomPhysicalProperties = nil
+        end
+    end
+    
+    LoadingFrame.Visible = false
+end
+
+-- TP Functions dengan smooth teleport
+function TP_MS_BAHAN()
+    smoothTeleport(CFrame.new(521.32,47.79,617.25), 10)
+end
+
+function TP_RS()
+    smoothTeleport(CFrame.new(1065.19,28.47,420.76), 10)
+end
+
 -- Button Connections
 BtnBahan.MouseButton1Click:Connect(TP_MS_BAHAN)
 BtnRS.MouseButton1Click:Connect(TP_RS)
 
 MSLoopStartBtn.MouseButton1Click:Connect(function()
-    if not loopRunning and not isTeleporting then
+    if not loopRunning then
         task.spawn(startMSLoop)
     end
 end)
@@ -1152,17 +1109,9 @@ MSLoopStopBtn.MouseButton1Click:Connect(function()
 end)
 
 -- CONNECT BUTTONS MS SAFETY
-BlinkDownBtn.MouseButton1Click:Connect(function()
-    if not isTeleporting then blinkDown() end
-end)
-
-BlinkMajuBtn.MouseButton1Click:Connect(function()
-    if not isTeleporting then blinkMaju() end
-end)
-
-BlinkMundurBtn.MouseButton1Click:Connect(function()
-    if not isTeleporting then blinkMundur() end
-end)
+BlinkDownBtn.MouseButton1Click:Connect(blinkDown)
+BlinkMajuBtn.MouseButton1Click:Connect(blinkMaju)
+BlinkMundurBtn.MouseButton1Click:Connect(blinkMundur)
 
 -- Tab Switching
 TPTabBtn.MouseButton1Click:Connect(function()
