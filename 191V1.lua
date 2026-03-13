@@ -640,17 +640,17 @@ BuyIndicatorTitle.TextXAlignment = Enum.TextXAlignment.Left
 BuyIndicatorTitle.Font = Enum.Font.GothamBold
 BuyIndicatorTitle.TextSize = 16
 
--- Total Pembelian
-local TotalPembelian = Instance.new("TextLabel")
-TotalPembelian.Parent = BuyIndicatorFrame
-TotalPembelian.Size = UDim2.new(1,-20,0,30)
-TotalPembelian.Position = UDim2.new(0,10,0,35)
-TotalPembelian.BackgroundTransparency = 1
-TotalPembelian.Text = "🔢 TOTAL: 0"
-TotalPembelian.TextColor3 = Color3.fromRGB(255,255,255)
-TotalPembelian.TextXAlignment = Enum.TextXAlignment.Left
-TotalPembelian.Font = Enum.Font.GothamBold
-TotalPembelian.TextSize = 18
+-- Total Set
+local TotalSet = Instance.new("TextLabel")
+TotalSet.Parent = BuyIndicatorFrame
+TotalSet.Size = UDim2.new(1,-20,0,30)
+TotalSet.Position = UDim2.new(0,10,0,35)
+TotalSet.BackgroundTransparency = 1
+TotalSet.Text = "📦 SET LENGKAP: ❌"
+TotalSet.TextColor3 = Color3.fromRGB(255,255,255)
+TotalSet.TextXAlignment = Enum.TextXAlignment.Left
+TotalSet.Font = Enum.Font.GothamBold
+TotalSet.TextSize = 18
 
 -- Water Indicator
 local WaterIndicator = Instance.new("TextLabel")
@@ -690,14 +690,16 @@ GelatinIndicator.TextSize = 14
 
 -- Function to update buy indicators
 local function updateBuyIndicators()
-    local total = 0
+    local waterStatus = false
+    local sugarStatus = false
+    local gelatinStatus = false
     
     -- Check Water
     local waterTool = findTool("water")
     if waterTool then
         WaterIndicator.Text = "💧 WATER: ✅ SUDAH"
         WaterIndicator.TextColor3 = Color3.fromRGB(100,200,255)
-        total = total + 1
+        waterStatus = true
     else
         WaterIndicator.Text = "💧 WATER: ❌ BELUM"
         WaterIndicator.TextColor3 = Color3.fromRGB(255,255,255)
@@ -708,7 +710,7 @@ local function updateBuyIndicators()
     if sugarTool then
         SugarIndicator.Text = "🍚 SUGAR: ✅ SUDAH"
         SugarIndicator.TextColor3 = Color3.fromRGB(100,200,255)
-        total = total + 1
+        sugarStatus = true
     else
         SugarIndicator.Text = "🍚 SUGAR: ❌ BELUM"
         SugarIndicator.TextColor3 = Color3.fromRGB(255,255,255)
@@ -719,20 +721,19 @@ local function updateBuyIndicators()
     if gelatinTool then
         GelatinIndicator.Text = "🧪 GELATIN: ✅ SUDAH"
         GelatinIndicator.TextColor3 = Color3.fromRGB(100,200,255)
-        total = total + 1
+        gelatinStatus = true
     else
         GelatinIndicator.Text = "🧪 GELATIN: ❌ BELUM"
         GelatinIndicator.TextColor3 = Color3.fromRGB(255,255,255)
     end
     
-    -- Update total pembelian
-    TotalPembelian.Text = "🔢 TOTAL: " .. total
-    if total == 3 then
-        TotalPembelian.TextColor3 = Color3.fromRGB(100,255,100)
-    elseif total >= 1 then
-        TotalPembelian.TextColor3 = Color3.fromRGB(255,255,100)
+    -- Update total set (1 set = water + sugar + gelatin)
+    if waterStatus and sugarStatus and gelatinStatus then
+        TotalSet.Text = "📦 SET LENGKAP: ✅ (1)"
+        TotalSet.TextColor3 = Color3.fromRGB(100,255,100)
     else
-        TotalPembelian.TextColor3 = Color3.fromRGB(255,255,255)
+        TotalSet.Text = "📦 SET LENGKAP: ❌"
+        TotalSet.TextColor3 = Color3.fromRGB(255,255,255)
     end
 end
 
