@@ -22,7 +22,7 @@ KeyBackground.ZIndex = 999
 -- Frame Utama Key System (PANJANG KE SAMPING)
 local KeyFrame = Instance.new("Frame")
 KeyFrame.Parent = KeyBackground
-KeyFrame.Size = UDim2.new(0,600,0,200) -- PANJANG KE SAMPING (600)
+KeyFrame.Size = UDim2.new(0,600,0,200)
 KeyFrame.Position = UDim2.new(0.5,-300,0.5,-100)
 KeyFrame.BackgroundColor3 = Color3.fromRGB(25,25,35)
 KeyFrame.BorderSizePixel = 0
@@ -80,7 +80,7 @@ InputCorner.CornerRadius = UDim.new(0,10)
 -- TextBox untuk key (PANJANG)
 local KeyTextBox = Instance.new("TextBox")
 KeyTextBox.Parent = InputFrame
-KeyTextBox.Size = UDim2.new(1,-120,1,0) -- Sisa ruang untuk button
+KeyTextBox.Size = UDim2.new(1,-120,1,0)
 KeyTextBox.Position = UDim2.new(0,10,0,0)
 KeyTextBox.BackgroundTransparency = 1
 KeyTextBox.PlaceholderText = "Masukkan Key..."
@@ -95,9 +95,9 @@ KeyTextBox.ZIndex = 1002
 -- Button ENTER (HIJAU KECIL)
 local EnterButton = Instance.new("TextButton")
 EnterButton.Parent = InputFrame
-EnterButton.Size = UDim2.new(0,100,1,-10) -- BUTTON KECIL
+EnterButton.Size = UDim2.new(0,100,1,-10)
 EnterButton.Position = UDim2.new(1,-110,0,5)
-EnterButton.BackgroundColor3 = Color3.fromRGB(50,200,50) -- HIJAU
+EnterButton.BackgroundColor3 = Color3.fromRGB(50,200,50)
 EnterButton.Text = "ENTER"
 EnterButton.TextColor3 = Color3.fromRGB(255,255,255)
 EnterButton.Font = Enum.Font.GothamBold
@@ -135,7 +135,7 @@ local KeyLoadingCorner = Instance.new("UICorner")
 KeyLoadingCorner.Parent = KeyLoading
 KeyLoadingCorner.CornerRadius = UDim.new(0,3)
 
--- KEY YANG VALID (CONTOH, BISA DIGANTI)
+-- KEY YANG VALID
 local VALID_KEYS = {
     ["191ONTOP"] = true,
     ["STORE191"] = true,
@@ -149,13 +149,13 @@ local VALID_KEYS = {
     ["MASTER191"] = true,
 }
 
--- MAIN GUI (AWALNYA DISEMBUNYIKAN)
+-- MAIN GUI
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Parent = player:WaitForChild("PlayerGui")
 ScreenGui.Name = "TP_Hub_191"
 ScreenGui.ResetOnSpawn = false
 ScreenGui.IgnoreGuiInset = true
-ScreenGui.Enabled = false -- MULAI DISEMBUNYIKAN
+ScreenGui.Enabled = false
 
 -- Loading Screen
 local LoadingFrame = Instance.new("Frame")
@@ -276,7 +276,7 @@ TitleCorner.CornerRadius = UDim.new(0,10)
 -- Title
 local Title = Instance.new("TextLabel")
 Title.Parent = TitleBar
-Title.Size = UDim2.new(1,-40,0,30)
+Title.Size = UDim2.new(1,-80,0,30)  -- Beri ruang untuk 2 button
 Title.Position = UDim2.new(0,10,0,5)
 Title.BackgroundTransparency = 1
 Title.Text = "191 STORE"
@@ -288,7 +288,7 @@ Title.TextSize = 20
 -- Billboard Text
 local BillboardText = Instance.new("TextLabel")
 BillboardText.Parent = TitleBar
-BillboardText.Size = UDim2.new(1,-40,0,20)
+BillboardText.Size = UDim2.new(1,-80,0,20)
 BillboardText.Position = UDim2.new(0,10,0,30)
 BillboardText.BackgroundTransparency = 1
 BillboardText.Text = "Mau join 191 store? https://discord.gg/h5CWN2sP4y"
@@ -297,6 +297,22 @@ BillboardText.TextXAlignment = Enum.TextXAlignment.Left
 BillboardText.Font = Enum.Font.Gotham
 BillboardText.TextSize = 12
 BillboardText.TextWrapped = true
+
+-- BUTTON CLOSE (MERAH)
+local CloseBtn = Instance.new("TextButton")
+CloseBtn.Parent = TitleBar
+CloseBtn.Size = UDim2.new(0,30,0,30)
+CloseBtn.Position = UDim2.new(1,-70,0,15)  -- Posisi sebelum minimize
+CloseBtn.BackgroundColor3 = Color3.fromRGB(200,50,50)  -- MERAH
+CloseBtn.Text = "✕"
+CloseBtn.TextColor3 = Color3.fromRGB(255,255,255)
+CloseBtn.TextSize = 20
+CloseBtn.Font = Enum.Font.GothamBold
+CloseBtn.ZIndex = 100
+
+local CloseCorner = Instance.new("UICorner")
+CloseCorner.Parent = CloseBtn
+CloseCorner.CornerRadius = UDim.new(0,8)
 
 -- Minimize Button
 local MinBtn = Instance.new("TextButton")
@@ -447,7 +463,7 @@ MSSafetyDesc.TextXAlignment = Enum.TextXAlignment.Left
 MSSafetyDesc.Font = Enum.Font.Gotham
 MSSafetyDesc.TextSize = 14
 
--- ===== BLINK KE ATAS (BARU) =====
+-- ===== BLINK KE ATAS =====
 local BlinkAtasFrame = Instance.new("Frame")
 BlinkAtasFrame.Parent = MSSafetyContent
 BlinkAtasFrame.Size = UDim2.new(1,-20,0,80)
@@ -571,7 +587,7 @@ local BlinkDownBtnCorner = Instance.new("UICorner")
 BlinkDownBtnCorner.Parent = BlinkDownBtn
 BlinkDownBtnCorner.CornerRadius = UDim.new(0,8)
 
--- ===== BLINK MAJU (DEPAN) =====
+-- ===== BLINK MAJU =====
 local BlinkMajuFrame = Instance.new("Frame")
 BlinkMajuFrame.Parent = MSSafetyContent
 BlinkMajuFrame.Size = UDim2.new(1,-20,0,80)
@@ -633,7 +649,7 @@ local BlinkMajuBtnCorner = Instance.new("UICorner")
 BlinkMajuBtnCorner.Parent = BlinkMajuBtn
 BlinkMajuBtnCorner.CornerRadius = UDim.new(0,8)
 
--- ===== BLINK MUNDUR (BELAKANG) =====
+-- ===== BLINK MUNDUR =====
 local BlinkMundurFrame = Instance.new("Frame")
 BlinkMundurFrame.Parent = MSSafetyContent
 BlinkMundurFrame.Size = UDim2.new(1,-20,0,80)
@@ -848,7 +864,7 @@ BuyIndicatorTitle.TextXAlignment = Enum.TextXAlignment.Left
 BuyIndicatorTitle.Font = Enum.Font.GothamBold
 BuyIndicatorTitle.TextSize = 16
 
--- Bisa Masak (jumlah set lengkap)
+-- Bisa Masak
 local BisaMasak = Instance.new("TextLabel")
 BisaMasak.Parent = BuyIndicatorFrame
 BisaMasak.Size = UDim2.new(1,-20,0,30)
@@ -901,14 +917,12 @@ function countTools(toolName)
     local count = 0
     if not player.Character then return count end
     
-    -- Check in character
     for _, child in pairs(player.Character:GetChildren()) do
         if child:IsA("Tool") and string.find(string.lower(child.Name), string.lower(toolName)) then
             count = count + 1
         end
     end
     
-    -- Check in backpack
     local backpack = player:FindFirstChild("Backpack")
     if backpack then
         for _, child in pairs(backpack:GetChildren()) do
@@ -923,7 +937,6 @@ end
 
 -- Function to update buy indicators
 local function updateBuyIndicators()
-    -- Count Water
     local waterCount = countTools("water")
     WaterIndicator.Text = "💧 WATER: " .. waterCount
     if waterCount > 0 then
@@ -932,7 +945,6 @@ local function updateBuyIndicators()
         WaterIndicator.TextColor3 = Color3.fromRGB(255,255,255)
     end
     
-    -- Count Sugar Block Bag
     local sugarCount = countTools("sugar")
     SugarIndicator.Text = "🍚 SUGAR BLOCK BAG: " .. sugarCount
     if sugarCount > 0 then
@@ -941,7 +953,6 @@ local function updateBuyIndicators()
         SugarIndicator.TextColor3 = Color3.fromRGB(255,255,255)
     end
     
-    -- Count Gelatin
     local gelatinCount = countTools("gelatin")
     GelatinIndicator.Text = "🧪 GELATIN: " .. gelatinCount
     if gelatinCount > 0 then
@@ -950,16 +961,15 @@ local function updateBuyIndicators()
         GelatinIndicator.TextColor3 = Color3.fromRGB(255,255,255)
     end
     
-    -- Hitung bisa masak (jumlah set lengkap dari item terkecil)
     local bisaMasak = math.min(waterCount, sugarCount, gelatinCount)
     BisaMasak.Text = "🍳 BISA MASAK: " .. bisaMasak
     
     if bisaMasak >= 3 then
-        BisaMasak.TextColor3 = Color3.fromRGB(100,255,100) -- Hijau kalau banyak
+        BisaMasak.TextColor3 = Color3.fromRGB(100,255,100)
     elseif bisaMasak >= 1 then
-        BisaMasak.TextColor3 = Color3.fromRGB(255,255,100) -- Kuning kalau ada
+        BisaMasak.TextColor3 = Color3.fromRGB(255,255,100)
     else
-        BisaMasak.TextColor3 = Color3.fromRGB(255,255,255) -- Putih kalau 0
+        BisaMasak.TextColor3 = Color3.fromRGB(255,255,255)
     end
 end
 
@@ -985,7 +995,6 @@ MSLoopTimer.TextXAlignment = Enum.TextXAlignment.Left
 MSLoopTimer.Font = Enum.Font.Gotham
 MSLoopTimer.TextSize = 14
 
--- Tool Status
 local ToolStatus = Instance.new("TextLabel")
 ToolStatus.Parent = MSLoopContent
 ToolStatus.Size = UDim2.new(1,-20,0,25)
@@ -997,7 +1006,6 @@ ToolStatus.TextXAlignment = Enum.TextXAlignment.Left
 ToolStatus.Font = Enum.Font.GothamBold
 ToolStatus.TextSize = 14
 
--- Informasi Jeda
 local JedaInfo = Instance.new("TextLabel")
 JedaInfo.Parent = MSLoopContent
 JedaInfo.Size = UDim2.new(1,-20,0,20)
@@ -1037,7 +1045,6 @@ local MSLoopStopCorner = Instance.new("UICorner")
 MSLoopStopCorner.Parent = MSLoopStopBtn
 MSLoopStopCorner.CornerRadius = UDim.new(0,8)
 
--- Refresh Indicators Button
 local RefreshBtn = Instance.new("TextButton")
 RefreshBtn.Parent = MSLoopContent
 RefreshBtn.Size = UDim2.new(1,-20,0,30)
@@ -1055,7 +1062,6 @@ RefreshBtnCorner.CornerRadius = UDim.new(0,8)
 -- Variables
 local loopRunning = false
 
--- Tool functions (untuk findTool, tetap digunakan di loop)
 function findTool(toolName)
     if not player.Character then return nil end
     for _, child in pairs(player.Character:GetChildren()) do
@@ -1206,10 +1212,8 @@ function startMSLoop()
     MSLoopStatus.TextColor3 = Color3.fromRGB(100,255,100)
     
     while loopRunning do
-        -- Update indicators at start of each loop
         updateBuyIndicators()
         
-        -- WATER
         if not loopRunning then break end
         local waterTool = findTool("water")
         if waterTool and equipTool(waterTool) then
@@ -1227,10 +1231,8 @@ function startMSLoop()
             break
         end
         
-        -- Update indicators
         updateBuyIndicators()
         
-        -- JEDA 3 DETIK
         if loopRunning then
             MSLoopStepLabel.Text = "Jeda 3 detik setelah WATER..."
             local jedaStart = tick()
@@ -1243,10 +1245,8 @@ function startMSLoop()
         
         if not loopRunning then break end
         
-        -- Update indicators
         updateBuyIndicators()
         
-        -- SUGAR
         local sugarTool = findTool("sugar")
         if sugarTool and equipTool(sugarTool) then
             ToolStatus.Text = "Tool: SUGAR"
@@ -1266,10 +1266,8 @@ function startMSLoop()
         task.wait(0.2)
         if not loopRunning then break end
         
-        -- Update indicators
         updateBuyIndicators()
         
-        -- GELATIN
         local gelatinTool = findTool("gelatin")
         if gelatinTool and equipTool(gelatinTool) then
             ToolStatus.Text = "Tool: GELATIN"
@@ -1286,10 +1284,8 @@ function startMSLoop()
             break
         end
         
-        -- Update indicators
         updateBuyIndicators()
         
-        -- JEDA 3 DETIK
         if loopRunning then
             MSLoopStepLabel.Text = "Jeda 3 detik setelah GELATIN..."
             local jedaStart = tick()
@@ -1302,10 +1298,8 @@ function startMSLoop()
         
         if not loopRunning then break end
         
-        -- Update indicators
         updateBuyIndicators()
         
-        -- EMPTY BAG
         local emptyTool = findTool("empty") or findTool("bag")
         if emptyTool and equipTool(emptyTool) then
             ToolStatus.Text = "Tool: EMPTY BAG"
@@ -1325,7 +1319,6 @@ function startMSLoop()
         task.wait(0.2)
         if not loopRunning then break end
         
-        -- Update indicators
         updateBuyIndicators()
         
         if loopRunning then
@@ -1343,9 +1336,8 @@ function startMSLoop()
     updateBuyIndicators()
 end
 
--- ===== SMOOTH TP FUNCTION DENGAN ANTI FLING, NAIK 65 STUDS, JALAN, LALU TURUN =====
+-- SMOOTH TP FUNCTION
 function smoothTeleport(targetCFrame, duration)
-    -- Cek karakter
     local character = player.Character
     if not character then
         warn("Character not found!")
@@ -1358,7 +1350,6 @@ function smoothTeleport(targetCFrame, duration)
         return
     end
     
-    -- MATIKAN SEMUA BAN/RODA (VEHICLE LOCK)
     local function lockAllWheels()
         local vehicle = character:FindFirstChildOfClass("VehicleSeat")
         if vehicle and vehicle:FindFirstChild("Wheels") then
@@ -1369,7 +1360,6 @@ function smoothTeleport(targetCFrame, duration)
             end
         end
         
-        -- Lock semua part yang mungkin jadi roda
         for _, child in pairs(character:GetDescendants()) do
             if child:IsA("Part") or child:IsA("MeshPart") or child:IsA("CylinderPart") or child:IsA("WedgePart") then
                 if string.find(string.lower(child.Name), "wheel") or 
@@ -1383,7 +1373,6 @@ function smoothTeleport(targetCFrame, duration)
         end
     end
     
-    -- UNLOCK SEMUA BAN
     local function unlockAllWheels()
         local vehicle = character:FindFirstChildOfClass("VehicleSeat")
         if vehicle and vehicle:FindFirstChild("Wheels") then
@@ -1406,7 +1395,6 @@ function smoothTeleport(targetCFrame, duration)
         end
     end
     
-    -- ANTI FLING: BodyPosition & BodyGyro
     local bp = Instance.new("BodyPosition")
     bp.MaxForce = Vector3.new(1e9, 1e9, 1e9)
     bp.P = 1e5
@@ -1419,129 +1407,90 @@ function smoothTeleport(targetCFrame, duration)
     bg.D = 1e3
     bg.Parent = hrp
     
-    -- Lock semua ban
     lockAllWheels()
     
-    -- Matikan physics sementara
     for _, child in pairs(character:GetDescendants()) do
         if child:IsA("BasePart") then
             child.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0)
         end
     end
     
-    -- Show loading screen
     LoadingFrame.Visible = true
     LoadingBar.Size = UDim2.new(0,0,1,0)
     LoadingPercent.Text = "0%"
     
-    -- POSISI AWAL
     local startCF = hrp.CFrame
-    
-    -- HITUNG TITIK PERTENGAHAN (NAIK 65 STUDS)
     local riseHeight = 65
     local upCF = startCF + Vector3.new(0, riseHeight, 0)
-    
-    -- HITUNG TITIK HORIZONTAL (POSISI TARGET TAPI TINGGI SAMA DENGAN upCF)
     local horizontalCF = CFrame.new(targetCFrame.X, upCF.Y, targetCFrame.Z) * CFrame.Angles(0, targetCFrame.Rotation.Y, 0)
     
-    -- BAGI DURASI MENJADI 3 BAGIAN: NAIK (30%), JALAN (40%), TURUN (30%)
-    local riseDuration = duration * 0.3  -- 30% waktu untuk naik 65 studs
-    local travelDuration = duration * 0.4 -- 40% waktu untuk jalan horizontal
-    local descendDuration = duration * 0.3 -- 30% waktu untuk turun ke target
-    
-    local totalSteps = 300 -- Total steps untuk semua fase
+    local totalSteps = 300
     local riseSteps = math.floor(totalSteps * 0.3)
     local travelSteps = math.floor(totalSteps * 0.4)
     local descendSteps = totalSteps - riseSteps - travelSteps
-    
     local stepTime = duration / totalSteps
     
     LoadingStatus.Text = "FASE 1: NAIK 65 STUDS KE ATAS..."
     
-    -- FASE 1: NAIK 65 STUDS
     for i = 1, riseSteps do
         if not hrp or not hrp.Parent then break end
-        
         local alpha = i / riseSteps
         local currentCF = startCF:Lerp(upCF, alpha)
-        
         bp.Position = currentCF.Position
         bg.CFrame = currentCF
-        
-        -- Update loading
         local percent = math.floor((i / totalSteps) * 100)
         LoadingBar.Size = UDim2.new(percent/100,0,1,0)
         LoadingPercent.Text = percent .. "%"
         LoadingStatus.Text = string.format("NAIK: %d/65 studs", math.floor(alpha * 65))
-        
         task.wait(stepTime)
     end
     
     LoadingStatus.Text = "FASE 2: BERGERAK HORIZONTAL..."
     
-    -- FASE 2: BERGERAK HORIZONTAL (JALAN)
     for i = 1, travelSteps do
         if not hrp or not hrp.Parent then break end
-        
         local alpha = i / travelSteps
         local currentCF = upCF:Lerp(horizontalCF, alpha)
-        
         bp.Position = currentCF.Position
         bg.CFrame = currentCF
-        
-        -- Update loading
         local stepIndex = riseSteps + i
         local percent = math.floor((stepIndex / totalSteps) * 100)
         LoadingBar.Size = UDim2.new(percent/100,0,1,0)
         LoadingPercent.Text = percent .. "%"
-        
         local distance = (currentCF.Position - upCF.Position).Magnitude
         local totalDistance = (horizontalCF.Position - upCF.Position).Magnitude
         LoadingStatus.Text = string.format("JALAN: %.1f/%.1f studs", distance, totalDistance)
-        
         task.wait(stepTime)
     end
     
     LoadingStatus.Text = "FASE 3: TURUN DARI 65 STUDS KE WAYPOINT..."
     
-    -- FASE 3: TURUN KE TARGET
     for i = 1, descendSteps do
         if not hrp or not hrp.Parent then break end
-        
         local alpha = i / descendSteps
         local currentCF = horizontalCF:Lerp(targetCFrame, alpha)
-        
         bp.Position = currentCF.Position
         bg.CFrame = currentCF
-        
-        -- Update loading
         local stepIndex = riseSteps + travelSteps + i
         local percent = math.floor((stepIndex / totalSteps) * 100)
         LoadingBar.Size = UDim2.new(percent/100,0,1,0)
         LoadingPercent.Text = percent .. "%"
         LoadingStatus.Text = string.format("TURUN: %d/65 studs", math.floor((1 - alpha) * 65))
-        
         task.wait(stepTime)
     end
     
-    -- Final position
     bp.Position = targetCFrame.Position
     bg.CFrame = targetCFrame
     
-    -- Hide loading
     LoadingBar.Size = UDim2.new(1,0,1,0)
     LoadingPercent.Text = "100%"
     LoadingStatus.Text = "TELEPORT SELESAI!"
     task.wait(0.5)
     
-    -- Cleanup
     bp:Destroy()
     bg:Destroy()
-    
-    -- Unlock semua ban
     unlockAllWheels()
     
-    -- Kembalikan physics
     for _, child in pairs(character:GetDescendants()) do
         if child:IsA("BasePart") then
             child.CustomPhysicalProperties = nil
@@ -1551,7 +1500,7 @@ function smoothTeleport(targetCFrame, duration)
     LoadingFrame.Visible = false
 end
 
--- TP Functions dengan smooth teleport (NAIK 65 STUDS, JALAN, TURUN)
+-- TP Functions
 function TP_MS_BAHAN()
     smoothTeleport(CFrame.new(521.32,47.79,617.25), 10)
 end
@@ -1560,15 +1509,29 @@ function TP_RS()
     smoothTeleport(CFrame.new(1065.19,28.47,420.76), 10)
 end
 
+-- FUNGSI CLOSE GUI (DELETE TOTAL)
+local function closeGUI()
+    -- Hapus semua GUI
+    KeyGui:Destroy()
+    ScreenGui:Destroy()
+    
+    -- Bersihkan semua thread
+    for _, v in pairs(getgc(true)) do
+        if type(v) == "thread" then
+            task.cancel(v)
+        end
+    end
+    
+    print("GUI 191 ONTOP telah dihapus")
+end
+
 -- FUNGSI UNTUK VALIDASI KEY
 local function checkKey(inputKey)
-    -- Loading animation
     KeyLoading.Visible = true
     KeyLoading.Size = UDim2.new(0,0,0,3)
     KeyStatus.Text = "MEMVERIFIKASI KEY..."
     KeyStatus.TextColor3 = Color3.fromRGB(255,255,0)
     
-    -- Animasi loading
     for i = 1, 30 do
         KeyLoading.Size = UDim2.new(i/30,0,0,3)
         task.wait(0.03)
@@ -1576,7 +1539,6 @@ local function checkKey(inputKey)
     
     task.wait(0.2)
     
-    -- Cek key
     if VALID_KEYS[inputKey] then
         KeyStatus.Text = "✓ KEY BENAR! LOADING GUI..."
         KeyStatus.TextColor3 = Color3.fromRGB(100,255,100)
@@ -1584,22 +1546,16 @@ local function checkKey(inputKey)
         
         task.wait(1)
         
-        -- Sembunyikan key system
         KeyGui.Enabled = false
-        
-        -- Tampilkan GUI utama
         ScreenGui.Enabled = true
         
-        -- Animasi muncul GUI
         Frame.Size = UDim2.new(0,0,0,0)
         task.wait(0.1)
         TweenService:Create(Frame, TweenInfo.new(0.5), {Size = UDim2.new(0,400,0,600)}):Play()
         
-        -- Initial update
         task.wait(1)
         updateBuyIndicators()
         
-        -- Auto refresh
         task.spawn(function()
             while true do
                 task.wait(2)
@@ -1622,6 +1578,9 @@ local function checkKey(inputKey)
         return false
     end
 end
+
+-- EVENT UNTUK CLOSE BUTTON
+CloseBtn.MouseButton1Click:Connect(closeGUI)
 
 -- EVENT UNTUK BUTTON ENTER
 EnterButton.MouseButton1Click:Connect(function()
@@ -1647,7 +1606,7 @@ KeyTextBox.FocusLost:Connect(function(enterPressed)
     end
 end)
 
--- BUTTON CONNECTIONS (HANYA AKTIF SETELAH KEY VALID)
+-- BUTTON CONNECTIONS
 BtnBahan.MouseButton1Click:Connect(TP_MS_BAHAN)
 BtnRS.MouseButton1Click:Connect(TP_RS)
 
@@ -1661,10 +1620,8 @@ MSLoopStopBtn.MouseButton1Click:Connect(function()
     loopRunning = false
 end)
 
--- Refresh button connection
 RefreshBtn.MouseButton1Click:Connect(updateBuyIndicators)
 
--- CONNECT BUTTONS MS SAFETY
 BlinkAtasBtn.MouseButton1Click:Connect(blinkAtas)
 BlinkDownBtn.MouseButton1Click:Connect(blinkDown)
 BlinkMajuBtn.MouseButton1Click:Connect(blinkMaju)
