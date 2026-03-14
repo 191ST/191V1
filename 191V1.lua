@@ -4,207 +4,174 @@ local TweenService = game:GetService("TweenService")
 local VirtualInputManager = game:GetService("VirtualInputManager")
 local RunService = game:GetService("RunService")
 
--- KEY SYSTEM (HANYA MUNCUL 1 KALI)
-local KeySystemShown = false
+-- ==================== KEY SYSTEM ====================
+local KeyScreenGui = Instance.new("ScreenGui")
+KeyScreenGui.Parent = player:WaitForChild("PlayerGui")
+KeyScreenGui.Name = "KeySystem_191"
+KeyScreenGui.ResetOnSpawn = false
+KeyScreenGui.IgnoreGuiInset = true
+KeyScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
--- Function to create key system
-local function createKeySystem()
-    if KeySystemShown then return end
-    KeySystemShown = true
+-- Key Frame
+local KeyFrame = Instance.new("Frame")
+KeyFrame.Parent = KeyScreenGui
+KeyFrame.Size = UDim2.new(0, 500, 0, 150)
+KeyFrame.Position = UDim2.new(0.5, -250, 0.5, -75)
+KeyFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
+KeyFrame.BorderSizePixel = 0
+KeyFrame.Active = true
+KeyFrame.Draggable = true
+KeyFrame.ClipsDescendants = true
+
+local KeyFrameCorner = Instance.new("UICorner")
+KeyFrameCorner.Parent = KeyFrame
+KeyFrameCorner.CornerRadius = UDim.new(0, 15)
+
+local KeyFrameStroke = Instance.new("UIStroke")
+KeyFrameStroke.Parent = KeyFrame
+KeyFrameStroke.Color = Color3.fromRGB(100, 200, 255)
+KeyFrameStroke.Thickness = 3
+
+-- Shadow
+local Shadow = Instance.new("Frame")
+Shadow.Parent = KeyFrame
+Shadow.Size = UDim2.new(1, 10, 1, 10)
+Shadow.Position = UDim2.new(0, -5, 0, -5)
+Shadow.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Shadow.BackgroundTransparency = 0.7
+Shadow.ZIndex = -1
+
+local ShadowCorner = Instance.new("UICorner")
+ShadowCorner.Parent = Shadow
+ShadowCorner.CornerRadius = UDim.new(0, 15)
+
+-- Title
+local KeyTitle = Instance.new("TextLabel")
+KeyTitle.Parent = KeyFrame
+KeyTitle.Size = UDim2.new(1, 0, 0, 50)
+KeyTitle.Position = UDim2.new(0, 0, 0, 10)
+KeyTitle.BackgroundTransparency = 1
+KeyTitle.Text = "191 ONTOP"
+KeyTitle.TextColor3 = Color3.fromRGB(100, 200, 255)
+KeyTitle.Font = Enum.Font.GothamBold
+KeyTitle.TextSize = 32
+KeyTitle.TextScaled = true
+
+-- Description
+local KeyDesc = Instance.new("TextLabel")
+KeyDesc.Parent = KeyFrame
+KeyDesc.Size = UDim2.new(1, -40, 0, 25)
+KeyDesc.Position = UDim2.new(0, 20, 0, 60)
+KeyDesc.BackgroundTransparency = 1
+KeyDesc.Text = "MASUKKAN KEY UNTUK AKSES"
+KeyDesc.TextColor3 = Color3.fromRGB(200, 200, 200)
+KeyDesc.Font = Enum.Font.Gotham
+KeyDesc.TextSize = 14
+
+-- Input Field
+local InputFrame = Instance.new("Frame")
+InputFrame.Parent = KeyFrame
+InputFrame.Size = UDim2.new(0.7, -10, 0, 35)
+InputFrame.Position = UDim2.new(0.15, 0, 0, 85)
+InputFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 50)
+InputFrame.BorderSizePixel = 0
+
+local InputFrameCorner = Instance.new("UICorner")
+InputFrameCorner.Parent = InputFrame
+InputFrameCorner.CornerRadius = UDim.new(0, 8)
+
+local InputStroke = Instance.new("UIStroke")
+InputStroke.Parent = InputFrame
+InputStroke.Color = Color3.fromRGB(100, 200, 255)
+InputStroke.Thickness = 1.5
+
+local KeyInput = Instance.new("TextBox")
+KeyInput.Parent = InputFrame
+KeyInput.Size = UDim2.new(1, -20, 1, 0)
+KeyInput.Position = UDim2.new(0, 10, 0, 0)
+KeyInput.BackgroundTransparency = 1
+KeyInput.PlaceholderText = "Ketik key di sini..."
+KeyInput.PlaceholderColor3 = Color3.fromRGB(150, 150, 150)
+KeyInput.Text = ""
+KeyInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+KeyInput.Font = Enum.Font.Gotham
+KeyInput.TextSize = 16
+KeyInput.ClearTextOnFocus = false
+
+-- ENTER Button
+local EnterBtn = Instance.new("TextButton")
+EnterBtn.Parent = KeyFrame
+EnterBtn.Size = UDim2.new(0.2, -10, 0, 35)
+EnterBtn.Position = UDim2.new(0.8, 0, 0, 85)
+EnterBtn.BackgroundColor3 = Color3.fromRGB(50, 150, 50)
+EnterBtn.Text = "ENTER"
+EnterBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+EnterBtn.Font = Enum.Font.GothamBold
+EnterBtn.TextSize = 16
+
+local EnterBtnCorner = Instance.new("UICorner")
+EnterBtnCorner.Parent = EnterBtn
+EnterBtnCorner.CornerRadius = UDim.new(0, 8)
+
+-- Error Message
+local ErrorMsg = Instance.new("TextLabel")
+ErrorMsg.Parent = KeyFrame
+ErrorMsg.Size = UDim2.new(1, -40, 0, 20)
+ErrorMsg.Position = UDim2.new(0, 20, 1, -25)
+ErrorMsg.BackgroundTransparency = 1
+ErrorMsg.Text = ""
+ErrorMsg.TextColor3 = Color3.fromRGB(255, 100, 100)
+ErrorMsg.Font = Enum.Font.Gotham
+ErrorMsg.TextSize = 12
+
+-- Animation masuk
+KeyFrame.Size = UDim2.new(0, 0, 0, 0)
+task.wait(0.1)
+TweenService:Create(KeyFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back), {Size = UDim2.new(0, 500, 0, 150)}):Play()
+
+-- Function check key
+local function checkKey()
+    local inputKey = string.lower(KeyInput.Text)
+    local validKey = "191store" -- GANTI KEY DI SINI
     
-    -- Key System GUI
-    local KeyScreenGui = Instance.new("ScreenGui")
-    KeyScreenGui.Parent = player:WaitForChild("PlayerGui")
-    KeyScreenGui.Name = "KeySystem_191"
-    KeyScreenGui.ResetOnSpawn = false
-    KeyScreenGui.IgnoreGuiInset = true
-    KeyScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-
-    -- Key Frame (memanjang ke samping)
-    local KeyFrame = Instance.new("Frame")
-    KeyFrame.Parent = KeyScreenGui
-    KeyFrame.Size = UDim2.new(0, 500, 0, 150)
-    KeyFrame.Position = UDim2.new(0.5, -250, 0.5, -75)
-    KeyFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
-    KeyFrame.BorderSizePixel = 0
-    KeyFrame.Active = true
-    KeyFrame.Draggable = true
-    KeyFrame.ClipsDescendants = true
-
-    local KeyFrameCorner = Instance.new("UICorner")
-    KeyFrameCorner.Parent = KeyFrame
-    KeyFrameCorner.CornerRadius = UDim.new(0, 15)
-
-    local KeyFrameStroke = Instance.new("UIStroke")
-    KeyFrameStroke.Parent = KeyFrame
-    KeyFrameStroke.Color = Color3.fromRGB(100, 200, 255)
-    KeyFrameStroke.Thickness = 3
-
-    -- Shadow
-    local Shadow = Instance.new("Frame")
-    Shadow.Parent = KeyFrame
-    Shadow.Size = UDim2.new(1, 10, 1, 10)
-    Shadow.Position = UDim2.new(0, -5, 0, -5)
-    Shadow.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-    Shadow.BackgroundTransparency = 0.7
-    Shadow.ZIndex = -1
-
-    local ShadowCorner = Instance.new("UICorner")
-    ShadowCorner.Parent = Shadow
-    ShadowCorner.CornerRadius = UDim.new(0, 15)
-
-    -- Title "191 ONTOP"
-    local KeyTitle = Instance.new("TextLabel")
-    KeyTitle.Parent = KeyFrame
-    KeyTitle.Size = UDim2.new(1, 0, 0, 50)
-    KeyTitle.Position = UDim2.new(0, 0, 0, 10)
-    KeyTitle.BackgroundTransparency = 1
-    KeyTitle.Text = "191 ONTOP"
-    KeyTitle.TextColor3 = Color3.fromRGB(100, 200, 255)
-    KeyTitle.Font = Enum.Font.GothamBold
-    KeyTitle.TextSize = 32
-    KeyTitle.TextScaled = true
-
-    -- Description
-    local KeyDesc = Instance.new("TextLabel")
-    KeyDesc.Parent = KeyFrame
-    KeyDesc.Size = UDim2.new(1, -40, 0, 25)
-    KeyDesc.Position = UDim2.new(0, 20, 0, 60)
-    KeyDesc.BackgroundTransparency = 1
-    KeyDesc.Text = "MASUKKAN KEY UNTUK AKSES"
-    KeyDesc.TextColor3 = Color3.fromRGB(200, 200, 200)
-    KeyDesc.Font = Enum.Font.Gotham
-    KeyDesc.TextSize = 14
-
-    -- Input Field (lebih kecil)
-    local InputFrame = Instance.new("Frame")
-    InputFrame.Parent = KeyFrame
-    InputFrame.Size = UDim2.new(0.7, -10, 0, 35)
-    InputFrame.Position = UDim2.new(0.15, 0, 0, 85)
-    InputFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 50)
-    InputFrame.BorderSizePixel = 0
-
-    local InputFrameCorner = Instance.new("UICorner")
-    InputFrameCorner.Parent = InputFrame
-    InputFrameCorner.CornerRadius = UDim.new(0, 8)
-
-    local InputStroke = Instance.new("UIStroke")
-    InputStroke.Parent = InputFrame
-    InputStroke.Color = Color3.fromRGB(100, 200, 255)
-    InputStroke.Thickness = 1.5
-
-    local KeyInput = Instance.new("TextBox")
-    KeyInput.Parent = InputFrame
-    KeyInput.Size = UDim2.new(1, -20, 1, 0)
-    KeyInput.Position = UDim2.new(0, 10, 0, 0)
-    KeyInput.BackgroundTransparency = 1
-    KeyInput.PlaceholderText = "Ketik key di sini..."
-    KeyInput.PlaceholderColor3 = Color3.fromRGB(150, 150, 150)
-    KeyInput.Text = ""
-    KeyInput.TextColor3 = Color3.fromRGB(255, 255, 255)
-    KeyInput.Font = Enum.Font.Gotham
-    KeyInput.TextSize = 16
-    KeyInput.ClearTextOnFocus = false
-
-    -- ENTER Button (hijau)
-    local EnterBtn = Instance.new("TextButton")
-    EnterBtn.Parent = KeyFrame
-    EnterBtn.Size = UDim2.new(0.2, -10, 0, 35)
-    EnterBtn.Position = UDim2.new(0.8, 0, 0, 85)
-    EnterBtn.BackgroundColor3 = Color3.fromRGB(50, 150, 50)
-    EnterBtn.Text = "ENTER"
-    EnterBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    EnterBtn.Font = Enum.Font.GothamBold
-    EnterBtn.TextSize = 16
-
-    local EnterBtnCorner = Instance.new("UICorner")
-    EnterBtnCorner.Parent = EnterBtn
-    EnterBtnCorner.CornerRadius = UDim.new(0, 8)
-
-    -- Error Message (sembunyi dulu)
-    local ErrorMsg = Instance.new("TextLabel")
-    ErrorMsg.Parent = KeyFrame
-    ErrorMsg.Size = UDim2.new(1, -40, 0, 20)
-    ErrorMsg.Position = UDim2.new(0, 20, 1, -25)
-    ErrorMsg.BackgroundTransparency = 1
-    ErrorMsg.Text = ""
-    ErrorMsg.TextColor3 = Color3.fromRGB(255, 100, 100)
-    ErrorMsg.Font = Enum.Font.Gotham
-    ErrorMsg.TextSize = 12
-
-    -- Animation masuk
-    KeyFrame.Size = UDim2.new(0, 0, 0, 0)
-    task.wait(0.1)
-    TweenService:Create(KeyFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back), {Size = UDim2.new(0, 500, 0, 150)}):Play()
-
-    -- Function to check key
-    local function checkKey()
-        local inputKey = string.lower(KeyInput.Text)
-        -- GANTI KEY DI SINI (contoh: "191store", "admin123", dll)
-        local validKey = "191store" -- <-- UBAH KEY SESUAI KEINGINAN
+    if inputKey == validKey then
+        ErrorMsg.Text = "✅ KEY BENAR! LOADING..."
+        ErrorMsg.TextColor3 = Color3.fromRGB(100, 255, 100)
         
-        if inputKey == validKey then
-            -- Key benar, tutup key system
-            ErrorMsg.Text = "✅ KEY BENAR! LOADING..."
-            ErrorMsg.TextColor3 = Color3.fromRGB(100, 255, 100)
-            
-            TweenService:Create(KeyFrame, TweenInfo.new(0.3), {Size = UDim2.new(0, 0, 0, 0)}):Play()
-            task.wait(0.3)
-            KeyScreenGui:Destroy()
-            
-            -- Panggil fungsi untuk membuat main GUI
-            createMainGUI()
-        else
-            -- Key salah, tampilkan error
-            ErrorMsg.Text = "❌ KEY SALAH! COBA LAGI."
-            ErrorMsg.TextColor3 = Color3.fromRGB(255, 100, 100)
-            KeyInput.Text = ""
-            KeyInput.PlaceholderText = "Ketik key di sini..."
-            
-            -- Efek merah di input
-            InputStroke.Color = Color3.fromRGB(255, 100, 100)
-            task.wait(0.3)
-            InputStroke.Color = Color3.fromRGB(100, 200, 255)
-            
-            -- Getar dikit
-            local originalPos = KeyFrame.Position
-            for i = 1, 3 do
-                KeyFrame.Position = originalPos + UDim2.new(0.01, 0, 0, 0)
-                task.wait(0.05)
-                KeyFrame.Position = originalPos - UDim2.new(0.01, 0, 0, 0)
-                task.wait(0.05)
-            end
-            KeyFrame.Position = originalPos
+        TweenService:Create(KeyFrame, TweenInfo.new(0.3), {Size = UDim2.new(0, 0, 0, 0)}):Play()
+        task.wait(0.3)
+        KeyScreenGui:Destroy()
+        
+        -- PANGGIL MAIN GUI
+        createMainGUI()
+    else
+        ErrorMsg.Text = "❌ KEY SALAH! COBA LAGI."
+        ErrorMsg.TextColor3 = Color3.fromRGB(255, 100, 100)
+        KeyInput.Text = ""
+        KeyInput.PlaceholderText = "Ketik key di sini..."
+        
+        InputStroke.Color = Color3.fromRGB(255, 100, 100)
+        task.wait(0.3)
+        InputStroke.Color = Color3.fromRGB(100, 200, 255)
+        
+        local originalPos = KeyFrame.Position
+        for i = 1, 3 do
+            KeyFrame.Position = originalPos + UDim2.new(0.01, 0, 0, 0)
+            task.wait(0.05)
+            KeyFrame.Position = originalPos - UDim2.new(0.01, 0, 0, 0)
+            task.wait(0.05)
         end
+        KeyFrame.Position = originalPos
     end
-
-    -- Button click
-    EnterBtn.MouseButton1Click:Connect(checkKey)
-
-    -- Enter key on keyboard
-    KeyInput.FocusLost:Connect(function(enterPressed)
-        if enterPressed then
-            checkKey()
-        end
-    end)
-
-    -- Biar bisa close dengan ESC (opsional)
-    UIS.InputBegan:Connect(function(input, gp)
-        if gp then return end
-        if input.KeyCode == Enum.KeyCode.Escape then
-            -- Kalo mau close pake ESC, tapi kasih warning dulu
-            ErrorMsg.Text = "⚠️ TEKAN ENTER UNTUK MASUK"
-            ErrorMsg.TextColor3 = Color3.fromRGB(255, 255, 100)
-        end
-    end)
 end
 
--- MAIN GUI FUNCTION (pindahkan semua code GUI ke sini)
+EnterBtn.MouseButton1Click:Connect(checkKey)
+KeyInput.FocusLost:Connect(function(enterPressed)
+    if enterPressed then checkKey() end
+end)
+
+-- ==================== MAIN GUI FUNCTION ====================
 function createMainGUI()
-    -- Hapus GUI lama kalo ada
-    local oldGui = player.PlayerGui:FindFirstChild("TP_Hub_191")
-    if oldGui then oldGui:Destroy() end
-    
     -- Loading Screen
     local LoadingFrame = Instance.new("Frame")
     LoadingFrame.Parent = player:WaitForChild("PlayerGui")
@@ -896,7 +863,7 @@ function createMainGUI()
     BuyIndicatorTitle.Font = Enum.Font.GothamBold
     BuyIndicatorTitle.TextSize = 16
 
-    -- Bisa Masak (jumlah set lengkap)
+    -- Bisa Masak
     local BisaMasak = Instance.new("TextLabel")
     BisaMasak.Parent = BuyIndicatorFrame
     BisaMasak.Size = UDim2.new(1,-20,0,30)
@@ -920,7 +887,7 @@ function createMainGUI()
     WaterIndicator.Font = Enum.Font.GothamBold
     WaterIndicator.TextSize = 14
 
-    -- Sugar Block Bag
+    -- Sugar
     local SugarIndicator = Instance.new("TextLabel")
     SugarIndicator.Parent = BuyIndicatorFrame
     SugarIndicator.Size = UDim2.new(1,-20,0,25)
@@ -944,19 +911,15 @@ function createMainGUI()
     GelatinIndicator.Font = Enum.Font.GothamBold
     GelatinIndicator.TextSize = 14
 
-    -- Function to count tools
+    -- Function count tools
     function countTools(toolName)
         local count = 0
         if not player.Character then return count end
-        
-        -- Check in character
         for _, child in pairs(player.Character:GetChildren()) do
             if child:IsA("Tool") and string.find(string.lower(child.Name), string.lower(toolName)) then
                 count = count + 1
             end
         end
-        
-        -- Check in backpack
         local backpack = player:FindFirstChild("Backpack")
         if backpack then
             for _, child in pairs(backpack:GetChildren()) do
@@ -965,49 +928,31 @@ function createMainGUI()
                 end
             end
         end
-        
         return count
     end
 
-    -- Function to update buy indicators
+    -- Update indicators
     local function updateBuyIndicators()
-        -- Count Water
         local waterCount = countTools("water")
         WaterIndicator.Text = "💧 WATER: " .. waterCount
-        if waterCount > 0 then
-            WaterIndicator.TextColor3 = Color3.fromRGB(100,200,255)
-        else
-            WaterIndicator.TextColor3 = Color3.fromRGB(255,255,255)
-        end
+        WaterIndicator.TextColor3 = waterCount > 0 and Color3.fromRGB(100,200,255) or Color3.fromRGB(255,255,255)
         
-        -- Count Sugar Block Bag
         local sugarCount = countTools("sugar")
         SugarIndicator.Text = "🍚 SUGAR BLOCK BAG: " .. sugarCount
-        if sugarCount > 0 then
-            SugarIndicator.TextColor3 = Color3.fromRGB(100,200,255)
-        else
-            SugarIndicator.TextColor3 = Color3.fromRGB(255,255,255)
-        end
+        SugarIndicator.TextColor3 = sugarCount > 0 and Color3.fromRGB(100,200,255) or Color3.fromRGB(255,255,255)
         
-        -- Count Gelatin
         local gelatinCount = countTools("gelatin")
         GelatinIndicator.Text = "🧪 GELATIN: " .. gelatinCount
-        if gelatinCount > 0 then
-            GelatinIndicator.TextColor3 = Color3.fromRGB(100,200,255)
-        else
-            GelatinIndicator.TextColor3 = Color3.fromRGB(255,255,255)
-        end
+        GelatinIndicator.TextColor3 = gelatinCount > 0 and Color3.fromRGB(100,200,255) or Color3.fromRGB(255,255,255)
         
-        -- Hitung bisa masak (jumlah set lengkap dari item terkecil)
         local bisaMasak = math.min(waterCount, sugarCount, gelatinCount)
         BisaMasak.Text = "🍳 BISA MASAK: " .. bisaMasak
-        
         if bisaMasak >= 3 then
-            BisaMasak.TextColor3 = Color3.fromRGB(100,255,100) -- Hijau kalau banyak
+            BisaMasak.TextColor3 = Color3.fromRGB(100,255,100)
         elseif bisaMasak >= 1 then
-            BisaMasak.TextColor3 = Color3.fromRGB(255,255,100) -- Kuning kalau ada
+            BisaMasak.TextColor3 = Color3.fromRGB(255,255,100)
         else
-            BisaMasak.TextColor3 = Color3.fromRGB(255,255,255) -- Putih kalau 0
+            BisaMasak.TextColor3 = Color3.fromRGB(255,255,255)
         end
     end
 
@@ -1033,7 +978,6 @@ function createMainGUI()
     MSLoopTimer.Font = Enum.Font.Gotham
     MSLoopTimer.TextSize = 14
 
-    -- Tool Status
     local ToolStatus = Instance.new("TextLabel")
     ToolStatus.Parent = MSLoopContent
     ToolStatus.Size = UDim2.new(1,-20,0,25)
@@ -1045,7 +989,6 @@ function createMainGUI()
     ToolStatus.Font = Enum.Font.GothamBold
     ToolStatus.TextSize = 14
 
-    -- Informasi Jeda
     local JedaInfo = Instance.new("TextLabel")
     JedaInfo.Parent = MSLoopContent
     JedaInfo.Size = UDim2.new(1,-20,0,20)
@@ -1085,7 +1028,6 @@ function createMainGUI()
     MSLoopStopCorner.Parent = MSLoopStopBtn
     MSLoopStopCorner.CornerRadius = UDim.new(0,8)
 
-    -- Refresh Indicators Button
     local RefreshBtn = Instance.new("TextButton")
     RefreshBtn.Parent = MSLoopContent
     RefreshBtn.Size = UDim2.new(1,-20,0,30)
@@ -1103,7 +1045,6 @@ function createMainGUI()
     -- Variables
     local loopRunning = false
 
-    -- Tool functions (untuk findTool, tetap digunakan di loop)
     function findTool(toolName)
         if not player.Character then return nil end
         for _, child in pairs(player.Character:GetChildren()) do
@@ -1254,7 +1195,6 @@ function createMainGUI()
         MSLoopStatus.TextColor3 = Color3.fromRGB(100,255,100)
         
         while loopRunning do
-            -- Update indicators at start of each loop
             updateBuyIndicators()
             
             -- WATER
@@ -1275,7 +1215,6 @@ function createMainGUI()
                 break
             end
             
-            -- Update indicators
             updateBuyIndicators()
             
             -- JEDA 3 DETIK
@@ -1290,8 +1229,6 @@ function createMainGUI()
             end
             
             if not loopRunning then break end
-            
-            -- Update indicators
             updateBuyIndicators()
             
             -- SUGAR
@@ -1313,8 +1250,6 @@ function createMainGUI()
             
             task.wait(0.2)
             if not loopRunning then break end
-            
-            -- Update indicators
             updateBuyIndicators()
             
             -- GELATIN
@@ -1334,7 +1269,6 @@ function createMainGUI()
                 break
             end
             
-            -- Update indicators
             updateBuyIndicators()
             
             -- JEDA 3 DETIK
@@ -1349,8 +1283,6 @@ function createMainGUI()
             end
             
             if not loopRunning then break end
-            
-            -- Update indicators
             updateBuyIndicators()
             
             -- EMPTY BAG
@@ -1372,8 +1304,6 @@ function createMainGUI()
             
             task.wait(0.2)
             if not loopRunning then break end
-            
-            -- Update indicators
             updateBuyIndicators()
             
             if loopRunning then
@@ -1391,22 +1321,14 @@ function createMainGUI()
         updateBuyIndicators()
     end
 
-    -- ===== SMOOTH TP FUNCTION DENGAN ANTI FLING, NAIK 65 STUDS, JALAN, LALU TURUN =====
+    -- SMOOTH TP
     function smoothTeleport(targetCFrame, duration)
-        -- Cek karakter
         local character = player.Character
-        if not character then
-            warn("Character not found!")
-            return
-        end
+        if not character then return end
         
         local hrp = character:FindFirstChild("HumanoidRootPart")
-        if not hrp then
-            warn("HumanoidRootPart not found!")
-            return
-        end
+        if not hrp then return end
         
-        -- MATIKAN SEMUA BAN/RODA (VEHICLE LOCK)
         local function lockAllWheels()
             local vehicle = character:FindFirstChildOfClass("VehicleSeat")
             if vehicle and vehicle:FindFirstChild("Wheels") then
@@ -1416,10 +1338,8 @@ function createMainGUI()
                     end
                 end
             end
-            
-            -- Lock semua part yang mungkin jadi roda
             for _, child in pairs(character:GetDescendants()) do
-                if child:IsA("Part") or child:IsA("MeshPart") or child:IsA("CylinderPart") or child:IsA("WedgePart") then
+                if child:IsA("Part") or child:IsA("MeshPart") then
                     if string.find(string.lower(child.Name), "wheel") or 
                        string.find(string.lower(child.Name), "roda") or
                        string.find(string.lower(child.Name), "ban") or
@@ -1431,7 +1351,6 @@ function createMainGUI()
             end
         end
         
-        -- UNLOCK SEMUA BAN
         local function unlockAllWheels()
             local vehicle = character:FindFirstChildOfClass("VehicleSeat")
             if vehicle and vehicle:FindFirstChild("Wheels") then
@@ -1441,9 +1360,8 @@ function createMainGUI()
                     end
                 end
             end
-            
             for _, child in pairs(character:GetDescendants()) do
-                if child:IsA("Part") or child:IsA("MeshPart") or child:IsA("CylinderPart") or child:IsA("WedgePart") then
+                if child:IsA("Part") or child:IsA("MeshPart") then
                     if string.find(string.lower(child.Name), "wheel") or 
                        string.find(string.lower(child.Name), "roda") or
                        string.find(string.lower(child.Name), "ban") or
@@ -1454,7 +1372,6 @@ function createMainGUI()
             end
         end
         
-        -- ANTI FLING: BodyPosition & BodyGyro
         local bp = Instance.new("BodyPosition")
         bp.MaxForce = Vector3.new(1e9, 1e9, 1e9)
         bp.P = 1e5
@@ -1467,129 +1384,90 @@ function createMainGUI()
         bg.D = 1e3
         bg.Parent = hrp
         
-        -- Lock semua ban
         lockAllWheels()
         
-        -- Matikan physics sementara
         for _, child in pairs(character:GetDescendants()) do
             if child:IsA("BasePart") then
                 child.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0)
             end
         end
         
-        -- Show loading screen
         LoadingFrame.Visible = true
         LoadingBar.Size = UDim2.new(0,0,1,0)
         LoadingPercent.Text = "0%"
         
-        -- POSISI AWAL
         local startCF = hrp.CFrame
-        
-        -- HITUNG TITIK PERTENGAHAN (NAIK 65 STUDS)
         local riseHeight = 65
         local upCF = startCF + Vector3.new(0, riseHeight, 0)
-        
-        -- HITUNG TITIK HORIZONTAL (POSISI TARGET TAPI TINGGI SAMA DENGAN upCF)
         local horizontalCF = CFrame.new(targetCFrame.X, upCF.Y, targetCFrame.Z) * CFrame.Angles(0, targetCFrame.Rotation.Y, 0)
         
-        -- BAGI DURASI MENJADI 3 BAGIAN: NAIK (30%), JALAN (40%), TURUN (30%)
-        local riseDuration = duration * 0.3  -- 30% waktu untuk naik 65 studs
-        local travelDuration = duration * 0.4 -- 40% waktu untuk jalan horizontal
-        local descendDuration = duration * 0.3 -- 30% waktu untuk turun ke target
-        
-        local totalSteps = 300 -- Total steps untuk semua fase
+        local totalSteps = 300
         local riseSteps = math.floor(totalSteps * 0.3)
         local travelSteps = math.floor(totalSteps * 0.4)
         local descendSteps = totalSteps - riseSteps - travelSteps
-        
         local stepTime = duration / totalSteps
         
         LoadingStatus.Text = "FASE 1: NAIK 65 STUDS KE ATAS..."
         
-        -- FASE 1: NAIK 65 STUDS
         for i = 1, riseSteps do
             if not hrp or not hrp.Parent then break end
-            
             local alpha = i / riseSteps
             local currentCF = startCF:Lerp(upCF, alpha)
-            
             bp.Position = currentCF.Position
             bg.CFrame = currentCF
-            
-            -- Update loading
             local percent = math.floor((i / totalSteps) * 100)
             LoadingBar.Size = UDim2.new(percent/100,0,1,0)
             LoadingPercent.Text = percent .. "%"
             LoadingStatus.Text = string.format("NAIK: %d/65 studs", math.floor(alpha * 65))
-            
             task.wait(stepTime)
         end
         
         LoadingStatus.Text = "FASE 2: BERGERAK HORIZONTAL..."
         
-        -- FASE 2: BERGERAK HORIZONTAL (JALAN)
         for i = 1, travelSteps do
             if not hrp or not hrp.Parent then break end
-            
             local alpha = i / travelSteps
             local currentCF = upCF:Lerp(horizontalCF, alpha)
-            
             bp.Position = currentCF.Position
             bg.CFrame = currentCF
-            
-            -- Update loading
             local stepIndex = riseSteps + i
             local percent = math.floor((stepIndex / totalSteps) * 100)
             LoadingBar.Size = UDim2.new(percent/100,0,1,0)
             LoadingPercent.Text = percent .. "%"
-            
             local distance = (currentCF.Position - upCF.Position).Magnitude
             local totalDistance = (horizontalCF.Position - upCF.Position).Magnitude
             LoadingStatus.Text = string.format("JALAN: %.1f/%.1f studs", distance, totalDistance)
-            
             task.wait(stepTime)
         end
         
         LoadingStatus.Text = "FASE 3: TURUN DARI 65 STUDS KE WAYPOINT..."
         
-        -- FASE 3: TURUN KE TARGET
         for i = 1, descendSteps do
             if not hrp or not hrp.Parent then break end
-            
             local alpha = i / descendSteps
             local currentCF = horizontalCF:Lerp(targetCFrame, alpha)
-            
             bp.Position = currentCF.Position
             bg.CFrame = currentCF
-            
-            -- Update loading
             local stepIndex = riseSteps + travelSteps + i
             local percent = math.floor((stepIndex / totalSteps) * 100)
             LoadingBar.Size = UDim2.new(percent/100,0,1,0)
             LoadingPercent.Text = percent .. "%"
             LoadingStatus.Text = string.format("TURUN: %d/65 studs", math.floor((1 - alpha) * 65))
-            
             task.wait(stepTime)
         end
         
-        -- Final position
         bp.Position = targetCFrame.Position
         bg.CFrame = targetCFrame
         
-        -- Hide loading
         LoadingBar.Size = UDim2.new(1,0,1,0)
         LoadingPercent.Text = "100%"
         LoadingStatus.Text = "TELEPORT SELESAI!"
         task.wait(0.5)
         
-        -- Cleanup
         bp:Destroy()
         bg:Destroy()
-        
-        -- Unlock semua ban
         unlockAllWheels()
         
-        -- Kembalikan physics
         for _, child in pairs(character:GetDescendants()) do
             if child:IsA("BasePart") then
                 child.CustomPhysicalProperties = nil
@@ -1599,7 +1477,6 @@ function createMainGUI()
         LoadingFrame.Visible = false
     end
 
-    -- TP Functions dengan smooth teleport (NAIK 65 STUDS, JALAN, TURUN)
     function TP_MS_BAHAN()
         smoothTeleport(CFrame.new(521.32,47.79,617.25), 10)
     end
@@ -1622,10 +1499,8 @@ function createMainGUI()
         loopRunning = false
     end)
 
-    -- Refresh button connection
     RefreshBtn.MouseButton1Click:Connect(updateBuyIndicators)
 
-    -- CONNECT BUTTONS MS SAFETY
     BlinkAtasBtn.MouseButton1Click:Connect(blinkAtas)
     BlinkDownBtn.MouseButton1Click:Connect(blinkDown)
     BlinkMajuBtn.MouseButton1Click:Connect(blinkMaju)
@@ -1636,11 +1511,9 @@ function createMainGUI()
         TPContent.Visible = true
         MSLoopContent.Visible = false
         MSSafetyContent.Visible = false
-        
         TPTabBtn.BackgroundColor3 = Color3.fromRGB(50,50,60)
         MSLoopTabBtn.BackgroundColor3 = Color3.fromRGB(40,40,50)
         MSSafetyTabBtn.BackgroundColor3 = Color3.fromRGB(40,40,50)
-        
         TPTabBtn.TextColor3 = Color3.fromRGB(255,255,255)
         MSLoopTabBtn.TextColor3 = Color3.fromRGB(200,200,200)
         MSSafetyTabBtn.TextColor3 = Color3.fromRGB(200,200,200)
@@ -1650,16 +1523,12 @@ function createMainGUI()
         TPContent.Visible = false
         MSLoopContent.Visible = true
         MSSafetyContent.Visible = false
-        
         TPTabBtn.BackgroundColor3 = Color3.fromRGB(40,40,50)
         MSLoopTabBtn.BackgroundColor3 = Color3.fromRGB(50,50,60)
         MSSafetyTabBtn.BackgroundColor3 = Color3.fromRGB(40,40,50)
-        
         TPTabBtn.TextColor3 = Color3.fromRGB(200,200,200)
         MSLoopTabBtn.TextColor3 = Color3.fromRGB(255,255,255)
         MSSafetyTabBtn.TextColor3 = Color3.fromRGB(200,200,200)
-        
-        -- Update indicators when switching to MS AUTO tab
         updateBuyIndicators()
     end)
 
@@ -1667,11 +1536,9 @@ function createMainGUI()
         TPContent.Visible = false
         MSLoopContent.Visible = false
         MSSafetyContent.Visible = true
-        
         TPTabBtn.BackgroundColor3 = Color3.fromRGB(40,40,50)
         MSLoopTabBtn.BackgroundColor3 = Color3.fromRGB(40,40,50)
         MSSafetyTabBtn.BackgroundColor3 = Color3.fromRGB(50,50,60)
-        
         TPTabBtn.TextColor3 = Color3.fromRGB(200,200,200)
         MSLoopTabBtn.TextColor3 = Color3.fromRGB(200,200,200)
         MSSafetyTabBtn.TextColor3 = Color3.fromRGB(255,255,255)
@@ -1727,11 +1594,11 @@ function createMainGUI()
     task.wait(0.1)
     TweenService:Create(Frame, tweenInfo, {Size = openSize}):Play()
 
-    -- Initial update of indicators
+    -- Initial update
     task.wait(1)
     updateBuyIndicators()
 
-    -- Auto refresh every 2 seconds
+    -- Auto refresh
     task.spawn(function()
         while true do
             task.wait(2)
@@ -1741,6 +1608,3 @@ function createMainGUI()
         end
     end)
 end
-
--- MULAI DENGAN KEY SYSTEM
-createKeySystem()
