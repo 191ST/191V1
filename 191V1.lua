@@ -129,15 +129,7 @@ KeyLoadingCorner.CornerRadius = UDim.new(0,3)
 -- KEY YANG VALID
 local VALID_KEYS = {
     ["191ONTOP"] = true,
-    ["STORE191"] = true,
-    ["DISCORD191"] = true,
-    ["MSBAHAN"] = true,
-    ["RSAJA"] = true,
-    ["BLINKMAJU"] = true,
-    ["DARK191"] = true,
-    ["SYSTEM191"] = true,
-    ["PREMIUM191"] = true,
-    ["MASTER191"] = true,
+
 }
 
 -- MAIN GUI
