@@ -144,7 +144,10 @@ local function createKeySystem()
         local validKey = "191store" -- <-- UBAH KEY SESUAI KEINGINAN
         
         if inputKey == validKey then
-            -- Key benar, tutup key system dan buka main GUI
+            -- Key benar, tutup key system
+            ErrorMsg.Text = "✅ KEY BENAR! LOADING..."
+            ErrorMsg.TextColor3 = Color3.fromRGB(100, 255, 100)
+            
             TweenService:Create(KeyFrame, TweenInfo.new(0.3), {Size = UDim2.new(0, 0, 0, 0)}):Play()
             task.wait(0.3)
             KeyScreenGui:Destroy()
@@ -154,6 +157,7 @@ local function createKeySystem()
         else
             -- Key salah, tampilkan error
             ErrorMsg.Text = "❌ KEY SALAH! COBA LAGI."
+            ErrorMsg.TextColor3 = Color3.fromRGB(255, 100, 100)
             KeyInput.Text = ""
             KeyInput.PlaceholderText = "Ketik key di sini..."
             
@@ -190,12 +194,17 @@ local function createKeySystem()
         if input.KeyCode == Enum.KeyCode.Escape then
             -- Kalo mau close pake ESC, tapi kasih warning dulu
             ErrorMsg.Text = "⚠️ TEKAN ENTER UNTUK MASUK"
+            ErrorMsg.TextColor3 = Color3.fromRGB(255, 255, 100)
         end
     end)
 end
 
 -- MAIN GUI FUNCTION (pindahkan semua code GUI ke sini)
 function createMainGUI()
+    -- Hapus GUI lama kalo ada
+    local oldGui = player.PlayerGui:FindFirstChild("TP_Hub_191")
+    if oldGui then oldGui:Destroy() end
+    
     -- Loading Screen
     local LoadingFrame = Instance.new("Frame")
     LoadingFrame.Parent = player:WaitForChild("PlayerGui")
