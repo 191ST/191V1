@@ -333,7 +333,7 @@ task.spawn(function()
     end
 end)
 
--- Tab Buttons (SEKARANG 4 TAB)
+-- Tab Buttons (4 TAB)
 local TabFrame = Instance.new("Frame")
 TabFrame.Parent = Frame
 TabFrame.Size = UDim2.new(1,0,0,40)
@@ -386,7 +386,7 @@ local MSSafetyTabCorner = Instance.new("UICorner")
 MSSafetyTabCorner.Parent = MSSafetyTabBtn
 MSSafetyTabCorner.CornerRadius = UDim.new(0,8)
 
--- AUTO SELL Tab Button (BARU)
+-- AUTO SELL Tab Button
 local AutoSellTabBtn = Instance.new("TextButton")
 AutoSellTabBtn.Parent = TabFrame
 AutoSellTabBtn.Size = UDim2.new(0.25,-3,1,-8)
@@ -441,14 +441,14 @@ MSSafetyContent.Visible = false
 MSSafetyContent.ScrollBarThickness = 6
 MSSafetyContent.CanvasSize = UDim2.new(0,0,0,500)
 
--- ===== AUTO SELL TAB CONTENT =====
+-- ===== AUTO SELL TAB CONTENT (CLEAN VERSION - TANPA DAFTAR TOOLS) =====
 local AutoSellContent = Instance.new("ScrollingFrame")
 AutoSellContent.Parent = Content
 AutoSellContent.Size = UDim2.new(1,0,1,0)
 AutoSellContent.BackgroundTransparency = 1
 AutoSellContent.Visible = false
 AutoSellContent.ScrollBarThickness = 6
-AutoSellContent.CanvasSize = UDim2.new(0,0,0,450)
+AutoSellContent.CanvasSize = UDim2.new(0,0,0,300)
 
 -- Title Auto Sell
 local AutoSellTitle = Instance.new("TextLabel")
@@ -456,28 +456,28 @@ AutoSellTitle.Parent = AutoSellContent
 AutoSellTitle.Size = UDim2.new(1,-20,0,40)
 AutoSellTitle.Position = UDim2.new(0,10,0,20)
 AutoSellTitle.BackgroundTransparency = 1
-AutoSellTitle.Text = "💰 AUTO SELL MARSHMALLOW BAG"
+AutoSellTitle.Text = "💰 AUTO SELL"
 AutoSellTitle.TextColor3 = Color3.fromRGB(100,255,100)
 AutoSellTitle.TextXAlignment = Enum.TextXAlignment.Left
 AutoSellTitle.Font = Enum.Font.GothamBold
-AutoSellTitle.TextSize = 24
+AutoSellTitle.TextSize = 30
 
 -- Description
 local AutoSellDesc = Instance.new("TextLabel")
 AutoSellDesc.Parent = AutoSellContent
-AutoSellDesc.Size = UDim2.new(1,-20,0,30)
-AutoSellDesc.Position = UDim2.new(0,10,0,60)
+AutoSellDesc.Size = UDim2.new(1,-20,0,25)
+AutoSellDesc.Position = UDim2.new(0,10,0,65)
 AutoSellDesc.BackgroundTransparency = 1
-AutoSellDesc.Text = "Auto jual Small/Medium/Large Marshmallow Bag (HOLD E 2 DETIK)"
+AutoSellDesc.Text = "Auto jual Marshmallow Bag (HOLD E 2 DETIK)"
 AutoSellDesc.TextColor3 = Color3.fromRGB(200,200,200)
 AutoSellDesc.TextXAlignment = Enum.TextXAlignment.Left
 AutoSellDesc.Font = Enum.Font.Gotham
 AutoSellDesc.TextSize = 14
 
--- Status Frame
+-- Status Frame (Lebih besar)
 local AutoSellStatusFrame = Instance.new("Frame")
 AutoSellStatusFrame.Parent = AutoSellContent
-AutoSellStatusFrame.Size = UDim2.new(1,-20,0,80)
+AutoSellStatusFrame.Size = UDim2.new(1,-20,0,120)
 AutoSellStatusFrame.Position = UDim2.new(0,10,0,100)
 AutoSellStatusFrame.BackgroundColor3 = Color3.fromRGB(35,35,45)
 AutoSellStatusFrame.BorderSizePixel = 0
@@ -486,14 +486,14 @@ local AutoSellStatusCorner = Instance.new("UICorner")
 AutoSellStatusCorner.Parent = AutoSellStatusFrame
 AutoSellStatusCorner.CornerRadius = UDim.new(0,10)
 
--- Icon
+-- Icon besar
 local AutoSellIcon = Instance.new("TextLabel")
 AutoSellIcon.Parent = AutoSellStatusFrame
-AutoSellIcon.Size = UDim2.new(0,60,1,0)
+AutoSellIcon.Size = UDim2.new(0,80,1,0)
 AutoSellIcon.Position = UDim2.new(0,10,0,0)
 AutoSellIcon.BackgroundTransparency = 1
 AutoSellIcon.Text = "💰"
-AutoSellIcon.TextSize = 40
+AutoSellIcon.TextSize = 60
 AutoSellIcon.Font = Enum.Font.GothamBold
 AutoSellIcon.TextColor3 = Color3.fromRGB(255,255,100)
 
@@ -501,114 +501,55 @@ AutoSellIcon.TextColor3 = Color3.fromRGB(255,255,100)
 local AutoSellStatusTitle = Instance.new("TextLabel")
 AutoSellStatusTitle.Parent = AutoSellStatusFrame
 AutoSellStatusTitle.Size = UDim2.new(1,-120,0,30)
-AutoSellStatusTitle.Position = UDim2.new(0,80,0,10)
+AutoSellStatusTitle.Position = UDim2.new(0,100,0,15)
 AutoSellStatusTitle.BackgroundTransparency = 1
-AutoSellStatusTitle.Text = "STATUS AUTO SELL"
+AutoSellStatusTitle.Text = "STATUS"
 AutoSellStatusTitle.TextColor3 = Color3.fromRGB(255,255,255)
 AutoSellStatusTitle.TextXAlignment = Enum.TextXAlignment.Left
 AutoSellStatusTitle.Font = Enum.Font.GothamBold
-AutoSellStatusTitle.TextSize = 18
+AutoSellStatusTitle.TextSize = 20
 
--- Status Label (akan berubah)
+-- Status Label
 local AutoSellStatus = Instance.new("TextLabel")
 AutoSellStatus.Parent = AutoSellStatusFrame
-AutoSellStatus.Size = UDim2.new(1,-120,0,25)
-AutoSellStatus.Position = UDim2.new(0,80,0,40)
+AutoSellStatus.Size = UDim2.new(1,-120,0,30)
+AutoSellStatus.Position = UDim2.new(0,100,0,45)
 AutoSellStatus.BackgroundTransparency = 1
 AutoSellStatus.Text = "⏹️ STOPPED"
 AutoSellStatus.TextColor3 = Color3.fromRGB(255,100,100)
 AutoSellStatus.TextXAlignment = Enum.TextXAlignment.Left
 AutoSellStatus.Font = Enum.Font.GothamBold
-AutoSellStatus.TextSize = 16
+AutoSellStatus.TextSize = 18
 
 -- Counter Label
 local AutoSellCounter = Instance.new("TextLabel")
 AutoSellCounter.Parent = AutoSellStatusFrame
-AutoSellCounter.Size = UDim2.new(1,-120,0,20)
-AutoSellCounter.Position = UDim2.new(0,80,0,65)
+AutoSellCounter.Size = UDim2.new(1,-120,0,25)
+AutoSellCounter.Position = UDim2.new(0,100,0,75)
 AutoSellCounter.BackgroundTransparency = 1
 AutoSellCounter.Text = "Terjual: 0"
-AutoSellCounter.TextColor3 = Color3.fromRGB(200,200,200)
+AutoSellCounter.TextColor3 = Color3.fromRGB(100,255,255)
 AutoSellCounter.TextXAlignment = Enum.TextXAlignment.Left
-AutoSellCounter.Font = Enum.Font.Gotham
-AutoSellCounter.TextSize = 14
+AutoSellCounter.Font = Enum.Font.GothamBold
+AutoSellCounter.TextSize = 16
 
--- DAFTAR TOOLS YANG AKAN DIJUAL
-local AutoSellToolsFrame = Instance.new("Frame")
-AutoSellToolsFrame.Parent = AutoSellContent
-AutoSellToolsFrame.Size = UDim2.new(1,-20,0,150)
-AutoSellToolsFrame.Position = UDim2.new(0,10,0,190)
-AutoSellToolsFrame.BackgroundColor3 = Color3.fromRGB(35,35,45)
-AutoSellToolsFrame.BorderSizePixel = 0
-
-local AutoSellToolsCorner = Instance.new("UICorner")
-AutoSellToolsCorner.Parent = AutoSellToolsFrame
-AutoSellToolsCorner.CornerRadius = UDim.new(0,10)
-
-local AutoSellToolsTitle = Instance.new("TextLabel")
-AutoSellToolsTitle.Parent = AutoSellToolsFrame
-AutoSellToolsTitle.Size = UDim2.new(1,-20,0,30)
-AutoSellToolsTitle.Position = UDim2.new(0,10,0,5)
-AutoSellToolsTitle.BackgroundTransparency = 1
-AutoSellToolsTitle.Text = "📦 DAFTAR TOOLS YANG DIJUAL"
-AutoSellToolsTitle.TextColor3 = Color3.fromRGB(255,255,100)
-AutoSellToolsTitle.TextXAlignment = Enum.TextXAlignment.Left
-AutoSellToolsTitle.Font = Enum.Font.GothamBold
-AutoSellToolsTitle.TextSize = 16
-
--- Small Marshmallow Bag
-local SmallBagLabel = Instance.new("TextLabel")
-SmallBagLabel.Parent = AutoSellToolsFrame
-SmallBagLabel.Size = UDim2.new(1,-20,0,25)
-SmallBagLabel.Position = UDim2.new(0,10,0,40)
-SmallBagLabel.BackgroundTransparency = 1
-SmallBagLabel.Text = "• Small Marshmallow Bag"
-SmallBagLabel.TextColor3 = Color3.fromRGB(200,200,255)
-SmallBagLabel.TextXAlignment = Enum.TextXAlignment.Left
-SmallBagLabel.Font = Enum.Font.Gotham
-SmallBagLabel.TextSize = 14
-
--- Medium Marshmallow Bag
-local MediumBagLabel = Instance.new("TextLabel")
-MediumBagLabel.Parent = AutoSellToolsFrame
-MediumBagLabel.Size = UDim2.new(1,-20,0,25)
-MediumBagLabel.Position = UDim2.new(0,10,0,70)
-MediumBagLabel.BackgroundTransparency = 1
-MediumBagLabel.Text = "• Medium Marshmallow Bag"
-MediumBagLabel.TextColor3 = Color3.fromRGB(200,200,255)
-MediumBagLabel.TextXAlignment = Enum.TextXAlignment.Left
-MediumBagLabel.Font = Enum.Font.Gotham
-MediumBagLabel.TextSize = 14
-
--- Large Marshmallow Bag
-local LargeBagLabel = Instance.new("TextLabel")
-LargeBagLabel.Parent = AutoSellToolsFrame
-LargeBagLabel.Size = UDim2.new(1,-20,0,25)
-LargeBagLabel.Position = UDim2.new(0,10,0,100)
-LargeBagLabel.BackgroundTransparency = 1
-LargeBagLabel.Text = "• Large Marshmallow Bag"
-LargeBagLabel.TextColor3 = Color3.fromRGB(200,200,255)
-LargeBagLabel.TextXAlignment = Enum.TextXAlignment.Left
-LargeBagLabel.Font = Enum.Font.Gotham
-LargeBagLabel.TextSize = 14
-
--- Info Jumlah
+-- Info tools ditemukan (tambahan)
 local AutoSellInfo = Instance.new("TextLabel")
-AutoSellInfo.Parent = AutoSellToolsFrame
-AutoSellInfo.Size = UDim2.new(1,-20,0,20)
-AutoSellInfo.Position = UDim2.new(0,10,0,130)
+AutoSellInfo.Parent = AutoSellStatusFrame
+AutoSellInfo.Size = UDim2.new(1,-120,0,20)
+AutoSellInfo.Position = UDim2.new(0,100,0,100)
 AutoSellInfo.BackgroundTransparency = 1
-AutoSellInfo.Text = "Total ditemukan: 0 tools"
-AutoSellInfo.TextColor3 = Color3.fromRGB(150,255,150)
+AutoSellInfo.Text = "Tools: 0"
+AutoSellInfo.TextColor3 = Color3.fromRGB(200,200,200)
 AutoSellInfo.TextXAlignment = Enum.TextXAlignment.Left
-AutoSellInfo.Font = Enum.Font.GothamBold
+AutoSellInfo.Font = Enum.Font.Gotham
 AutoSellInfo.TextSize = 14
 
 -- Button Frame
 local AutoSellButtonFrame = Instance.new("Frame")
 AutoSellButtonFrame.Parent = AutoSellContent
 AutoSellButtonFrame.Size = UDim2.new(1,-20,0,60)
-AutoSellButtonFrame.Position = UDim2.new(0,10,0,350)
+AutoSellButtonFrame.Position = UDim2.new(0,10,0,230)
 AutoSellButtonFrame.BackgroundColor3 = Color3.fromRGB(35,35,45)
 AutoSellButtonFrame.BorderSizePixel = 0
 
@@ -622,10 +563,10 @@ AutoSellStartBtn.Parent = AutoSellButtonFrame
 AutoSellStartBtn.Size = UDim2.new(0.5,-15,0,40)
 AutoSellStartBtn.Position = UDim2.new(0,10,0,10)
 AutoSellStartBtn.BackgroundColor3 = Color3.fromRGB(50,150,50)
-AutoSellStartBtn.Text = "▶️ START AUTO SELL"
+AutoSellStartBtn.Text = "▶️ START"
 AutoSellStartBtn.TextColor3 = Color3.fromRGB(255,255,255)
 AutoSellStartBtn.Font = Enum.Font.GothamBold
-AutoSellStartBtn.TextSize = 14
+AutoSellStartBtn.TextSize = 16
 
 local AutoSellStartCorner = Instance.new("UICorner")
 AutoSellStartCorner.Parent = AutoSellStartBtn
@@ -637,16 +578,16 @@ AutoSellStopBtn.Parent = AutoSellButtonFrame
 AutoSellStopBtn.Size = UDim2.new(0.5,-15,0,40)
 AutoSellStopBtn.Position = UDim2.new(0.5,5,0,10)
 AutoSellStopBtn.BackgroundColor3 = Color3.fromRGB(150,50,50)
-AutoSellStopBtn.Text = "⏹️ STOP AUTO SELL"
+AutoSellStopBtn.Text = "⏹️ STOP"
 AutoSellStopBtn.TextColor3 = Color3.fromRGB(255,255,255)
 AutoSellStopBtn.Font = Enum.Font.GothamBold
-AutoSellStopBtn.TextSize = 14
+AutoSellStopBtn.TextSize = 16
 
 local AutoSellStopCorner = Instance.new("UICorner")
 AutoSellStopCorner.Parent = AutoSellStopBtn
 AutoSellStopCorner.CornerRadius = UDim.new(0,8)
 
--- MS SAFETY Content
+-- MS SAFETY Content (sama seperti sebelumnya)
 local MSSafetyTitle = Instance.new("TextLabel")
 MSSafetyTitle.Parent = MSSafetyContent
 MSSafetyTitle.Size = UDim2.new(1,-20,0,40)
@@ -1269,7 +1210,7 @@ function startAutoSell()
     
     autoSellRunning = true
     autoSellCount = 0
-    AutoSellStatus.Text = "▶️ RUNNING (HOLD E 2D)"
+    AutoSellStatus.Text = "▶️ RUNNING"
     AutoSellStatus.TextColor3 = Color3.fromRGB(100,255,100)
     
     task.spawn(function()
@@ -1278,8 +1219,8 @@ function startAutoSell()
             local tools = getSellTools()
             local totalTools = #tools
             
-            -- Update info jumlah
-            AutoSellInfo.Text = "Total ditemukan: " .. totalTools .. " tools"
+            -- Update info jumlah tools
+            AutoSellInfo.Text = "Tools: " .. totalTools
             
             if totalTools > 0 then
                 -- Loop melalui setiap tool
@@ -1298,14 +1239,12 @@ function startAutoSell()
                         end
                         
                         -- HOLD E SELAMA 2 DETIK
-                        AutoSellStatus.Text = "▶️ HOLD E... (2 detik)"
+                        AutoSellStatus.Text = "▶️ HOLD E..."
                         VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.E, false, game) -- Tekan E
                         
-                        -- Hold selama 2 detik dengan update status
+                        -- Hold selama 2 detik
                         local holdStart = tick()
                         while autoSellRunning and (tick() - holdStart) < 2 do
-                            local remaining = 2 - (tick() - holdStart)
-                            AutoSellStatus.Text = string.format("▶️ HOLD E... (%.1f detik)", remaining)
                             task.wait(0.1)
                         end
                         
@@ -1315,7 +1254,7 @@ function startAutoSell()
                         -- Update counter
                         autoSellCount = autoSellCount + 1
                         AutoSellCounter.Text = "Terjual: " .. autoSellCount
-                        AutoSellStatus.Text = "▶️ RUNNING (HOLD E 2D)"
+                        AutoSellStatus.Text = "▶️ RUNNING"
                         
                         -- Delay 1 detik antar tool
                         task.wait(1)
@@ -1323,7 +1262,7 @@ function startAutoSell()
                 end
             else
                 -- Tidak ada tools, tunggu 2 detik lalu cek lagi
-                AutoSellInfo.Text = "Total ditemukan: 0 tools (mencari...)"
+                AutoSellInfo.Text = "Tools: 0"
                 task.wait(2)
             end
             
@@ -1339,7 +1278,7 @@ function stopAutoSell()
     VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.E, false, game)
     AutoSellStatus.Text = "⏹️ STOPPED"
     AutoSellStatus.TextColor3 = Color3.fromRGB(255,100,100)
-    AutoSellInfo.Text = "Total ditemukan: 0 tools"
+    AutoSellInfo.Text = "Tools: 0"
 end
 
 -- FUNGSI LAINNYA
@@ -2059,7 +1998,7 @@ AutoSellTabBtn.MouseButton1Click:Connect(function()
     
     -- Update jumlah tools saat membuka tab
     local total = countSellTools()
-    AutoSellInfo.Text = "Total ditemukan: " .. total .. " tools"
+    AutoSellInfo.Text = "Tools: " .. total
 end)
 
 -- Minimize
