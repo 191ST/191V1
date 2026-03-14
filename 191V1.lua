@@ -441,7 +441,7 @@ MSSafetyContent.Visible = false
 MSSafetyContent.ScrollBarThickness = 6
 MSSafetyContent.CanvasSize = UDim2.new(0,0,0,500)
 
--- ===== AUTO SELL TAB CONTENT (BARU) =====
+-- ===== AUTO SELL TAB CONTENT =====
 local AutoSellContent = Instance.new("ScrollingFrame")
 AutoSellContent.Parent = Content
 AutoSellContent.Size = UDim2.new(1,0,1,0)
@@ -468,7 +468,7 @@ AutoSellDesc.Parent = AutoSellContent
 AutoSellDesc.Size = UDim2.new(1,-20,0,30)
 AutoSellDesc.Position = UDim2.new(0,10,0,60)
 AutoSellDesc.BackgroundTransparency = 1
-AutoSellDesc.Text = "Auto jual Small/Medium/Large Marshmallow Bag dengan tekan E"
+AutoSellDesc.Text = "Auto jual Small/Medium/Large Marshmallow Bag (HOLD E 2 DETIK)"
 AutoSellDesc.TextColor3 = Color3.fromRGB(200,200,200)
 AutoSellDesc.TextXAlignment = Enum.TextXAlignment.Left
 AutoSellDesc.Font = Enum.Font.Gotham
@@ -646,7 +646,7 @@ local AutoSellStopCorner = Instance.new("UICorner")
 AutoSellStopCorner.Parent = AutoSellStopBtn
 AutoSellStopCorner.CornerRadius = UDim.new(0,8)
 
--- MS SAFETY Content (sama seperti sebelumnya)
+-- MS SAFETY Content
 local MSSafetyTitle = Instance.new("TextLabel")
 MSSafetyTitle.Parent = MSSafetyContent
 MSSafetyTitle.Size = UDim2.new(1,-20,0,40)
@@ -1263,13 +1263,13 @@ function countSellTools()
     return count
 end
 
--- FUNGSI UNTUK MENJUAL TOOLS (AUTO SELL)
+-- FUNGSI UNTUK MENJUAL TOOLS (AUTO SELL) - HOLD E 2 DETIK
 function startAutoSell()
     if autoSellRunning then return end
     
     autoSellRunning = true
     autoSellCount = 0
-    AutoSellStatus.Text = "▶️ RUNNING"
+    AutoSellStatus.Text = "▶️ RUNNING (HOLD E 2D)"
     AutoSellStatus.TextColor3 = Color3.fromRGB(100,255,100)
     
     task.spawn(function()
@@ -1297,16 +1297,27 @@ function startAutoSell()
                             end
                         end
                         
-                        -- Tekan E untuk menjual
-                        VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.E, false, game)
-                        task.wait(0.1)
+                        -- HOLD E SELAMA 2 DETIK
+                        AutoSellStatus.Text = "▶️ HOLD E... (2 detik)"
+                        VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.E, false, game) -- Tekan E
+                        
+                        -- Hold selama 2 detik dengan update status
+                        local holdStart = tick()
+                        while autoSellRunning and (tick() - holdStart) < 2 do
+                            local remaining = 2 - (tick() - holdStart)
+                            AutoSellStatus.Text = string.format("▶️ HOLD E... (%.1f detik)", remaining)
+                            task.wait(0.1)
+                        end
+                        
+                        -- Lepas E
                         VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.E, false, game)
                         
                         -- Update counter
                         autoSellCount = autoSellCount + 1
                         AutoSellCounter.Text = "Terjual: " .. autoSellCount
+                        AutoSellStatus.Text = "▶️ RUNNING (HOLD E 2D)"
                         
-                        -- Delay 1 detik
+                        -- Delay 1 detik antar tool
                         task.wait(1)
                     end
                 end
@@ -1316,7 +1327,7 @@ function startAutoSell()
                 task.wait(2)
             end
             
-            -- Delay sebelum loop lagi (biar ga terlalu cepat)
+            -- Delay sebelum loop lagi
             task.wait(0.5)
         end
     end)
@@ -1324,12 +1335,14 @@ end
 
 function stopAutoSell()
     autoSellRunning = false
+    -- Pastikan E dilepas jika sedang di-hold
+    VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.E, false, game)
     AutoSellStatus.Text = "⏹️ STOPPED"
     AutoSellStatus.TextColor3 = Color3.fromRGB(255,100,100)
     AutoSellInfo.Text = "Total ditemukan: 0 tools"
 end
 
--- FUNGSI LAINNYA (countTools, findTool, equipTool, pressE, dll)
+-- FUNGSI LAINNYA
 function countTools(toolName)
     local count = 0
     if not player.Character then return count end
@@ -1837,9 +1850,21 @@ end
 
 -- FUNGSI CLOSE GUI
 local function closeGUI()
+    -- Hentikan auto sell jika running
+    if autoSellRunning then
+        stopAutoSell()
+    end
+    
+    -- Hentikan MS loop jika running
+    if loopRunning then
+        loopRunning = false
+    end
+    
+    -- Hapus GUI
     KeyGui:Destroy()
     ScreenGui:Destroy()
     
+    -- Bersihkan thread
     for _, v in pairs(getgc(true)) do
         if type(v) == "thread" then
             task.cancel(v)
@@ -1962,7 +1987,7 @@ AutoSellStopBtn.MouseButton1Click:Connect(function()
     stopAutoSell()
 end)
 
--- Tab Switching (UPDATE UNTUK 4 TAB)
+-- Tab Switching (4 TAB)
 TPTabBtn.MouseButton1Click:Connect(function()
     TPContent.Visible = true
     MSLoopContent.Visible = false
