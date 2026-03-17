@@ -128,7 +128,7 @@ KeyLoadingCorner.CornerRadius = UDim.new(0,3)
 
 -- KEY YANG VALID
 local VALID_KEYS = {
-    ["191ONTOP"] = true,
+    ["191UPD"] = true,
 
 }
 
